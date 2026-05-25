@@ -1,0 +1,10 @@
+# Netlify build configuration for LinuxLab UFPS (Next.js 16, App Router)
+# Netlify auto-detects Next.js and applies its Next.js runtime (@netlify/plugin-nextjs),
+# which serves SSR / dynamic routes as serverless functions. No manual publish dir needed.
+
+[build]
+  command = "bun run build"
+
+[build.environment]
+  # Next 16 needs a modern Node runtime for its serverless functions.
+  NODE_VERSION = "20"

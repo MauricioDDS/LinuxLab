@@ -1,0 +1,227 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+
+@custom-variant dark (&:is(.dark *));
+
+/* ============================================================
+   LIGHT THEME (default)
+   Soft off-white canvas, true-white cards, UFPS red accent.
+   The "neon" glow becomes a soft red-tinted halo on key spots.
+   ============================================================ */
+:root {
+  --background: #f6f7f9;
+  --foreground: #1c2128;
+  --card: #ffffff;
+  --card-foreground: #1c2128;
+  --popover: #ffffff;
+  --popover-foreground: #1c2128;
+  --primary: #C41E3A;
+  --primary-foreground: #ffffff;
+  --secondary: #eceef1;
+  --secondary-foreground: #1c2128;
+  --muted: #eceef1;
+  --muted-foreground: #5b626b;
+  --accent: #C41E3A;
+  --accent-foreground: #ffffff;
+  --destructive: #cf222e;
+  --destructive-foreground: #ffffff;
+  --border: #e2e5ea;
+  --input: #e2e5ea;
+  --ring: #C41E3A;
+  --chart-1: #C41E3A;
+  --chart-2: #1a7f37;
+  --chart-3: #bf8700;
+  --chart-4: #5b626b;
+  --chart-5: #8b949e;
+  --radius: 0.25rem;
+  --sidebar: #ffffff;
+  --sidebar-foreground: #1c2128;
+  --sidebar-primary: #C41E3A;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #eceef1;
+  --sidebar-accent-foreground: #1c2128;
+  --sidebar-border: #e2e5ea;
+  --sidebar-ring: #C41E3A;
+
+  /* Semantic status colors (light) — vibrant */
+  --success: #16a34a;
+  --warning: #ca8a04;
+  --danger: #dc2626;
+
+  /* Soft red halo — light-mode translation of the neon glow */
+  --neon-glow: 0 1px 2px rgba(196, 30, 58, 0.16), 0 6px 16px -4px rgba(196, 30, 58, 0.26);
+  --neon-glow-strong: 0 2px 4px rgba(196, 30, 58, 0.2), 0 12px 28px -6px rgba(196, 30, 58, 0.4);
+  --neon-text-shadow: none;
+  --neon-border-shadow: 0 0 0 1px rgba(196, 30, 58, 0.18), 0 4px 12px -4px rgba(196, 30, 58, 0.22);
+}
+
+/* ============================================================
+   DARK THEME (toggle) — original GitHub-dark palette, with
+   the literal neon glow preserved.
+   ============================================================ */
+.dark {
+  --background: #0d1117;
+  --foreground: #e6edf3;
+  --card: #161b22;
+  --card-foreground: #e6edf3;
+  --popover: #161b22;
+  --popover-foreground: #e6edf3;
+  --primary: #C41E3A;
+  --primary-foreground: #ffffff;
+  --secondary: #21262d;
+  --secondary-foreground: #e6edf3;
+  --muted: #21262d;
+  --muted-foreground: #8b949e;
+  --accent: #C41E3A;
+  --accent-foreground: #ffffff;
+  --destructive: #f85149;
+  --destructive-foreground: #ffffff;
+  --border: #21262d;
+  --input: #21262d;
+  --ring: #C41E3A;
+  --chart-1: #C41E3A;
+  --chart-2: #238636;
+  --chart-3: #d29922;
+  --chart-4: #8b949e;
+  --chart-5: #6e7681;
+  --sidebar: #161b22;
+  --sidebar-foreground: #e6edf3;
+  --sidebar-primary: #C41E3A;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #21262d;
+  --sidebar-accent-foreground: #e6edf3;
+  --sidebar-border: #21262d;
+  --sidebar-ring: #C41E3A;
+
+  /* Semantic status colors (dark) — vibrant */
+  --success: #3fb950;
+  --warning: #e3b341;
+  --danger: #f85149;
+
+  /* Literal neon glow */
+  --neon-glow: 0 0 10px rgba(196, 30, 58, 0.5), 0 0 20px rgba(196, 30, 58, 0.3);
+  --neon-glow-strong: 0 0 10px rgba(196, 30, 58, 0.7), 0 0 30px rgba(196, 30, 58, 0.5), 0 0 50px rgba(196, 30, 58, 0.3);
+  --neon-text-shadow: 0 0 10px rgba(196, 30, 58, 0.7), 0 0 20px rgba(196, 30, 58, 0.5);
+  --neon-border-shadow: 0 0 5px rgba(196, 30, 58, 0.3), inset 0 0 5px rgba(196, 30, 58, 0.1);
+}
+
+@theme inline {
+  --font-sans: 'Geist', 'Geist Fallback';
+  --font-mono: 'Geist Mono', 'Geist Mono Fallback';
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-danger: var(--danger);
+  --radius-sm: calc(var(--radius) - 2px);
+  --radius-md: var(--radius);
+  --radius-lg: calc(var(--radius) + 2px);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* Neon / red-halo utilities — values come from the theme variables above */
+.neon-glow {
+  box-shadow: var(--neon-glow);
+}
+
+.neon-glow-strong {
+  box-shadow: var(--neon-glow-strong);
+}
+
+.neon-text {
+  text-shadow: var(--neon-text-shadow);
+}
+
+.neon-border {
+  border-color: var(--primary);
+  box-shadow: var(--neon-border-shadow);
+}
+
+/* Scrollbar styling (theme-aware) */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--background);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--muted-foreground);
+}
+
+/* Terminal styling */
+.terminal-body {
+  font-family: 'Geist Mono', 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+}
+
+/* Blinking cursor animation */
+@keyframes blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
+.cursor-blink {
+  animation: blink 1s step-end infinite;
+}
+
+/* Pulse animation for live indicator */
+@keyframes pulse-dot {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.6;
+    transform: scale(1.1);
+  }
+}
+
+.pulse-dot {
+  animation: pulse-dot 2s ease-in-out infinite;
+}
