@@ -1,46 +1,71 @@
 "use client"
 
-import { useState } from "react"
+import { useMemo, useState } from "react"
 import Link from "next/link"
-import { BookOpen, Users, ChevronRight, Plus } from "lucide-react"
+import {
+  Plus,
+  Eye,
+  Pencil,
+  Users,
+  Archive,
+  ArchiveRestore,
+  Trash2,
+} from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { cn } from "@/lib/utils"
 
-const courses = [
-  {
-    id: 1,
-    name: "Sistemas Operativos - 2025-I",
-    students: 32,
-    topics: 8,
-    status: "active",
-  },
-  {
-    id: 2,
-    name: "Fundamentos de Linux - 2024-II",
-    students: 28,
-    topics: 12,
-    status: "completed",
-  },
-  {
-    id: 3,
-    name: "Administración de Servidores - 2025-I",
-    students: 15,
-    topics: 6,
-    status: "draft",
-  },
+interface Course {
+  id: number
+  name: string
+  description: string
+  students: number
+  activities: number
+  created: string
+  archived: boolean
+}
+
+const initialCourses: Course[] = [
+  { id: 7, name: "Sistemas Operativos - I sem 2026", description: "Grupo de Sistemas Operativos", students: 21, activities: 21, created: "08/04/2026", archived: false },
+  { id: 8, name: "Análisis de Algoritmos - I sem 2026", description: "Grupo de análisis de algoritmos", students: 11, activities: 11, created: "15/04/2026", archived: false },
+  { id: 5, name: "Estructuras de datos - I sem 2026", description: "Grupo de estructuras de datos", students: 24, activities: 24, created: "31/03/2026", archived: false },
+  { id: 4, name: "Fundamentos de Programación - I sem 2026", description: "Grupo de fundamentos", students: 18, activities: 9, created: "31/03/2026", archived: false },
+  { id: 2, name: "Fundamentos de Linux - 2025-II", description: "Grupo cerrado del semestre anterior", students: 28, activities: 12, created: "10/08/2025", archived: true },
+  { id: 1, name: "Administración de Servidores - 2025-I", description: "Curso piloto", students: 15, activities: 6, created: "15/02/2025", archived: true },
 ]
 
+type Tab = "activos" | "archivados"
+
 export default function TeacherDashboard() {
+  const [courses, setCourses] = useState<Course[]>(initialCourses)
+  const [tab, setTab] = useState<Tab>("activos")
+
+  const counts = useMemo(
+    () => ({
+      activos: courses.filter((c) => !c.archived).length,
+      archivados: courses.filter((c) => c.archived).length,
+    }),
+    [courses]
+  )
+
+  const visible = courses.filter((c) =>
+    tab === "activos" ? !c.archived : c.archived
+  )
+
+  const toggleArchive = (id: number) =>
+    setCourses((prev) =>
+      prev.map((c) => (c.id === id ? { ...c, archived: !c.archived } : c))
+    )
+
+  const removeCourse = (id: number) =>
+    setCourses((prev) => prev.filter((c) => c.id !== id))
+
   return (
     <div className="p-8">
       {/* Header */}
-      <div className="flex items-center justify-between mb-8">
+      <div className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="text-2xl font-semibold text-foreground mb-1">
-            Mis Cursos
-          </h1>
-          <p className="text-muted-foreground">
-            Gestiona tus cursos y actividades
-          </p>
+          <h1 className="text-2xl font-semibold text-foreground mb-1">Mis Cursos</h1>
+          <p className="text-muted-foreground">Gestiona tus cursos y actividades</p>
         </div>
         <Link href="/docente/crear-curso">
           <Button className="bg-primary hover:bg-primary/90 text-primary-foreground neon-glow">
@@ -50,57 +75,140 @@ export default function TeacherDashboard() {
         </Link>
       </div>
 
-      {/* Course Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {courses.map((course) => (
-          <Link
-            key={course.id}
-            href={`/docente/cursos/${course.id}`}
-            className="bg-card border border-border p-6 hover:border-primary/30 transition-all duration-200 group"
+      {/* Tabs */}
+      <div className="flex items-center gap-1 border-b border-border mb-4">
+        {(["activos", "archivados"] as Tab[]).map((t) => (
+          <button
+            key={t}
+            onClick={() => setTab(t)}
+            className={cn(
+              "px-4 py-2.5 text-sm font-medium border-b-2 -mb-px transition-colors capitalize",
+              tab === t
+                ? "border-primary text-primary"
+                : "border-transparent text-muted-foreground hover:text-foreground"
+            )}
           >
-            <div className="flex items-start justify-between mb-4">
-              <div className="w-10 h-10 bg-primary/10 border border-primary/30 flex items-center justify-center">
-                <BookOpen className="w-5 h-5 text-primary" />
-              </div>
-              <span
-                className={`px-2 py-1 text-xs font-medium ${
-                  course.status === "active"
-                    ? "bg-success/20 text-success border border-success/30"
-                    : course.status === "completed"
-                    ? "bg-muted text-muted-foreground border border-border"
-                    : "bg-warning/20 text-warning border border-warning/30"
-                }`}
-              >
-                {course.status === "active"
-                  ? "Activo"
-                  : course.status === "completed"
-                  ? "Finalizado"
-                  : "Borrador"}
-              </span>
-            </div>
-
-            <h3 className="text-lg font-medium text-foreground mb-3 group-hover:text-primary transition-colors">
-              {course.name}
-            </h3>
-
-            <div className="flex items-center gap-4 text-sm text-muted-foreground">
-              <div className="flex items-center gap-1.5">
-                <Users className="w-4 h-4" />
-                {course.students} estudiantes
-              </div>
-              <div className="flex items-center gap-1.5">
-                <BookOpen className="w-4 h-4" />
-                {course.topics} temas
-              </div>
-            </div>
-
-            <div className="flex items-center justify-end mt-4 text-primary opacity-0 group-hover:opacity-100 transition-opacity">
-              <span className="text-sm">Ver detalles</span>
-              <ChevronRight className="w-4 h-4 ml-1" />
-            </div>
-          </Link>
+            {t === "activos" ? "Activos" : "Archivados"}
+            <span className="ml-2 text-xs text-muted-foreground">
+              {counts[t]}
+            </span>
+          </button>
         ))}
       </div>
+
+      {/* Table */}
+      <div className="bg-card border border-border rounded-lg overflow-hidden">
+        <div className="overflow-x-auto">
+          <table className="w-full">
+            <thead>
+              <tr className="border-b border-border">
+                <th className="text-left px-4 py-3 text-xs font-medium text-muted-foreground uppercase tracking-wide w-16">
+                  ID
+                </th>
+                <th className="text-left px-4 py-3 text-xs font-medium text-muted-foreground uppercase tracking-wide">
+                  Curso
+                </th>
+                <th className="text-center px-4 py-3 text-xs font-medium text-muted-foreground uppercase tracking-wide w-28">
+                  Estudiantes
+                </th>
+                <th className="text-center px-4 py-3 text-xs font-medium text-muted-foreground uppercase tracking-wide w-28">
+                  Actividades
+                </th>
+                <th className="text-left px-4 py-3 text-xs font-medium text-muted-foreground uppercase tracking-wide w-32">
+                  Creado
+                </th>
+                <th className="text-right px-4 py-3 text-xs font-medium text-muted-foreground uppercase tracking-wide w-44">
+                  Acciones
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {visible.map((course) => (
+                <tr
+                  key={course.id}
+                  className="border-b border-border/50 last:border-0 hover:bg-secondary/30 transition-colors"
+                >
+                  <td className="px-4 py-3">
+                    <span className="inline-flex items-center justify-center min-w-9 px-2 py-0.5 text-xs font-mono rounded-md bg-secondary text-muted-foreground">
+                      #{course.id}
+                    </span>
+                  </td>
+                  <td className="px-4 py-3">
+                    <Link href={`/docente/cursos/${course.id}`} className="group block">
+                      <span className="text-sm font-medium text-foreground group-hover:text-primary transition-colors">
+                        {course.name}
+                      </span>
+                      <span className="block text-xs text-muted-foreground">
+                        {course.description}
+                      </span>
+                    </Link>
+                  </td>
+                  <td className="px-4 py-3 text-center text-sm font-mono text-foreground">
+                    {course.students}
+                  </td>
+                  <td className="px-4 py-3 text-center text-sm font-mono text-foreground">
+                    {course.activities}
+                  </td>
+                  <td className="px-4 py-3 text-sm text-muted-foreground font-mono">
+                    {course.created}
+                  </td>
+                  <td className="px-4 py-3">
+                    <div className="flex items-center justify-end gap-1">
+                      <IconAction href={`/docente/cursos/${course.id}`} label="Ver" icon={Eye} />
+                      <IconAction href={`/docente/cursos/${course.id}`} label="Estudiantes" icon={Users} />
+                      <IconAction href={`/docente/crear-curso`} label="Editar" icon={Pencil} />
+                      <button
+                        onClick={() => toggleArchive(course.id)}
+                        title={course.archived ? "Desarchivar" : "Archivar"}
+                        className="w-8 h-8 flex items-center justify-center rounded-md text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors"
+                      >
+                        {course.archived ? (
+                          <ArchiveRestore className="w-4 h-4" />
+                        ) : (
+                          <Archive className="w-4 h-4" />
+                        )}
+                      </button>
+                      <button
+                        onClick={() => removeCourse(course.id)}
+                        title="Eliminar"
+                        className="w-8 h-8 flex items-center justify-center rounded-md text-muted-foreground hover:text-danger hover:bg-danger/10 transition-colors"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        {visible.length === 0 && (
+          <div className="px-4 py-12 text-center text-sm text-muted-foreground">
+            No tienes cursos {tab === "activos" ? "activos" : "archivados"}.
+          </div>
+        )}
+      </div>
     </div>
+  )
+}
+
+function IconAction({
+  href,
+  label,
+  icon: Icon,
+}: {
+  href: string
+  label: string
+  icon: React.ComponentType<{ className?: string }>
+}) {
+  return (
+    <Link
+      href={href}
+      title={label}
+      className="w-8 h-8 flex items-center justify-center rounded-md text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors"
+    >
+      <Icon className="w-4 h-4" />
+    </Link>
   )
 }

@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { BookOpen, Database, PlusCircle, Terminal, ArrowLeftRight } from "lucide-react"
+import { BookOpen, Database, PlusCircle, Terminal, ArrowLeftRight, ScrollText } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { ThemeToggle } from "@/components/theme-toggle"
@@ -22,6 +22,11 @@ const navItems = [
     label: "Crear Curso",
     href: "/docente/crear-curso",
     icon: PlusCircle,
+  },
+  {
+    label: "Bitácora",
+    href: "/docente/bitacora",
+    icon: ScrollText,
   },
 ]
 

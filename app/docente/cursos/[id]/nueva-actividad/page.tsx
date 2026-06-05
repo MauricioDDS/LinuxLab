@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/select"
 import { Switch } from "@/components/ui/switch"
 import { RichTextEditor } from "@/components/rich-text-editor"
+import { CheckBuilder, type ActivityCheck } from "@/components/check-builder"
 import { cn } from "@/lib/utils"
 
 const courseTopics = [
@@ -25,22 +26,20 @@ const courseTopics = [
   { id: 11, name: "Shell Scripting" },
 ]
 
-const defaultInstructions = `Crea un script en bash que realice un backup del directorio /home/estudiante/documentos hacia /home/estudiante/backups.
+const defaultInstructions = `Crea un directorio llamado practicas dentro de tu home y, dentro de él, un archivo script.sh con permisos de ejecución (755).
 
-El script debe:
+Pasos sugeridos:
 
-1. Verificar que el directorio origen existe
-2. Crear el directorio destino si no existe
-3. Copiar los archivos preservando permisos
-4. Mostrar un mensaje de confirmación al finalizar`
+1. Crea el directorio: mkdir ~/practicas
+2. Crea el archivo: touch ~/practicas/script.sh
+3. Asigna los permisos: chmod 755 ~/practicas/script.sh
+4. Verifica con: ls -l ~/practicas`
 
-const defaultValidationScript = `#!/bin/bash
-# Verificar que el directorio backup existe
-if [ -d /home/$USER/backups ]; then
-  echo 'PASS'
-else
-  echo 'FAIL'
-fi`
+const initialChecks: ActivityCheck[] = [
+  { id: "c1", type: "directorio_existe", params: { ruta: "/home/$usuario/practicas" }, points: 0 },
+  { id: "c2", type: "archivo_existe", params: { ruta: "/home/$usuario/practicas/script.sh" }, points: 0 },
+  { id: "c3", type: "permisos_son", params: { ruta: "/home/$usuario/practicas/script.sh", modo: "755" }, points: 0 },
+]
 
 interface TerminalLine {
   type: "prompt" | "output"
@@ -54,13 +53,14 @@ export default function NuevaActividadPage() {
   const [dueDate, setDueDate] = useState("")
   const [isRequired, setIsRequired] = useState(true)
   const [instructions, setInstructions] = useState(defaultInstructions)
-  const [evaluationType, setEvaluationType] = useState<"manual" | "script">("script")
-  const [validationScript, setValidationScript] = useState(defaultValidationScript)
-  
+  const [evaluationType, setEvaluationType] = useState<"atomica" | "manual">("atomica")
+  const [checks, setChecks] = useState<ActivityCheck[]>(initialChecks)
+  const [distributeEvenly, setDistributeEvenly] = useState(true)
+
   // Terminal state
   const [terminalHistory, setTerminalHistory] = useState<TerminalLine[]>([
     { type: "output", content: "LinuxLab UFPS - Terminal de prueba para docentes" },
-    { type: "output", content: "Usa esta terminal para preparar el entorno o probar tu script de validación.\n" },
+    { type: "output", content: "Usa esta terminal para preparar y probar el entorno de la actividad.\n" },
   ])
   const [terminalInput, setTerminalInput] = useState("")
   const [cursorVisible, setCursorVisible] = useState(true)
@@ -95,7 +95,7 @@ export default function NuevaActividadPage() {
       return "docente"
     }
     if (cmd === "ls" || cmd === "ls -l" || cmd === "ls -la") {
-      return "documentos/  scripts/  backups/  validacion.sh"
+      return "documentos/  practicas/  notas.txt"
     }
     if (cmd === "clear") {
       setTerminalHistory([])
@@ -106,15 +106,13 @@ export default function NuevaActividadPage() {
     }
     if (cmd.startsWith("cat ")) {
       const file = cmd.substring(4)
-      if (file === "validacion.sh") {
-        return validationScript
-      }
       return `cat: ${file}: No such file or directory`
     }
-    if (cmd === "bash validacion.sh" || cmd === "./validacion.sh") {
-      return "PASS"
-    }
-    if (cmd.startsWith("mkdir ") || cmd.startsWith("touch ")) {
+    if (
+      cmd.startsWith("mkdir ") ||
+      cmd.startsWith("touch ") ||
+      cmd.startsWith("chmod ")
+    ) {
       return ""
     }
     
@@ -334,81 +332,71 @@ export default function NuevaActividadPage() {
               </div>
             </section>
 
-            {/* Section 3: Evaluation */}
+            {/* Section 3: Evaluation by atomic assertions */}
             <section className="space-y-6">
               <div className="flex items-center gap-3 pb-2 border-b border-border">
                 <div className="w-6 h-6 bg-primary/10 border border-primary/30 flex items-center justify-center text-xs font-medium text-primary">
                   3
                 </div>
-                <h2 className="text-lg font-medium text-foreground">Evaluación</h2>
+                <h2 className="text-lg font-medium text-foreground">Validación</h2>
               </div>
 
               {/* Evaluation type toggle */}
-              <div className="flex items-center gap-4 p-4 bg-secondary/30 border border-border">
-                <div className="flex items-center gap-3">
-                  <button
-                    onClick={() => setEvaluationType("manual")}
-                    className={cn(
-                      "px-4 py-2 text-sm font-medium transition-all",
-                      evaluationType === "manual"
-                        ? "bg-card border border-primary/50 text-foreground"
-                        : "text-muted-foreground hover:text-foreground"
-                    )}
-                  >
-                    Evaluación manual
-                  </button>
-                  <button
-                    onClick={() => setEvaluationType("script")}
-                    className={cn(
-                      "px-4 py-2 text-sm font-medium transition-all",
-                      evaluationType === "script"
-                        ? "bg-card border border-primary/50 text-foreground"
-                        : "text-muted-foreground hover:text-foreground"
-                    )}
-                  >
-                    Script de validación
-                  </button>
-                </div>
+              <div className="flex items-center gap-2 p-1 bg-secondary/40 border border-border rounded-md w-fit">
+                <button
+                  onClick={() => setEvaluationType("atomica")}
+                  className={cn(
+                    "px-4 py-1.5 text-sm font-medium rounded transition-all",
+                    evaluationType === "atomica"
+                      ? "bg-card border border-border shadow-sm text-foreground"
+                      : "text-muted-foreground hover:text-foreground"
+                  )}
+                >
+                  Aserciones atómicas
+                </button>
+                <button
+                  onClick={() => setEvaluationType("manual")}
+                  className={cn(
+                    "px-4 py-1.5 text-sm font-medium rounded transition-all",
+                    evaluationType === "manual"
+                      ? "bg-card border border-border shadow-sm text-foreground"
+                      : "text-muted-foreground hover:text-foreground"
+                  )}
+                >
+                  Revisión manual
+                </button>
               </div>
 
-              {evaluationType === "manual" ? (
-                <div className="p-4 bg-secondary/20 border border-border">
+              {evaluationType === "atomica" ? (
+                <>
                   <p className="text-sm text-muted-foreground leading-relaxed">
-                    Podrás revisar y calificar manualmente los envíos de los estudiantes desde el{" "}
+                    Define cómo se valida la actividad agregando aserciones del catálogo.
+                    El sistema las ejecuta sobre el entorno del estudiante cuando este
+                    solicita la validación, sin necesidad de escribir scripts. El valor
+                    de la actividad ({maxScore || 0} pts) se reparte entre las aserciones.
+                  </p>
+                  <CheckBuilder
+                    checks={checks}
+                    onChange={setChecks}
+                    activityValue={Number(maxScore) || 0}
+                    distributeEvenly={distributeEvenly}
+                    onDistributeChange={setDistributeEvenly}
+                  />
+                </>
+              ) : (
+                <div className="bg-secondary/20 border border-border rounded-md p-4 space-y-2">
+                  <p className="text-sm text-foreground font-medium">El docente revisa y califica manualmente</p>
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    El estudiante podrá enviar su trabajo desde la vista de la actividad.
+                    Recibirás el aviso en el{" "}
                     <Link href="/docente/cursos/1/seguimiento" className="text-primary hover:underline">
                       panel de seguimiento
-                    </Link>
-                    .
+                    </Link>{" "}
+                    y podrás revisarlo, asignar la calificación y dar retroalimentación
+                    de forma manual.
                   </p>
-                </div>
-              ) : (
-                <div className="space-y-3">
-                  <label className="text-sm font-medium text-foreground">
-                    Script de validación (Bash)
-                  </label>
-                  <div className="border border-border bg-[#0a0a0a] overflow-hidden">
-                    {/* Code editor header */}
-                    <div className="flex items-center gap-2 px-4 py-2 bg-[#161616] border-b border-border">
-                      <div className="flex gap-1.5">
-                        <div className="w-3 h-3 rounded-full bg-[#ff5f57]" />
-                        <div className="w-3 h-3 rounded-full bg-[#febc2e]" />
-                        <div className="w-3 h-3 rounded-full bg-[#28c840]" />
-                      </div>
-                      <span className="text-xs text-zinc-400 ml-2 font-mono">
-                        validacion.sh
-                      </span>
-                    </div>
-                    {/* Code editor */}
-                    <textarea
-                      value={validationScript}
-                      onChange={(e) => setValidationScript(e.target.value)}
-                      className="w-full h-48 p-4 bg-transparent text-[#e6e6e6] font-mono text-sm resize-none focus:outline-none leading-relaxed"
-                      spellCheck={false}
-                    />
-                  </div>
-                  <p className="text-xs text-muted-foreground flex items-center gap-2">
-                    <span className="w-1.5 h-1.5 rounded-full bg-primary" />
-                    El script debe imprimir PASS o FAIL. El resultado se asignará automáticamente como puntuación.
+                  <p className="text-xs text-muted-foreground">
+                    La actividad tendrá un valor de <span className="font-medium text-foreground">{maxScore || 0} pts</span> asignados directamente por ti.
                   </p>
                 </div>
               )}
@@ -422,7 +410,7 @@ export default function NuevaActividadPage() {
           <div className="px-4 py-3 border-b border-border bg-card">
             <h3 className="text-sm font-medium text-foreground">Terminal de prueba</h3>
             <p className="text-xs text-muted-foreground mt-0.5">
-              Usa esta terminal para preparar el entorno o probar tu script de validación
+              Usa esta terminal para reproducir la solución y verificar tus aserciones
             </p>
           </div>
 

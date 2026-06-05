@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { MetricCard } from "@/components/metric-card"
 import { StatusIndicator, ProgressBar } from "@/components/progress-indicators"
+import { StudentProgressDialog } from "@/components/student-progress-dialog"
 
 const topics = [
   { id: 1, name: "Intro Linux", short: "T1" },
@@ -42,6 +43,13 @@ export default function SeguimientoPage() {
   const [searchQuery, setSearchQuery] = useState("")
   const [selectedTopic, setSelectedTopic] = useState("all")
   const [selectedActivity, setSelectedActivity] = useState("all")
+  const [selectedStudent, setSelectedStudent] = useState<Student | null>(null)
+  const [dialogOpen, setDialogOpen] = useState(false)
+
+  const openStudent = (student: Student) => {
+    setSelectedStudent(student)
+    setDialogOpen(true)
+  }
 
   const filteredStudents = students.filter(student =>
     student.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -195,9 +203,9 @@ export default function SeguimientoPage() {
                     className="border-b border-border/50 hover:bg-card/50 transition-colors group"
                   >
                     <td className="px-4 py-3">
-                      <Link
-                        href={`/docente/cursos/1/estudiante/${student.id}`}
-                        className="group/link"
+                      <button
+                        onClick={() => openStudent(student)}
+                        className="group/link text-left"
                       >
                         <span className="text-sm font-medium text-foreground group-hover/link:text-primary group-hover/link:underline decoration-primary underline-offset-2 transition-colors">
                           {student.name}
@@ -205,7 +213,7 @@ export default function SeguimientoPage() {
                         <span className="block text-xs font-mono text-muted-foreground">
                           {student.code}
                         </span>
-                      </Link>
+                      </button>
                     </td>
                     {topics.map((topic) => (
                       <td key={topic.id} className="px-3 py-3">
@@ -235,6 +243,14 @@ export default function SeguimientoPage() {
           </div>
         </div>
       </div>
+
+      {/* Student progress dialog */}
+      <StudentProgressDialog
+        student={selectedStudent}
+        topics={topics}
+        open={dialogOpen}
+        onOpenChange={setDialogOpen}
+      />
     </div>
   )
 }
