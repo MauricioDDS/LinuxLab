@@ -2,14 +2,9 @@
 
 import { Plus, Trash2, ShieldCheck } from "lucide-react"
 import { cn } from "@/lib/utils"
+import type { ActivityCheck } from "@/lib/domain/activity"
 
-/** Una aserción atómica configurada por el docente. */
-export interface ActivityCheck {
-  id: string
-  type: string
-  params: Record<string, string>
-  points: number
-}
+export type { ActivityCheck }
 
 interface Field {
   key: string

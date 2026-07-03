@@ -4,8 +4,9 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { BookOpen, Database, PlusCircle, Terminal, ArrowLeftRight, ScrollText } from "lucide-react"
 import { cn } from "@/lib/utils"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { ThemeToggle } from "@/components/theme-toggle"
+import { useAuth, initialsOf } from "@/lib/auth/context"
 
 const navItems = [
   {
@@ -32,6 +33,13 @@ const navItems = [
 
 export function TeacherSidebar() {
   const pathname = usePathname()
+  const { user } = useAuth()
+  const roleLabel =
+    user?.role === "admin"
+      ? "Administrador"
+      : user?.role === "student"
+        ? "Estudiante"
+        : "Docente"
 
   return (
     <aside className="w-64 bg-card border-r border-border flex flex-col h-screen shrink-0">
@@ -87,17 +95,16 @@ export function TeacherSidebar() {
       <div className="p-4 border-t border-border">
         <div className="flex items-center gap-3">
           <Avatar className="w-10 h-10 border border-border">
-            <AvatarImage src="/placeholder-user.jpg" />
             <AvatarFallback className="bg-secondary text-foreground">
-              CM
+              {initialsOf(user?.name)}
             </AvatarFallback>
           </Avatar>
           <div className="flex-1 min-w-0">
             <p className="text-sm font-medium text-foreground truncate">
-              Carlos Mendoza
+              {user?.name ?? "Invitado"}
             </p>
             <span className="text-xs text-muted-foreground">
-              Docente
+              {roleLabel}
             </span>
           </div>
         </div>

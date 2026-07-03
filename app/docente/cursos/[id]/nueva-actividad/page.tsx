@@ -1,8 +1,9 @@
 "use client"
 
-import { useState, useRef, useEffect } from "react"
+import { useState, useRef, useEffect, useMemo } from "react"
 import Link from "next/link"
-import { ChevronRight, Calendar, Save, Send, Copy, Trash2, Maximize2, Minimize2 } from "lucide-react"
+import { useParams } from "next/navigation"
+import { ChevronRight, Calendar, Save, Send, Copy, Trash2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import {
@@ -16,30 +17,10 @@ import { Switch } from "@/components/ui/switch"
 import { RichTextEditor } from "@/components/rich-text-editor"
 import { CheckBuilder, type ActivityCheck } from "@/components/check-builder"
 import { cn } from "@/lib/utils"
-
-const courseTopics = [
-  { id: 1, name: "Introducción a Linux" },
-  { id: 2, name: "Directorios" },
-  { id: 4, name: "Permisos" },
-  { id: 6, name: "Compresión" },
-  { id: 8, name: "Gestión de Procesos" },
-  { id: 11, name: "Shell Scripting" },
-]
-
-const defaultInstructions = `Crea un directorio llamado practicas dentro de tu home y, dentro de él, un archivo script.sh con permisos de ejecución (755).
-
-Pasos sugeridos:
-
-1. Crea el directorio: mkdir ~/practicas
-2. Crea el archivo: touch ~/practicas/script.sh
-3. Asigna los permisos: chmod 755 ~/practicas/script.sh
-4. Verifica con: ls -l ~/practicas`
-
-const initialChecks: ActivityCheck[] = [
-  { id: "c1", type: "directorio_existe", params: { ruta: "/home/$usuario/practicas" }, points: 0 },
-  { id: "c2", type: "archivo_existe", params: { ruta: "/home/$usuario/practicas/script.sh" }, points: 0 },
-  { id: "c3", type: "permisos_son", params: { ruta: "/home/$usuario/practicas/script.sh", modo: "755" }, points: 0 },
-]
+import { temario } from "@/lib/content/temario"
+import { createTerminalSession } from "@/lib/data/terminal"
+import { createActivity } from "@/lib/data/activities"
+import type { EvaluationType } from "@/lib/domain/activity"
 
 interface TerminalLine {
   type: "prompt" | "output"
@@ -47,120 +28,95 @@ interface TerminalLine {
 }
 
 export default function NuevaActividadPage() {
-  const [activityName, setActivityName] = useState("Tarea: Script de backup")
+  const params = useParams<{ id: string }>()
+  const courseId = params?.id ?? ""
+
+  const [activityName, setActivityName] = useState("")
   const [selectedTopic, setSelectedTopic] = useState("")
   const [maxScore, setMaxScore] = useState("100")
   const [dueDate, setDueDate] = useState("")
   const [isRequired, setIsRequired] = useState(true)
-  const [instructions, setInstructions] = useState(defaultInstructions)
-  const [evaluationType, setEvaluationType] = useState<"atomica" | "manual">("atomica")
-  const [checks, setChecks] = useState<ActivityCheck[]>(initialChecks)
+  const [instructions, setInstructions] = useState("")
+  const [evaluationType, setEvaluationType] = useState<EvaluationType>("atomica")
+  const [checks, setChecks] = useState<ActivityCheck[]>([])
   const [distributeEvenly, setDistributeEvenly] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+  const [publishing, setPublishing] = useState(false)
 
-  // Terminal state
-  const [terminalHistory, setTerminalHistory] = useState<TerminalLine[]>([
-    { type: "output", content: "LinuxLab UFPS - Terminal de prueba para docentes" },
-    { type: "output", content: "Usa esta terminal para preparar y probar el entorno de la actividad.\n" },
-  ])
+  // Terminal (teacher test environment) — routed through the terminal seam.
+  const session = useMemo(() => createTerminalSession({ user: "docente" }), [])
+  const greeting = useMemo<TerminalLine[]>(
+    () => session.greeting.map((content) => ({ type: "output", content })),
+    [session]
+  )
+  const [terminalHistory, setTerminalHistory] = useState<TerminalLine[]>(greeting)
   const [terminalInput, setTerminalInput] = useState("")
   const [cursorVisible, setCursorVisible] = useState(true)
   const inputRef = useRef<HTMLInputElement>(null)
   const terminalBodyRef = useRef<HTMLDivElement>(null)
 
-  // Blinking cursor effect
   useEffect(() => {
-    const interval = setInterval(() => {
-      setCursorVisible((prev) => !prev)
-    }, 530)
+    const interval = setInterval(() => setCursorVisible((prev) => !prev), 530)
     return () => clearInterval(interval)
   }, [])
 
-  // Auto-scroll to bottom
   useEffect(() => {
     if (terminalBodyRef.current) {
       terminalBodyRef.current.scrollTop = terminalBodyRef.current.scrollHeight
     }
   }, [terminalHistory, terminalInput])
 
-  const processCommand = (command: string): string => {
-    const cmd = command.trim().toLowerCase()
-    
-    if (cmd === "help") {
-      return "Comandos disponibles: ls, pwd, whoami, echo, cat, mkdir, touch, clear, help"
-    }
-    if (cmd === "pwd") {
-      return "/home/docente"
-    }
-    if (cmd === "whoami") {
-      return "docente"
-    }
-    if (cmd === "ls" || cmd === "ls -l" || cmd === "ls -la") {
-      return "documentos/  practicas/  notas.txt"
-    }
-    if (cmd === "clear") {
-      setTerminalHistory([])
-      return ""
-    }
-    if (cmd.startsWith("echo ")) {
-      return command.substring(5).replace(/['"]/g, "")
-    }
-    if (cmd.startsWith("cat ")) {
-      const file = cmd.substring(4)
-      return `cat: ${file}: No such file or directory`
-    }
-    if (
-      cmd.startsWith("mkdir ") ||
-      cmd.startsWith("touch ") ||
-      cmd.startsWith("chmod ")
-    ) {
-      return ""
-    }
-    
-    return `bash: ${command.split(" ")[0]}: command not found`
-  }
-
-  const handleTerminalSubmit = () => {
+  const handleTerminalSubmit = async () => {
     if (!terminalInput.trim()) return
-    
-    const newHistory: TerminalLine[] = [
-      ...terminalHistory,
-      { type: "prompt", content: terminalInput },
-    ]
-    
-    const output = processCommand(terminalInput)
-    if (output) {
-      newHistory.push({ type: "output", content: output })
-    }
-    
-    setTerminalHistory(newHistory)
+    const command = terminalInput
+    setTerminalHistory((prev) => [...prev, { type: "prompt", content: command }])
     setTerminalInput("")
+    const result = await session.run(command)
+    if (result.clear) {
+      setTerminalHistory([])
+      return
+    }
+    if (result.output) {
+      setTerminalHistory((prev) => [...prev, { type: "output", content: result.output }])
+    }
   }
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter") {
-      handleTerminalSubmit()
-    }
+    if (e.key === "Enter") handleTerminalSubmit()
   }
 
-  const focusInput = () => {
-    inputRef.current?.focus()
-  }
+  const focusInput = () => inputRef.current?.focus()
 
   const copyToClipboard = () => {
     const text = terminalHistory
-      .map((line) => {
-        if (line.type === "prompt") return `$ ${line.content}`
-        return line.content
-      })
+      .map((line) => (line.type === "prompt" ? `$ ${line.content}` : line.content))
       .join("\n")
     navigator.clipboard.writeText(text)
   }
 
-  const clearTerminal = () => {
-    setTerminalHistory([
-      { type: "output", content: "LinuxLab UFPS - Terminal de prueba para docentes" },
-      { type: "output", content: "Usa esta terminal para preparar el entorno o probar tu script de validación.\n" },
-    ])
+  const clearTerminal = () => setTerminalHistory(greeting)
+
+  const handlePublish = async () => {
+    setError(null)
+    setPublishing(true)
+    try {
+      await createActivity({
+        title: activityName,
+        topicNumber: Number(selectedTopic) || 0,
+        source: "profesor",
+        instructions,
+        maxScore: Number(maxScore) || 0,
+        dueDate: dueDate || undefined,
+        required: isRequired,
+        evaluationType,
+        checks,
+      })
+      // On success the backend returns the activity; redirect to the course.
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "No se pudo publicar la actividad.")
+    } finally {
+      setPublishing(false)
+    }
   }
 
   return (
@@ -174,8 +130,8 @@ export default function NuevaActividadPage() {
               Mis Cursos
             </Link>
             <ChevronRight className="w-4 h-4" />
-            <Link href="/docente/cursos/1" className="hover:text-foreground transition-colors">
-              Sistemas Operativos 2025-II
+            <Link href={`/docente/cursos/${courseId}`} className="hover:text-foreground transition-colors">
+              Curso
             </Link>
             <ChevronRight className="w-4 h-4" />
             <span className="text-foreground">Nueva Actividad</span>
@@ -185,16 +141,22 @@ export default function NuevaActividadPage() {
           <div className="flex items-center justify-between">
             <h1 className="text-xl font-semibold text-foreground">Crear nueva actividad</h1>
             <div className="flex items-center gap-3">
-              <Button variant="ghost" className="text-muted-foreground hover:text-foreground">
-                Cancelar
-              </Button>
+              <Link href={`/docente/cursos/${courseId}`}>
+                <Button variant="ghost" className="text-muted-foreground hover:text-foreground">
+                  Cancelar
+                </Button>
+              </Link>
               <Button variant="outline" className="border-border hover:bg-secondary">
                 <Save className="w-4 h-4 mr-2" />
                 Guardar borrador
               </Button>
-              <Button className="bg-primary hover:bg-primary/90 text-primary-foreground neon-glow">
+              <Button
+                onClick={handlePublish}
+                disabled={publishing}
+                className="bg-primary hover:bg-primary/90 text-primary-foreground neon-glow"
+              >
                 <Send className="w-4 h-4 mr-2" />
-                Publicar actividad
+                {publishing ? "Publicando…" : "Publicar actividad"}
               </Button>
             </div>
           </div>
@@ -206,6 +168,12 @@ export default function NuevaActividadPage() {
         {/* Left Side - Configuration (55%) */}
         <div className="w-[55%] border-r border-border overflow-y-auto">
           <div className="p-6 space-y-8">
+            {error && (
+              <div className="text-sm text-danger bg-danger/10 border border-danger/20 rounded-md px-3 py-2">
+                {error}
+              </div>
+            )}
+
             {/* Section 1: General Information */}
             <section className="space-y-6">
               <div className="flex items-center gap-3 pb-2 border-b border-border">
@@ -216,7 +184,6 @@ export default function NuevaActividadPage() {
               </div>
 
               <div className="grid gap-5">
-                {/* Activity name */}
                 <div className="space-y-2">
                   <label className="text-sm font-medium text-foreground">
                     Nombre de la actividad
@@ -229,24 +196,21 @@ export default function NuevaActividadPage() {
                   />
                 </div>
 
-                {/* Topic and Score row */}
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <label className="text-sm font-medium text-foreground">
-                      Tema asociado
-                    </label>
+                    <label className="text-sm font-medium text-foreground">Tema asociado</label>
                     <Select value={selectedTopic} onValueChange={setSelectedTopic}>
                       <SelectTrigger className="bg-secondary/30 border-border focus:border-primary/50 focus:ring-primary/20">
                         <SelectValue placeholder="Seleccionar tema" />
                       </SelectTrigger>
                       <SelectContent className="bg-card border-border">
-                        {courseTopics.map((topic) => (
+                        {temario.map((topic) => (
                           <SelectItem
-                            key={topic.id}
-                            value={topic.id.toString()}
+                            key={topic.number}
+                            value={String(topic.number)}
                             className="focus:bg-primary/10 focus:text-foreground"
                           >
-                            {topic.id}. {topic.name}
+                            {topic.number}. {topic.title}
                           </SelectItem>
                         ))}
                       </SelectContent>
@@ -254,9 +218,7 @@ export default function NuevaActividadPage() {
                   </div>
 
                   <div className="space-y-2">
-                    <label className="text-sm font-medium text-foreground">
-                      Puntuación máxima
-                    </label>
+                    <label className="text-sm font-medium text-foreground">Puntuación máxima</label>
                     <Input
                       type="number"
                       value={maxScore}
@@ -268,7 +230,6 @@ export default function NuevaActividadPage() {
                   </div>
                 </div>
 
-                {/* Due date and toggle row */}
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <label className="text-sm font-medium text-foreground">
@@ -286,9 +247,7 @@ export default function NuevaActividadPage() {
                   </div>
 
                   <div className="space-y-2">
-                    <label className="text-sm font-medium text-foreground">
-                      Tipo de actividad
-                    </label>
+                    <label className="text-sm font-medium text-foreground">Tipo de actividad</label>
                     <div className="flex items-center gap-3 h-9">
                       <Switch
                         checked={isRequired}
@@ -332,7 +291,7 @@ export default function NuevaActividadPage() {
               </div>
             </section>
 
-            {/* Section 3: Evaluation by atomic assertions */}
+            {/* Section 3: Evaluation */}
             <section className="space-y-6">
               <div className="flex items-center gap-3 pb-2 border-b border-border">
                 <div className="w-6 h-6 bg-primary/10 border border-primary/30 flex items-center justify-center text-xs font-medium text-primary">
@@ -341,7 +300,6 @@ export default function NuevaActividadPage() {
                 <h2 className="text-lg font-medium text-foreground">Validación</h2>
               </div>
 
-              {/* Evaluation type toggle */}
               <div className="flex items-center gap-2 p-1 bg-secondary/40 border border-border rounded-md w-fit">
                 <button
                   onClick={() => setEvaluationType("atomica")}
@@ -385,18 +343,25 @@ export default function NuevaActividadPage() {
                 </>
               ) : (
                 <div className="bg-secondary/20 border border-border rounded-md p-4 space-y-2">
-                  <p className="text-sm text-foreground font-medium">El docente revisa y califica manualmente</p>
+                  <p className="text-sm text-foreground font-medium">
+                    El docente revisa y califica manualmente
+                  </p>
                   <p className="text-sm text-muted-foreground leading-relaxed">
                     El estudiante podrá enviar su trabajo desde la vista de la actividad.
                     Recibirás el aviso en el{" "}
-                    <Link href="/docente/cursos/1/seguimiento" className="text-primary hover:underline">
+                    <Link
+                      href={`/docente/cursos/${courseId}/seguimiento`}
+                      className="text-primary hover:underline"
+                    >
                       panel de seguimiento
                     </Link>{" "}
                     y podrás revisarlo, asignar la calificación y dar retroalimentación
                     de forma manual.
                   </p>
                   <p className="text-xs text-muted-foreground">
-                    La actividad tendrá un valor de <span className="font-medium text-foreground">{maxScore || 0} pts</span> asignados directamente por ti.
+                    La actividad tendrá un valor de{" "}
+                    <span className="font-medium text-foreground">{maxScore || 0} pts</span>{" "}
+                    asignados directamente por ti.
                   </p>
                 </div>
               )}
@@ -406,7 +371,6 @@ export default function NuevaActividadPage() {
 
         {/* Right Side - Terminal Preview (45%) */}
         <div className="w-[45%] flex flex-col bg-[#0a0a0a]">
-          {/* Terminal label */}
           <div className="px-4 py-3 border-b border-border bg-card">
             <h3 className="text-sm font-medium text-foreground">Terminal de prueba</h3>
             <p className="text-xs text-muted-foreground mt-0.5">
@@ -414,9 +378,7 @@ export default function NuevaActividadPage() {
             </p>
           </div>
 
-          {/* Terminal */}
           <div className="flex-1 flex flex-col">
-            {/* Terminal Header */}
             <div className="flex items-center justify-between px-4 py-2 bg-[#161616] border-b border-primary/30">
               <div className="flex items-center gap-2">
                 <div className="flex gap-1.5">
@@ -424,9 +386,7 @@ export default function NuevaActividadPage() {
                   <div className="w-3 h-3 rounded-full bg-[#febc2e]" />
                   <div className="w-3 h-3 rounded-full bg-[#28c840]" />
                 </div>
-                <span className="text-sm text-zinc-400 ml-3 font-mono">
-                  bash
-                </span>
+                <span className="text-sm text-zinc-400 ml-3 font-mono">bash</span>
               </div>
               <div className="flex items-center gap-1">
                 <Button
@@ -448,16 +408,13 @@ export default function NuevaActividadPage() {
               </div>
             </div>
 
-            {/* Red separator line */}
             <div className="h-px bg-primary/50" />
 
-            {/* Terminal Body */}
             <div
               ref={terminalBodyRef}
               className="flex-1 p-4 overflow-y-auto font-mono text-sm cursor-text"
               onClick={focusInput}
             >
-              {/* History */}
               {terminalHistory.map((line, index) => (
                 <div key={index} className="leading-6">
                   {line.type === "prompt" ? (
@@ -469,14 +426,11 @@ export default function NuevaActividadPage() {
                       <span className="text-zinc-100">{line.content}</span>
                     </div>
                   ) : (
-                    <div className="text-zinc-400 whitespace-pre-wrap">
-                      {line.content}
-                    </div>
+                    <div className="text-zinc-400 whitespace-pre-wrap">{line.content}</div>
                   )}
                 </div>
               ))}
 
-              {/* Current Input Line */}
               <div className="flex leading-6">
                 <span className="text-[#238636]">docente@linuxlab</span>
                 <span className="text-zinc-100">:</span>
@@ -491,7 +445,6 @@ export default function NuevaActividadPage() {
                 />
               </div>
 
-              {/* Hidden input for keyboard capture */}
               <input
                 ref={inputRef}
                 type="text"

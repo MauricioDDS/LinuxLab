@@ -6,6 +6,7 @@ import { Home, Terminal, BookOpen, LogOut, ArrowLeftRight } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { ThemeToggle } from "@/components/theme-toggle"
+import { useAuth, initialsOf } from "@/lib/auth/context"
 
 const navItems = [
   { label: "Inicio", href: "/inicio", icon: Home },
@@ -15,6 +16,7 @@ const navItems = [
 
 export function StudentSidebar() {
   const pathname = usePathname()
+  const { user } = useAuth()
 
   return (
     <aside className="w-64 bg-sidebar border-r border-border flex flex-col h-screen shrink-0">
@@ -69,12 +71,16 @@ export function StudentSidebar() {
         <div className="flex items-center gap-3 px-1">
           <Avatar className="w-9 h-9">
             <AvatarFallback className="bg-primary/15 text-primary text-xs font-medium">
-              JP
+              {initialsOf(user?.name)}
             </AvatarFallback>
           </Avatar>
           <div className="flex-1 min-w-0">
-            <p className="text-sm font-medium text-foreground truncate">Juan Pérez</p>
-            <p className="text-xs text-muted-foreground truncate">juan.perez@ufps.edu.co</p>
+            <p className="text-sm font-medium text-foreground truncate">
+              {user?.name ?? "Invitado"}
+            </p>
+            <p className="text-xs text-muted-foreground truncate">
+              {user?.email ?? "Sin sesión activa"}
+            </p>
           </div>
           <ThemeToggle className="h-8 w-8 shrink-0" />
         </div>

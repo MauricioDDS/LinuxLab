@@ -1,48 +1,34 @@
 "use client"
 
-import { useState } from "react"
+import { useMemo, useState } from "react"
 import { Terminal as TerminalIcon, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { TerminalEmulator } from "@/components/terminal-emulator"
+import { createTerminalSession } from "@/lib/data/terminal"
 
 interface TerminalLine {
   type: "prompt" | "output"
   content: string
 }
 
-const initialHistory: TerminalLine[] = [
-  { type: "output", content: "LinuxLab UFPS — terminal lista." },
-  { type: "output", content: "Escribe 'help' para ver los comandos disponibles.\n" },
-]
-
-function processCommand(
-  command: string,
-  setHistory: React.Dispatch<React.SetStateAction<TerminalLine[]>>
-): string {
-  const cmd = command.trim().toLowerCase()
-  if (cmd === "help") return "Comandos: ls, pwd, whoami, echo, cat, clear, help"
-  if (cmd === "pwd") return "/home/estudiante"
-  if (cmd === "whoami") return "estudiante"
-  if (cmd === "ls" || cmd === "ls -l" || cmd === "ls -la")
-    return "documentos/  practicas/  notas.txt  script.sh"
-  if (cmd === "clear") {
-    setHistory([])
-    return ""
-  }
-  if (cmd.startsWith("echo ")) return command.substring(5).replace(/['"]/g, "")
-  if (cmd.startsWith("cat ")) return `cat: ${cmd.substring(4)}: No such file or directory`
-  return `bash: ${command.split(" ")[0]}: command not found`
-}
-
 export function TerminalPanel({ onClose }: { onClose: () => void }) {
-  const [history, setHistory] = useState<TerminalLine[]>(initialHistory)
+  const session = useMemo(() => createTerminalSession({ user: "estudiante" }), [])
+  const [history, setHistory] = useState<TerminalLine[]>(
+    session.greeting.map((content) => ({ type: "output", content }))
+  )
   const [currentInput, setCurrentInput] = useState("")
 
-  const handleSubmit = (command: string) => {
+  const handleSubmit = async (command: string) => {
     setHistory((prev) => [...prev, { type: "prompt", content: command }])
-    const output = processCommand(command, setHistory)
-    if (output) setHistory((prev) => [...prev, { type: "output", content: output }])
     setCurrentInput("")
+    const result = await session.run(command)
+    if (result.clear) {
+      setHistory([])
+      return
+    }
+    if (result.output) {
+      setHistory((prev) => [...prev, { type: "output", content: result.output }])
+    }
   }
 
   return (

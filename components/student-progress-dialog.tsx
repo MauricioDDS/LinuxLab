@@ -11,33 +11,18 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog"
 import { cn } from "@/lib/utils"
-
-type Status = "completed" | "in-progress" | "not-started" | "overdue"
-
-interface Topic {
-  id: number
-  name: string
-  short: string
-}
-
-interface Student {
-  id: string
-  name: string
-  code: string
-  topicStatus: Record<number, Status>
-  progress: number
-  lastActivity: string
-}
+import type { ProgressStatus, StudentProgress } from "@/lib/domain/submission"
+import type { Topic } from "@/lib/domain/topic"
 
 interface StudentProgressDialogProps {
-  student: Student | null
+  student: StudentProgress | null
   topics: Topic[]
   courseId?: string
   open: boolean
   onOpenChange: (open: boolean) => void
 }
 
-const statusMeta: Record<Status, { label: string; color: string; text: string }> = {
+const statusMeta: Record<ProgressStatus, { label: string; color: string; text: string }> = {
   completed: { label: "Completado", color: "var(--success)", text: "text-success" },
   "in-progress": { label: "En progreso", color: "var(--warning)", text: "text-warning" },
   "not-started": { label: "Sin iniciar", color: "var(--muted-foreground)", text: "text-muted-foreground" },
@@ -47,13 +32,14 @@ const statusMeta: Record<Status, { label: string; color: string; text: string }>
 export function StudentProgressDialog({
   student,
   topics,
-  courseId = "1",
+  courseId = "",
   open,
   onOpenChange,
 }: StudentProgressDialogProps) {
   if (!student) return null
 
-  const statuses = topics.map((t) => student.topicStatus[t.id] ?? "not-started")
+  const { student: person, topicStatus, progress, lastActivity } = student
+  const statuses = topics.map((t) => topicStatus[t.number] ?? "not-started")
   const completados = statuses.filter((s) => s === "completed").length
   const enProgreso = statuses.filter((s) => s === "in-progress").length
   const sinIniciar = statuses.filter((s) => s === "not-started").length
@@ -77,9 +63,9 @@ export function StudentProgressDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-2xl">
         <DialogHeader>
-          <DialogTitle>{student.name}</DialogTitle>
+          <DialogTitle>{person.name}</DialogTitle>
           <DialogDescription>
-            <span className="font-mono">{student.code}</span> · Última actividad: {student.lastActivity}
+            <span className="font-mono">{person.code}</span> · Última actividad: {lastActivity}
           </DialogDescription>
         </DialogHeader>
 
@@ -107,9 +93,7 @@ export function StudentProgressDialog({
             </ResponsiveContainer>
             {/* Center label */}
             <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-              <span className="text-3xl font-bold font-mono text-foreground">
-                {student.progress}%
-              </span>
+              <span className="text-3xl font-bold font-mono text-foreground">{progress}%</span>
               <span className="text-xs text-muted-foreground">progreso</span>
             </div>
           </div>
@@ -138,14 +122,14 @@ export function StudentProgressDialog({
           </h4>
           <div className="space-y-1.5">
             {topics.map((topic) => {
-              const status = student.topicStatus[topic.id] ?? "not-started"
+              const status = topicStatus[topic.number] ?? "not-started"
               const meta = statusMeta[status]
               return (
                 <div
-                  key={topic.id}
+                  key={topic.number}
                   className="flex items-center justify-between bg-secondary/30 border border-border rounded-md px-3 py-2"
                 >
-                  <span className="text-sm text-foreground">{topic.name}</span>
+                  <span className="text-sm text-foreground">{topic.title}</span>
                   <span className={cn("inline-flex items-center gap-1.5 text-xs font-medium", meta.text)}>
                     <span className="w-1.5 h-1.5 rounded-full" style={{ background: meta.color }} />
                     {meta.label}
@@ -159,7 +143,7 @@ export function StudentProgressDialog({
         {/* Footer link */}
         <div className="flex justify-end pt-1">
           <Link
-            href={`/docente/cursos/${courseId}/estudiante/${student.id}`}
+            href={`/docente/cursos/${courseId}/estudiante/${person.id}`}
             className="inline-flex items-center gap-1.5 text-sm text-primary hover:underline"
           >
             Ver dashboard completo

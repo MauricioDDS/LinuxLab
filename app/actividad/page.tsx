@@ -1,143 +1,35 @@
 "use client"
 
-import { useState } from "react"
+import { useMemo, useState } from "react"
+import { ClipboardList } from "lucide-react"
 import { Navbar } from "@/components/navbar"
-import { ActivityInstructions } from "@/components/activity-instructions"
 import { TerminalEmulator } from "@/components/terminal-emulator"
+import { createTerminalSession } from "@/lib/data/terminal"
 
 interface TerminalLine {
   type: "prompt" | "output"
   content: string
 }
 
-const initialSteps = [
-  {
-    id: 1,
-    instruction: "Crea un archivo llamado script.sh usando touch",
-    status: "completed" as const,
-  },
-  {
-    id: 2,
-    instruction: "Asigna permisos 755 al archivo script.sh",
-    status: "current" as const,
-  },
-  {
-    id: 3,
-    instruction: "Verifica los permisos con ls -l",
-    status: "locked" as const,
-  },
-  {
-    id: 4,
-    instruction: "Cambia el propietario del archivo usando chown",
-    status: "locked" as const,
-  },
-]
-
-const initialHistory: TerminalLine[] = [
-  { type: "prompt", content: "touch script.sh" },
-  { type: "prompt", content: "ls -l" },
-  {
-    type: "output",
-    content: `total 4
--rw-r--r-- 1 estudiante estudiante    0 May 24 10:30 script.sh`,
-  },
-]
-
 export default function ActividadPage() {
-  const [steps, setSteps] = useState(initialSteps)
-  const [currentStep, setCurrentStep] = useState(2)
-  const [history, setHistory] = useState<TerminalLine[]>(initialHistory)
-  const [currentInput, setCurrentInput] = useState("chmod 755 script.sh")
+  const session = useMemo(() => createTerminalSession({ user: "estudiante" }), [])
+  const [history, setHistory] = useState<TerminalLine[]>(
+    session.greeting.map((content) => ({ type: "output", content }))
+  )
+  const [currentInput, setCurrentInput] = useState("")
   const [isFullscreen, setIsFullscreen] = useState(false)
 
-  const allCompleted = steps.every((step) => step.status === "completed")
-
-  const handleValidate = () => {
-    // Simulate validation - in real app would check terminal output
-    const expectedCommands: Record<number, string> = {
-      2: "chmod 755 script.sh",
-      3: "ls -l",
-      4: "chown",
-    }
-
-    const expected = expectedCommands[currentStep]
-    if (currentInput.includes(expected?.split(" ")[0] || "")) {
-      // Add command to history
-      setHistory((prev) => [...prev, { type: "prompt", content: currentInput }])
-
-      // Add output for chmod
-      if (currentStep === 2) {
-        // chmod doesn't produce output, move to next step
-      } else if (currentStep === 3) {
-        setHistory((prev) => [
-          ...prev,
-          {
-            type: "output",
-            content: `total 4
--rwxr-xr-x 1 estudiante estudiante    0 May 24 10:30 script.sh`,
-          },
-        ])
-      }
-
-      // Update steps
-      setSteps((prev) =>
-        prev.map((step) => {
-          if (step.id === currentStep) {
-            return { ...step, status: "completed" as const }
-          }
-          if (step.id === currentStep + 1) {
-            return { ...step, status: "current" as const }
-          }
-          return step
-        })
-      )
-
-      setCurrentStep((prev) => Math.min(prev + 1, steps.length))
-      setCurrentInput("")
-    }
-  }
-
-  const handleSubmit = () => {
-    if (allCompleted) {
-      alert("Actividad enviada correctamente!")
-    }
-  }
-
-  const handleTerminalSubmit = (command: string) => {
+  const handleTerminalSubmit = async (command: string) => {
     setHistory((prev) => [...prev, { type: "prompt", content: command }])
-
-    // Simulate command outputs
-    if (command === "ls -l") {
-      const hasChmod = history.some(
-        (h) => h.type === "prompt" && h.content.includes("chmod 755")
-      )
-      setHistory((prev) => [
-        ...prev,
-        {
-          type: "output",
-          content: hasChmod
-            ? `total 4
--rwxr-xr-x 1 estudiante estudiante    0 May 24 10:30 script.sh`
-            : `total 4
--rw-r--r-- 1 estudiante estudiante    0 May 24 10:30 script.sh`,
-        },
-      ])
-    } else if (command === "pwd") {
-      setHistory((prev) => [
-        ...prev,
-        { type: "output", content: "/home/estudiante" },
-      ])
-    } else if (command === "whoami") {
-      setHistory((prev) => [
-        ...prev,
-        { type: "output", content: "estudiante" },
-      ])
-    } else if (command.startsWith("echo")) {
-      const text = command.replace(/^echo\s*/, "").replace(/['"]/g, "")
-      setHistory((prev) => [...prev, { type: "output", content: text }])
-    }
-
     setCurrentInput("")
+    const result = await session.run(command)
+    if (result.clear) {
+      setHistory([])
+      return
+    }
+    if (result.output) {
+      setHistory((prev) => [...prev, { type: "output", content: result.output }])
+    }
   }
 
   return (
@@ -145,17 +37,19 @@ export default function ActividadPage() {
       <Navbar />
       <div className="flex-1 flex overflow-hidden">
         {/* Left Panel - Instructions (40%) */}
-        <div className="w-[40%] flex-shrink-0">
-          <ActivityInstructions
-            title="Práctica: Gestión de permisos con chmod"
-            source="banco"
-            points={100}
-            steps={steps}
-            currentStep={currentStep}
-            onValidate={handleValidate}
-            onSubmit={handleSubmit}
-            allCompleted={allCompleted}
-          />
+        <div className="w-[40%] flex-shrink-0 bg-card border-r border-border flex items-center justify-center p-8">
+          <div className="max-w-sm text-center">
+            <div className="w-12 h-12 mx-auto mb-4 rounded-lg bg-secondary/60 flex items-center justify-center">
+              <ClipboardList className="w-6 h-6 text-muted-foreground" />
+            </div>
+            <h1 className="text-base font-medium text-foreground mb-1">
+              No hay actividad seleccionada
+            </h1>
+            <p className="text-sm text-muted-foreground">
+              Abre una actividad desde un tema del curso. Las instrucciones, los pasos
+              y la validación se cargarán aquí.
+            </p>
+          </div>
         </div>
 
         {/* Right Panel - Terminal (60%) */}

@@ -1,0 +1,83 @@
+import ReactMarkdown from "react-markdown"
+import remarkGfm from "remark-gfm"
+import type { Components } from "react-markdown"
+
+/** Renders lesson markdown with the LinuxLab theme. */
+const components: Components = {
+  h1: ({ children }) => (
+    <h1 className="text-2xl font-semibold text-foreground mt-2 mb-4">{children}</h1>
+  ),
+  h2: ({ children }) => (
+    <h2 className="text-xl font-semibold text-foreground mt-8 mb-3">{children}</h2>
+  ),
+  h3: ({ children }) => (
+    <h3 className="text-lg font-medium text-foreground mt-6 mb-2">{children}</h3>
+  ),
+  p: ({ children }) => (
+    <p className="text-sm text-muted-foreground leading-relaxed my-3">{children}</p>
+  ),
+  ul: ({ children }) => (
+    <ul className="list-disc pl-6 space-y-1.5 my-3 text-sm text-muted-foreground">{children}</ul>
+  ),
+  ol: ({ children }) => (
+    <ol className="list-decimal pl-6 space-y-1.5 my-3 text-sm text-muted-foreground">{children}</ol>
+  ),
+  li: ({ children }) => <li className="leading-relaxed">{children}</li>,
+  strong: ({ children }) => (
+    <strong className="font-semibold text-foreground">{children}</strong>
+  ),
+  a: ({ href, children }) => (
+    <a
+      href={href}
+      target="_blank"
+      rel="noreferrer"
+      className="text-primary hover:underline"
+    >
+      {children}
+    </a>
+  ),
+  blockquote: ({ children }) => (
+    <blockquote className="border-l-2 border-primary/50 pl-4 my-4 text-muted-foreground italic">
+      {children}
+    </blockquote>
+  ),
+  pre: ({ children }) => (
+    <pre className="bg-[#0d1117] border border-border rounded-md p-4 overflow-x-auto my-4 text-sm leading-6">
+      {children}
+    </pre>
+  ),
+  code: ({ className, children }) => {
+    const text = String(children)
+    const isInline = !className && !text.includes("\n")
+    if (isInline) {
+      return (
+        <code className="bg-secondary px-1.5 py-0.5 rounded text-primary font-mono text-[0.85em]">
+          {children}
+        </code>
+      )
+    }
+    return <code className="text-zinc-100 font-mono whitespace-pre">{children}</code>
+  },
+  hr: () => <hr className="my-6 border-border" />,
+  table: ({ children }) => (
+    <div className="overflow-x-auto my-4">
+      <table className="w-full text-sm border border-border">{children}</table>
+    </div>
+  ),
+  th: ({ children }) => (
+    <th className="text-left px-3 py-2 border border-border bg-card text-foreground font-medium">
+      {children}
+    </th>
+  ),
+  td: ({ children }) => (
+    <td className="px-3 py-2 border border-border text-muted-foreground">{children}</td>
+  ),
+}
+
+export function Markdown({ children }: { children: string }) {
+  return (
+    <ReactMarkdown remarkPlugins={[remarkGfm]} components={components}>
+      {children}
+    </ReactMarkdown>
+  )
+}

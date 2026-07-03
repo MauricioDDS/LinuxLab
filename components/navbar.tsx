@@ -2,11 +2,14 @@
 
 import Link from "next/link"
 import { Terminal, User } from "lucide-react"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { ThemeToggle } from "@/components/theme-toggle"
+import { useAuth, initialsOf } from "@/lib/auth/context"
 
 export function Navbar() {
+  const { user } = useAuth()
+
   return (
     <header className="h-14 border-b border-border bg-card flex items-center justify-between px-4">
       {/* Logo */}
@@ -31,11 +34,10 @@ export function Navbar() {
           <Terminal className="w-5 h-5" />
         </Button>
         <div className="flex items-center gap-2">
-          <span className="text-sm text-foreground">Juan Pérez</span>
+          <span className="text-sm text-foreground">{user?.name ?? "Invitado"}</span>
           <Avatar className="w-8 h-8">
-            <AvatarImage src="/avatar.png" alt="Juan Pérez" />
             <AvatarFallback className="bg-secondary text-foreground text-xs">
-              <User className="w-4 h-4" />
+              {user ? initialsOf(user.name) : <User className="w-4 h-4" />}
             </AvatarFallback>
           </Avatar>
         </div>

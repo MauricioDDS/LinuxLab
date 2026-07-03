@@ -2,25 +2,12 @@
 
 import { Checkbox } from "@/components/ui/checkbox"
 import { cn } from "@/lib/utils"
-
-const topics = [
-  { id: 1, title: "Introducción a Linux", activities: 3 },
-  { id: 2, title: "Directorios", activities: 5 },
-  { id: 3, title: "Sistema de Archivos", activities: 4 },
-  { id: 4, title: "Permisos", activities: 6 },
-  { id: 5, title: "Compresión", activities: 2 },
-  { id: 6, title: "Usuarios y Grupos", activities: 4 },
-  { id: 7, title: "Procesos", activities: 3 },
-  { id: 8, title: "Shell Scripting", activities: 7 },
-  { id: 9, title: "Redes Básicas", activities: 5 },
-  { id: 10, title: "Gestión de Paquetes", activities: 3 },
-  { id: 11, title: "Servicios del Sistema", activities: 4 },
-  { id: 12, title: "Seguridad Básica", activities: 5 },
-]
+import { temario } from "@/lib/content/temario"
 
 interface TopicSelectorProps {
+  /** Selected temario topic numbers. */
   selectedTopics: number[]
-  onToggle: (id: number) => void
+  onToggle: (topicNumber: number) => void
   onSelectAll: () => void
 }
 
@@ -29,7 +16,7 @@ export function TopicSelector({
   onToggle,
   onSelectAll,
 }: TopicSelectorProps) {
-  const allSelected = selectedTopics.length === topics.length
+  const allSelected = selectedTopics.length === temario.length
 
   return (
     <div className="space-y-4">
@@ -42,17 +29,17 @@ export function TopicSelector({
           {allSelected ? "Deseleccionar todos" : "Seleccionar todos"}
         </button>
         <span className="text-xs text-muted-foreground">
-          {selectedTopics.length} de {topics.length} seleccionados
+          {selectedTopics.length} de {temario.length} seleccionados
         </span>
       </div>
 
       {/* Topic List */}
       <div className="space-y-1">
-        {topics.map((topic) => {
-          const isSelected = selectedTopics.includes(topic.id)
+        {temario.map((topic) => {
+          const isSelected = selectedTopics.includes(topic.number)
           return (
             <label
-              key={topic.id}
+              key={topic.number}
               className={cn(
                 "flex items-center gap-3 p-3 cursor-pointer transition-all duration-200 border border-transparent",
                 isSelected
@@ -62,11 +49,11 @@ export function TopicSelector({
             >
               <Checkbox
                 checked={isSelected}
-                onCheckedChange={() => onToggle(topic.id)}
+                onCheckedChange={() => onToggle(topic.number)}
                 className="border-border data-[state=checked]:bg-primary data-[state=checked]:border-primary"
               />
               <span className="text-sm text-muted-foreground w-6">
-                {topic.id}.
+                {topic.number}.
               </span>
               <span
                 className={cn(
@@ -76,9 +63,11 @@ export function TopicSelector({
               >
                 {topic.title}
               </span>
-              <span className="text-xs text-muted-foreground bg-secondary/50 px-2 py-1">
-                {topic.activities} actividades
-              </span>
+              {topic.complementary && (
+                <span className="text-[10px] uppercase tracking-wide font-medium text-muted-foreground bg-secondary/60 px-1.5 py-0.5 rounded">
+                  Complementario
+                </span>
+              )}
             </label>
           )
         })}

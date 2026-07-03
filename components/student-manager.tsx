@@ -15,12 +15,7 @@ import {
   TableRow,
 } from "@/components/ui/table"
 
-export interface Student {
-  id: string
-  nombre: string
-  email: string
-  codigo: string
-}
+import type { Student } from "@/lib/domain/user"
 
 interface StudentManagerProps {
   students: Student[]
@@ -43,7 +38,7 @@ export function StudentManager({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     if (nombre && email && codigo) {
-      onAddStudent({ nombre, email, codigo })
+      onAddStudent({ name: nombre, email, code: codigo })
       setNombre("")
       setEmail("")
       setCodigo("")
@@ -106,7 +101,7 @@ export function StudentManager({
                   id="nombre"
                   value={nombre}
                   onChange={(e) => setNombre(e.target.value)}
-                  placeholder="Juan Pérez García"
+                  placeholder="Nombre y apellidos"
                   className="bg-secondary/30 border-border focus:border-primary focus:ring-primary/20"
                 />
               </div>
@@ -119,7 +114,7 @@ export function StudentManager({
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="jperez@ufps.edu.co"
+                  placeholder="correo@ufps.edu.co"
                   className="bg-secondary/30 border-border focus:border-primary focus:ring-primary/20"
                 />
               </div>
@@ -131,7 +126,7 @@ export function StudentManager({
                   id="codigo"
                   value={codigo}
                   onChange={(e) => setCodigo(e.target.value)}
-                  placeholder="1151234"
+                  placeholder="1150000"
                   className="bg-secondary/30 border-border focus:border-primary focus:ring-primary/20"
                 />
               </div>
@@ -178,8 +173,8 @@ export function StudentManager({
             <div className="mt-4 p-3 bg-secondary/30 border border-border text-left font-mono text-xs text-muted-foreground">
               <p className="text-foreground mb-1"># Ejemplo de CSV:</p>
               <p>nombre,email,codigo</p>
-              <p>Juan Pérez,jperez@ufps.edu.co,1151234</p>
-              <p>María García,mgarcia@ufps.edu.co,1151235</p>
+              <p>Nombre Apellido,correo@ufps.edu.co,1150000</p>
+              <p>Otro Estudiante,otro@ufps.edu.co,1150001</p>
             </div>
           </div>
         </TabsContent>
@@ -204,13 +199,13 @@ export function StudentManager({
                   className="border-border hover:bg-secondary/30"
                 >
                   <TableCell className="text-foreground">
-                    {student.nombre}
+                    {student.name}
                   </TableCell>
                   <TableCell className="text-muted-foreground">
                     {student.email}
                   </TableCell>
                   <TableCell className="text-muted-foreground font-mono">
-                    {student.codigo}
+                    {student.code}
                   </TableCell>
                   <TableCell>
                     <Button

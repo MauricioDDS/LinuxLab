@@ -3,20 +3,33 @@
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { ShieldCheck } from "lucide-react"
+import { useAuth } from "@/lib/auth/context"
 
 export default function CambiarContrasenaPage() {
   const router = useRouter()
+  const { changePassword } = useAuth()
   const [password, setPassword] = useState("")
   const [confirm, setConfirm] = useState("")
+  const [error, setError] = useState<string | null>(null)
+  const [saving, setSaving] = useState(false)
 
   const mismatch = confirm.length > 0 && password !== confirm
   const tooShort = password.length > 0 && password.length < 8
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (mismatch || tooShort || password.length === 0) return
-    // Mock: el backend guarda la nueva contraseña y marca el primer ingreso como completado.
-    router.push("/inicio")
+    setError(null)
+    setSaving(true)
+    try {
+      await changePassword(password)
+      // Once the backend marks the first-login change complete, continue in.
+      router.push("/inicio")
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "No se pudo guardar la contraseña.")
+    } finally {
+      setSaving(false)
+    }
   }
 
   return (
@@ -70,12 +83,16 @@ export default function CambiarContrasenaPage() {
             )}
           </div>
 
+          {error && (
+            <p className="text-xs text-danger bg-danger/10 rounded-md px-3 py-2">{error}</p>
+          )}
+
           <button
             type="submit"
-            disabled={mismatch || tooShort || password.length === 0}
+            disabled={mismatch || tooShort || password.length === 0 || saving}
             className="w-full h-11 rounded-md bg-primary text-primary-foreground font-medium hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            Guardar y continuar
+            {saving ? "Guardando…" : "Guardar y continuar"}
           </button>
         </form>
       </div>

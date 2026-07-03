@@ -1,24 +1,42 @@
-"use client"
-
-import { useState } from "react"
 import { Navbar } from "@/components/navbar"
 import { CourseSidebar } from "@/components/course-sidebar"
 import { ContentArea } from "@/components/content-area"
-import { FloatingTerminal } from "@/components/floating-terminal"
-import { TerminalPanel } from "@/components/terminal-panel"
+import { CourseTerminal } from "@/components/course-terminal"
+import { temario, getTopicBySlug } from "@/lib/content/temario"
+import { getTopicContentMeta, getSubtopicMarkdown } from "@/lib/content/lessons"
 
-export default function CursoPage() {
-  const [terminalOpen, setTerminalOpen] = useState(false)
+export default async function CursoPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ tema?: string; sub?: string }>
+}) {
+  const { tema, sub } = await searchParams
+  const topic = (tema ? getTopicBySlug(tema) : undefined) ?? temario[0]
+
+  const meta = getTopicContentMeta(topic.number)
+  const activeSubtopic = meta
+    ? (meta.subtopics.find((s) => s.id === sub) ?? meta.subtopics[0] ?? null)
+    : null
+  const markdown =
+    activeSubtopic !== null ? getSubtopicMarkdown(topic.number, activeSubtopic.file) : null
 
   return (
     <div className="h-screen flex flex-col bg-background">
       <Navbar />
       <div className="flex-1 flex overflow-hidden">
-        <CourseSidebar />
-        <ContentArea />
-        {terminalOpen && <TerminalPanel onClose={() => setTerminalOpen(false)} />}
+        <CourseSidebar
+          activeTopicSlug={topic.slug}
+          activeSubtopicId={activeSubtopic?.id}
+          contentSubtopics={meta?.subtopics}
+        />
+        <ContentArea
+          topic={topic}
+          meta={meta}
+          activeSubtopic={activeSubtopic}
+          markdown={markdown}
+        />
+        <CourseTerminal />
       </div>
-      {!terminalOpen && <FloatingTerminal onClick={() => setTerminalOpen(true)} />}
     </div>
   )
 }

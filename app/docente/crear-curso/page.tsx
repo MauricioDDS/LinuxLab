@@ -8,62 +8,35 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { TopicSelector } from "@/components/topic-selector"
-import { StudentManager, Student } from "@/components/student-manager"
-
-const initialStudents: Student[] = [
-  {
-    id: "1",
-    nombre: "Andrea Sofía Ramírez",
-    email: "asramirez@ufps.edu.co",
-    codigo: "1151423",
-  },
-  {
-    id: "2",
-    nombre: "Luis Fernando Ortega",
-    email: "lfortega@ufps.edu.co",
-    codigo: "1151567",
-  },
-  {
-    id: "3",
-    nombre: "María José Contreras",
-    email: "mjcontreras@ufps.edu.co",
-    codigo: "1151892",
-  },
-  {
-    id: "4",
-    nombre: "Carlos Andrés Villamizar",
-    email: "cavillamizar@ufps.edu.co",
-    codigo: "1152034",
-  },
-]
+import { StudentManager } from "@/components/student-manager"
+import { temario } from "@/lib/content/temario"
+import { createCourse } from "@/lib/data/courses"
+import type { Student } from "@/lib/domain/user"
 
 export default function CreateCoursePage() {
-  const [courseName, setCourseName] = useState("Sistemas Operativos - 2025-II")
-  const [description, setDescription] = useState(
-    "Curso introductorio a la administración de sistemas Linux. Los estudiantes aprenderán los fundamentos del sistema operativo, manejo de archivos, permisos, y automatización con scripts."
-  )
-  const [selectedTopics, setSelectedTopics] = useState<number[]>([1, 2, 4, 8])
-  const [students, setStudents] = useState<Student[]>(initialStudents)
+  const [courseName, setCourseName] = useState("")
+  const [description, setDescription] = useState("")
+  const [selectedTopics, setSelectedTopics] = useState<number[]>([])
+  const [students, setStudents] = useState<Student[]>([])
+  const [error, setError] = useState<string | null>(null)
+  const [publishing, setPublishing] = useState(false)
 
-  const handleToggleTopic = (id: number) => {
+  const handleToggleTopic = (topicNumber: number) => {
     setSelectedTopics((prev) =>
-      prev.includes(id) ? prev.filter((t) => t !== id) : [...prev, id]
+      prev.includes(topicNumber)
+        ? prev.filter((t) => t !== topicNumber)
+        : [...prev, topicNumber]
     )
   }
 
   const handleSelectAllTopics = () => {
-    if (selectedTopics.length === 12) {
-      setSelectedTopics([])
-    } else {
-      setSelectedTopics([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12])
-    }
+    setSelectedTopics((prev) =>
+      prev.length === temario.length ? [] : temario.map((t) => t.number)
+    )
   }
 
   const handleAddStudent = (student: Omit<Student, "id">) => {
-    setStudents((prev) => [
-      ...prev,
-      { ...student, id: Date.now().toString() },
-    ])
+    setStudents((prev) => [...prev, { ...student, id: crypto.randomUUID() }])
   }
 
   const handleRemoveStudent = (id: string) => {
@@ -71,8 +44,26 @@ export default function CreateCoursePage() {
   }
 
   const handleUploadCSV = (file: File) => {
-    // In a real app, parse the CSV here
-    console.log("Uploading CSV:", file.name)
+    // TODO: parse the CSV client-side, or hand it to students.importStudentsCsv
+    // once the course exists. Roster is held locally until the course is published.
+    console.log("CSV seleccionado:", file.name)
+  }
+
+  const handlePublish = async () => {
+    setError(null)
+    setPublishing(true)
+    try {
+      await createCourse({
+        name: courseName,
+        description,
+        enabledTopics: selectedTopics,
+      })
+      // On success the backend returns the course; redirect there.
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "No se pudo publicar el curso.")
+    } finally {
+      setPublishing(false)
+    }
   }
 
   return (
@@ -88,9 +79,7 @@ export default function CreateCoursePage() {
               <ArrowLeft className="w-5 h-5" />
             </Link>
             <div>
-              <h1 className="text-xl font-semibold text-foreground">
-                Crear Curso
-              </h1>
+              <h1 className="text-xl font-semibold text-foreground">Crear Curso</h1>
               <p className="text-sm text-muted-foreground">
                 Configura un nuevo curso para tus estudiantes
               </p>
@@ -104,9 +93,13 @@ export default function CreateCoursePage() {
               <Save className="w-4 h-4 mr-2" />
               Guardar borrador
             </Button>
-            <Button className="bg-primary hover:bg-primary/90 text-primary-foreground neon-glow">
+            <Button
+              onClick={handlePublish}
+              disabled={publishing}
+              className="bg-primary hover:bg-primary/90 text-primary-foreground neon-glow"
+            >
               <Send className="w-4 h-4 mr-2" />
-              Publicar curso
+              {publishing ? "Publicando…" : "Publicar curso"}
             </Button>
           </div>
         </div>
@@ -114,6 +107,12 @@ export default function CreateCoursePage() {
 
       {/* Content */}
       <div className="max-w-4xl mx-auto p-8 space-y-8">
+        {error && (
+          <div className="text-sm text-danger bg-danger/10 border border-danger/20 rounded-md px-3 py-2">
+            {error}
+          </div>
+        )}
+
         {/* Section 1: Course Info */}
         <section className="bg-card border border-border p-6">
           <h2 className="text-lg font-medium text-foreground mb-6 flex items-center gap-2">
@@ -132,6 +131,7 @@ export default function CreateCoursePage() {
                 id="courseName"
                 value={courseName}
                 onChange={(e) => setCourseName(e.target.value)}
+                placeholder="Ej: Sistemas Operativos - 2026-I"
                 className="bg-secondary/30 border-border focus:border-primary focus:ring-primary/20"
               />
             </div>
@@ -145,6 +145,7 @@ export default function CreateCoursePage() {
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 rows={4}
+                placeholder="Breve descripción del curso…"
                 className="bg-secondary/30 border-border focus:border-primary focus:ring-primary/20 resize-none"
               />
             </div>
