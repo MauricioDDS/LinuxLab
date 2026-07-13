@@ -7,59 +7,47 @@ import type { Topic } from "@/lib/domain/topic"
  * never edit this list. It is the single source of truth — every screen that
  * shows topics imports from here. Titles and subtopics are authoritative;
  * descriptions are short navigational summaries, NOT lesson content. The actual
- * teaching material (text, video, links per topic) is loaded separately and is
- * authored by the thesis team.
+ * teaching material (text, video, links per topic) lives in `content/temario/`
+ * and is authored by the thesis team.
  *
- * 14 topics; topic 14 is complementary (optional).
+ * 13 topics; topic 13 is complementary (optional).
  */
 export const temario: Topic[] = [
   {
     number: 1,
     slug: "introduccion-a-linux",
     title: "Introducción a Linux",
-    description: "Historia, kernel, entorno de ventanas, instalación y software libre.",
+    description: "Historia, kernel, entorno de ventanas e instalación.",
     subTopics: [
-      { number: 1, title: "Historia" },
-      { number: 2, title: "Kernel" },
+      { number: 1, title: "¿Qué es Linux? Dónde todo empezó" },
+      { number: 2, title: "El Kernel" },
       { number: 3, title: "Entorno de ventanas" },
       { number: 4, title: "Instalación" },
-      { number: 5, title: "Software libre y licenciamiento" },
     ],
   },
   {
     number: 2,
-    slug: "ayuda-del-sistema",
-    title: "Ayuda del sistema",
-    description: "Consulta del sistema con man, --help y apropos.",
-    subTopics: [
-      { number: 1, title: "man" },
-      { number: 2, title: "--help" },
-      { number: 3, title: "apropos" },
-    ],
-  },
-  {
-    number: 3,
     slug: "directorios",
     title: "Directorios",
     description: "Tipos de directorios del sistema: etc/, home/, var/, tmp/, entre otros.",
     subTopics: [],
   },
   {
-    number: 4,
+    number: 3,
     slug: "sistema-de-archivos",
     title: "Sistema de archivos",
     description: "Inodos y estructura del sistema de archivos.",
     subTopics: [],
   },
   {
-    number: 5,
+    number: 4,
     slug: "creacion-de-directorios",
     title: "Creación de directorios",
     description: "Uso de mkdir y construcción de una estructura jerárquica.",
     subTopics: [],
   },
   {
-    number: 6,
+    number: 5,
     slug: "creacion-de-archivos",
     title: "Creación de archivos",
     description: "touch y editores de texto: vi, pico, nano.",
@@ -69,7 +57,7 @@ export const temario: Topic[] = [
     ],
   },
   {
-    number: 7,
+    number: 6,
     slug: "permisos",
     title: "Permisos",
     description: "Gestión de permisos con chmod, chown y umask.",
@@ -80,14 +68,14 @@ export const temario: Topic[] = [
     ],
   },
   {
-    number: 8,
+    number: 7,
     slug: "compresion",
     title: "Compresión",
     description: "Compresión de archivos con tar, gzip, bzip2 y zip.",
     subTopics: [],
   },
   {
-    number: 9,
+    number: 8,
     slug: "busqueda",
     title: "Búsqueda",
     description: "Patrones, expresiones regulares y uso de find y grep.",
@@ -98,7 +86,7 @@ export const temario: Topic[] = [
     ],
   },
   {
-    number: 10,
+    number: 9,
     slug: "usuarios-y-grupos",
     title: "Usuarios y grupos",
     description: "passwd, shadow y creación de cuentas con useradd y groupadd.",
@@ -109,7 +97,7 @@ export const temario: Topic[] = [
     ],
   },
   {
-    number: 11,
+    number: 10,
     slug: "gestion-de-procesos",
     title: "Gestión de procesos",
     description: "ps, top, kill, jobs y manejo de primer y segundo plano (fg, bg, &).",
@@ -120,7 +108,7 @@ export const temario: Topic[] = [
     ],
   },
   {
-    number: 12,
+    number: 11,
     slug: "servicios-y-demonios",
     title: "Servicios y demonios",
     description: "systemctl y estados de los servicios.",
@@ -130,14 +118,14 @@ export const temario: Topic[] = [
     ],
   },
   {
-    number: 13,
+    number: 12,
     slug: "shell-scripting",
     title: "Shell scripting",
     description: "Variables, condicionales, ciclos y funciones en Bash.",
     subTopics: [],
   },
   {
-    number: 14,
+    number: 13,
     slug: "instalacion-de-paquetes",
     title: "Instalación de paquetes",
     description: "Gestión de paquetes con apt y dnf.",

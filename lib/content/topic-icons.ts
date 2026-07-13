@@ -1,6 +1,5 @@
 import {
   Terminal,
-  HelpCircle,
   FolderTree,
   HardDrive,
   FolderPlus,
@@ -21,20 +20,19 @@ import {
  * temario data so the content stays pure (no React/icon dependency).
  */
 const TOPIC_ICONS: Record<number, LucideIcon> = {
-  1: Terminal,
-  2: HelpCircle,
-  3: FolderTree,
-  4: HardDrive,
-  5: FolderPlus,
-  6: FilePlus,
-  7: ShieldCheck,
-  8: Archive,
-  9: Search,
-  10: Users,
-  11: Activity,
-  12: Server,
-  13: Code2,
-  14: Package,
+  1: Terminal, // Introducción a Linux
+  2: FolderTree, // Directorios
+  3: HardDrive, // Sistema de archivos
+  4: FolderPlus, // Creación de directorios
+  5: FilePlus, // Creación de archivos
+  6: ShieldCheck, // Permisos
+  7: Archive, // Compresión
+  8: Search, // Búsqueda
+  9: Users, // Usuarios y grupos
+  10: Activity, // Gestión de procesos
+  11: Server, // Servicios y demonios
+  12: Code2, // Shell scripting
+  13: Package, // Instalación de paquetes (complementario)
 }
 
 export function topicIcon(topicNumber: number): LucideIcon {
