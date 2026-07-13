@@ -1,5 +1,14 @@
+"use client"
+
+import { useState } from "react"
 import Link from "next/link"
-import { ChevronDown, ChevronRight, Circle } from "lucide-react"
+import {
+  ChevronDown,
+  ChevronRight,
+  Circle,
+  PanelLeftClose,
+  PanelLeftOpen,
+} from "lucide-react"
 import { cn } from "@/lib/utils"
 import { temario } from "@/lib/content/temario"
 import type { LessonSubtopic } from "@/lib/domain/content"
@@ -14,8 +23,8 @@ interface CourseSidebarProps {
 
 /**
  * Topic navigation for the content view. URL-driven (links to
- * `/curso?tema=&sub=`), so it can stay a server component. The active topic
- * expands to show its subtopics from the content manifest.
+ * `/curso?tema=&sub=`); the active topic expands to show its subtopics from the
+ * content manifest. Collapsible into a slim rail to give the lesson more room.
  */
 export function CourseSidebar({
   activeTopicSlug,
@@ -23,14 +32,41 @@ export function CourseSidebar({
   contentSubtopics,
   courseName,
 }: CourseSidebarProps) {
+  const [open, setOpen] = useState(true)
+
+  if (!open) {
+    return (
+      <aside className="w-12 shrink-0 border-r border-border bg-sidebar h-full flex flex-col items-center py-3">
+        <button
+          onClick={() => setOpen(true)}
+          title="Mostrar contenidos"
+          aria-label="Mostrar contenidos"
+          className="w-8 h-8 flex items-center justify-center rounded-md text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors"
+        >
+          <PanelLeftOpen className="w-4 h-4" />
+        </button>
+      </aside>
+    )
+  }
+
   return (
-    <aside className="w-72 border-r border-border bg-sidebar h-full flex flex-col">
+    <aside className="w-72 shrink-0 border-r border-border bg-sidebar h-full flex flex-col">
       {/* Course Header */}
-      <div className="p-4 border-b border-border">
-        <h2 className="font-semibold text-foreground text-sm">
-          {courseName ?? "Contenidos del curso"}
-        </h2>
-        <p className="text-xs text-muted-foreground mt-1">Sistemas Operativos · UFPS</p>
+      <div className="p-4 border-b border-border flex items-start justify-between gap-2">
+        <div className="min-w-0">
+          <h2 className="font-semibold text-foreground text-sm truncate">
+            {courseName ?? "Contenidos del curso"}
+          </h2>
+          <p className="text-xs text-muted-foreground mt-1">Sistemas Operativos · UFPS</p>
+        </div>
+        <button
+          onClick={() => setOpen(false)}
+          title="Ocultar contenidos"
+          aria-label="Ocultar contenidos"
+          className="w-8 h-8 shrink-0 flex items-center justify-center rounded-md text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors"
+        >
+          <PanelLeftClose className="w-4 h-4" />
+        </button>
       </div>
 
       {/* Topics Navigation */}

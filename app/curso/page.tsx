@@ -3,7 +3,12 @@ import { CourseSidebar } from "@/components/course-sidebar"
 import { ContentArea } from "@/components/content-area"
 import { CourseTerminal } from "@/components/course-terminal"
 import { temario, getTopicBySlug } from "@/lib/content/temario"
-import { getTopicContentMeta, getSubtopicMarkdown } from "@/lib/content/lessons"
+import {
+  getTopicContentMeta,
+  getSubtopicMarkdown,
+  getLessonNeighbours,
+} from "@/lib/content/lessons"
+import { parseLessonBlocks } from "@/lib/content/lesson-blocks"
 
 export default async function CursoPage({
   searchParams,
@@ -17,8 +22,15 @@ export default async function CursoPage({
   const activeSubtopic = meta
     ? (meta.subtopics.find((s) => s.id === sub) ?? meta.subtopics[0] ?? null)
     : null
-  const markdown =
-    activeSubtopic !== null ? getSubtopicMarkdown(topic.number, activeSubtopic.file) : null
+
+  const markdown = activeSubtopic
+    ? getSubtopicMarkdown(topic.number, activeSubtopic.file)
+    : null
+  const blocks = markdown ? parseLessonBlocks(markdown, topic.number) : null
+
+  const { prev, next } = activeSubtopic
+    ? getLessonNeighbours(topic.number, activeSubtopic.id)
+    : { prev: null, next: null }
 
   return (
     <div className="h-screen flex flex-col bg-background">
@@ -33,7 +45,9 @@ export default async function CursoPage({
           topic={topic}
           meta={meta}
           activeSubtopic={activeSubtopic}
-          markdown={markdown}
+          blocks={blocks}
+          prev={prev}
+          next={next}
         />
         <CourseTerminal />
       </div>

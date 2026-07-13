@@ -11,5 +11,12 @@ out/
 # Variables de entorno
 .env*.local
 
+# Videos de las lecciones: pesan mucho y git guarda cada versión para siempre.
+# Se dejan en local (funcionan al correr el proyecto) y se alojan fuera del repo.
+# Las imágenes SÍ se versionan: son livianas y son parte del contenido.
+public/temario/**/*.mp4
+public/temario/**/*.webm
+public/temario/**/*.mov
+
 # Sistema
 .DS_Store

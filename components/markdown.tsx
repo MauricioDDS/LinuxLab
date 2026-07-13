@@ -1,5 +1,6 @@
 import ReactMarkdown from "react-markdown"
 import remarkGfm from "remark-gfm"
+import rehypeRaw from "rehype-raw"
 import type { Components } from "react-markdown"
 
 /** Renders lesson markdown with the LinuxLab theme. */
@@ -74,9 +75,18 @@ const components: Components = {
   ),
 }
 
+/**
+ * `rehypeRaw` enables inline HTML authored inside the lesson markdown (e.g.
+ * `<span class="text-primary">`). Safe here because lesson content is authored by
+ * the team and read from disk — never user input.
+ */
 export function Markdown({ children }: { children: string }) {
   return (
-    <ReactMarkdown remarkPlugins={[remarkGfm]} components={components}>
+    <ReactMarkdown
+      remarkPlugins={[remarkGfm]}
+      rehypePlugins={[rehypeRaw]}
+      components={components}
+    >
       {children}
     </ReactMarkdown>
   )

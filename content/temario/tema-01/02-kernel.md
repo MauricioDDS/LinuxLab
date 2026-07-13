@@ -80,8 +80,6 @@ La salida mostrará algo como `6.1.0-18-amd64`, donde:
 - `18` es la revisión específica de la distribución
 - `amd64` indica la arquitectura del procesador
 
-<!-- VIDEO: video-arquitectura-linux | Arquitectura de Linux: qué pasa cuando ejecutas un comando -->
-
 ---
 
 **Fuentes**

@@ -1,7 +1,7 @@
 <!-- IMAGE-DARK: logo-linuxlab-dark.png | logo LinuxLab tema oscuro -->
 <!-- IMAGE-LIGHT: logo-linuxlab-light.png | logo LinuxLab tema claro -->
 
-<span style="color:#ff2d55;">**¡Bienvenid@ a LinuxLab!** Te damos la bienvenida a tu nuevo centro de aprendizaje Linux. Aquí vas a descubrir cómo funciona el sistema que mueve internet, los servidores de casi todo y el teléfono que tienes en el bolsillo. La meta es que salgas conociendo como manejar la terminal, entendiendo el sistema por dentro y con las bases para automatizar lo que desees con scripts. ¡Vamos pa lante!</span>
+<span class="lesson-highlight">**¡Bienvenid@ a LinuxLab!** Te damos la bienvenida a tu nuevo centro de aprendizaje Linux. Aquí vas a descubrir cómo funciona el sistema que mueve internet, los servidores de casi todo y el teléfono que tienes en el bolsillo. La meta es que salgas conociendo como manejar la terminal, entendiendo el sistema por dentro y con las bases para automatizar lo que desees con scripts. ¡Vamos pa lante!</span>
 
 ## ¿Qué es un sistema operativo?
 

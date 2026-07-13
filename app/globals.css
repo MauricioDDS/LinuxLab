@@ -176,6 +176,14 @@
   box-shadow: var(--neon-border-shadow);
 }
 
+/* Texto destacado en las lecciones: <span class="lesson-highlight">...</span>
+   Colorea también negritas y enlaces internos con el rojo del laboratorio.
+   !important porque el markdown renderiza <strong> con su propio color. */
+.lesson-highlight,
+.lesson-highlight * {
+  color: var(--primary) !important;
+}
+
 /* Scrollbar styling (theme-aware) */
 ::-webkit-scrollbar {
   width: 8px;
