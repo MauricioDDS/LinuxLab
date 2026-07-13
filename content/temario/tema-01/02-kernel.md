@@ -1,4 +1,4 @@
-# El Kernel
+<!-- VIDEO: video-arquitectura-linux | Arquitectura de Linux: qué pasa cuando ejecutas un comando -->
 
 ## ¿Qué es el kernel?
 
@@ -46,18 +46,17 @@ Linux divide la memoria en dos zonas claramente separadas:
 
 ```
 +-------------------------------------+
+|           ESPACIO DE USUARIO        |
 |        Aplicaciones del usuario     |
 |     (bash, firefox, ls, grep...)    |
-|           ESPACIO DE USUARIO        |
 +-------------------------------------+
 |          Llamadas al sistema        |
 |     (open, read, write, fork...)    |
 +-------------------------------------+
-|               KERNEL                |
+|           ESPACIO DE KERNEL         |
 |  Gestión de procesos | Memoria      |
 |  Sistema de archivos | Drivers      |
 |  Red | Seguridad                    |
-|           ESPACIO DE KERNEL         |
 +-------------------------------------+
 |              HARDWARE               |
 |   CPU | RAM | Disco | Red | USB     |
@@ -81,16 +80,14 @@ La salida mostrará algo como `6.1.0-18-amd64`, donde:
 - `18` es la revisión específica de la distribución
 - `amd64` indica la arquitectura del procesador
 
-## Kernel monolítico con módulos
+<!-- VIDEO: video-arquitectura-linux | Arquitectura de Linux: qué pasa cuando ejecutas un comando -->
 
-El kernel Linux es **monolítico**, lo que significa que todas sus funciones principales se ejecutan en un solo espacio de memoria con privilegios completos. Sin embargo, soporta **módulos cargables** que permiten agregar o quitar funcionalidades (como controladores de hardware) sin necesidad de reiniciar el sistema.
+---
 
-```bash
-# Ver los módulos cargados actualmente
-lsmod
+**Fuentes**
 
-# Información sobre un módulo específico
-modinfo nombre_del_modulo
-```
-
-Esta arquitectura combina el rendimiento de un kernel monolítico con la flexibilidad de poder cargar solo los componentes necesarios.
+- Silberschatz, A., Galvin, P. & Gagne, G. *Operating System Concepts*, 10th Ed. Wiley, 2021.
+- Tanenbaum, A. & Bos, H. *Modern Operating Systems*, 5th Ed. Pearson, 2023.
+- NDG Linux Essentials. Cisco Networking Academy, 2024.
+- The Linux Foundation. *Linux Kernel Development Report*, 2024.
+- Linux kernel documentation. kernel.org/doc/html/latest

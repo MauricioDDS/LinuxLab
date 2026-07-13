@@ -1,58 +1,42 @@
-# Entorno de ventanas
+<!-- IMAGE: desktop-linux-ejemplo.png | Escritorio Linux con entorno gráfico -->
 
-## La interfaz gráfica en Linux
+## Dos formas de hablarle al sistema
 
-A diferencia de Windows o macOS, donde la interfaz gráfica está integrada directamente en el sistema operativo, en Linux la interfaz gráfica es un componente separado y opcional. Un servidor Linux puede funcionar perfectamente sin interfaz gráfica, operando exclusivamente desde la línea de comandos. Esta separación es una decisión de diseño: el sistema operativo gestiona recursos, la interfaz gráfica es solo una forma de interactuar con él.
+Hay dos maneras de interactuar con un sistema operativo.
 
-## Componentes del sistema gráfico
+La primera es la **interfaz gráfica (GUI)**: ventanas, íconos, menús. El sistema responde a tus clicks. Es lo que conoce la mayoría de personas que vienen de Windows o macOS. El explorador de archivos, el navegador, el reproductor de música. Todo visual, todo clickeable.
 
-La interfaz gráfica de Linux se compone de varias capas independientes que trabajan juntas:
+La segunda es la **interfaz de línea de comandos (CLI)**: texto puro. Escribes lo que quieres hacer, el sistema lo ejecuta. Hay una forma de verlo que es bastante clara: cuando haces clic en un ícono, es el computador el que te está diciendo qué puedes hacer. Cuando escribes un comando, eres tú el que le dice al computador qué tiene que hacer.
 
-### Servidor de pantalla
+Linux tiene ambas.
 
-Es el software que se comunica con el hardware gráfico (tarjeta de video, monitor) y proporciona la base sobre la cual se dibujan las ventanas. Existen dos tecnologías principales:
+## Linux no es solo una pantalla negra
 
-**X11 (X Window System):** El sistema tradicional, desarrollado desde 1984. Utiliza una arquitectura cliente-servidor donde las aplicaciones (clientes) solicitan al servidor X que dibuje ventanas en la pantalla. Aunque funcional, su diseño tiene décadas de antigüedad.
+Hay un cliché que persiste donde la mayoría de newcomers cree que Linux es solo una terminal negra con texto verde, y que usarla significa renunciar a cualquier cosa que se parezca a una interfaz normal.
 
-**Wayland:** El reemplazo moderno de X11. Simplifica la arquitectura eliminando la capa intermedia del servidor X, lo que resulta en mejor rendimiento, menor latencia y mayor seguridad. Las distribuciones modernas como Fedora y Ubuntu ya usan Wayland por defecto.
+No es así...
 
-### Entorno de escritorio
+Linux tiene escritorios gráficos. Escritorios que se ven bien, que funcionan bien, con barra de tareas, explorador de archivos, notificaciones y todo lo que esperarías. Cualquier persona puede instalarlo y usarlo desde el primer día sin tocar una terminal. Hay opciones que se parecen bastante a Windows, otras más minimalistas, otras pensadas para computadores con pocos recursos.
 
-Es el conjunto de aplicaciones y herramientas que conforman la experiencia visual completa: el panel de tareas, el escritorio, el gestor de archivos, el menú de aplicaciones, las notificaciones, la configuración del sistema. Linux ofrece varios entornos de escritorio, cada uno con su propia filosofía de diseño:
+Un **entorno de escritorio** es la capa visual del sistema: las ventanas, el panel, los íconos del escritorio, el menú de aplicaciones. No es parte del kernel. Es software independiente que se instala encima, y en Linux puedes elegir cuál usar o incluso cambiarlo después. Esa flexibilidad no existe en Windows ni en macOS, donde la interfaz la define la empresa y no la tocas.
 
-**GNOME:** El entorno por defecto de Ubuntu, Fedora y muchas otras distribuciones. Tiene un diseño minimalista y moderno centrado en la productividad, con un flujo de trabajo basado en actividades y espacios de trabajo virtuales.
+<!-- IMAGE: kde-gnome-comparacion.png | Comparación entre GNOME y KDE Plasma en Linux -->
 
-**KDE Plasma:** Altamente personalizable, con una estética similar a Windows. Ofrece una cantidad enorme de opciones de configuración y efectos visuales. Es el entorno por defecto de KDE Neon y Kubuntu.
+Lo que más importa entender no es qué entornos existen, sino que **en Linux la interfaz gráfica y el sistema operativo son cosas separadas**. El sistema funciona aunque no haya pantalla. En servidores, Linux corre sin entorno gráfico porque no lo necesita. Eso lo hace más eficiente, más seguro y más flexible.
 
-**XFCE:** Ligero y eficiente, diseñado para funcionar bien en hardware con recursos limitados sin sacrificar funcionalidad. Consume significativamente menos memoria que GNOME o KDE.
+## Por qué aprender CLI aunque haya interfaz gráfica
 
-**MATE:** Continuación del antiguo GNOME 2, ofrece una interfaz tradicional con barra de menú, panel de tareas y escritorio clásico. Ideal para quienes prefieren una experiencia convencional.
+Hay una realidad que a muchos les cuesta aceptar... y es que la GUI tiene límites. Para el uso del día a día funciona perfecto. Pero para administrar un servidor, automatizar tareas, manejar archivos en cantidad o entender de verdad qué está haciendo el sistema, la línea de comandos no tiene competencia.
 
-**Cinnamon:** Desarrollado por el equipo de Linux Mint, combina la modernidad de GNOME 3 con una disposición de escritorio tradicional.
+Una sola línea en la terminal puede reemplazar varios minutos de clics navegando menús. Y hay cosas que directamente no se pueden hacer desde la interfaz gráfica.
 
-### Gestor de ventanas
+Hay otra ventaja que vale la pena mencionar: una vez que aprendes los comandos de Linux, eres productivo en cualquier distribución. El escritorio gráfico de Ubuntu se ve diferente al de Fedora, que se ve diferente al de Arch. La terminal es la misma en todas.
 
-Es el componente que controla cómo se posicionan, redimensionan y organizan las ventanas en la pantalla. Cada entorno de escritorio incluye su propio gestor de ventanas, pero también existen gestores independientes para usuarios avanzados:
+En LinuxLab vas a trabajar desde la terminal. No porque la interfaz gráfica no exista, sino porque dominar la terminal es lo que te da control real sobre el sistema.
 
-**Gestores de ventanas de mosaico (tiling):** Como i3, Sway, Hyprland o dwm. Organizan las ventanas automáticamente sin superponerlas, maximizando el uso del espacio en pantalla. Son controlados principalmente por teclado y son populares entre desarrolladores y administradores de sistemas.
+---
 
-**Gestores de ventanas flotantes (floating):** Como Openbox o Fluxbox. Las ventanas flotan libremente y pueden superponerse, similar a Windows o macOS.
+**Fuentes**
 
-## ¿Por qué importa esto para Sistemas Operativos?
-
-En el contexto de este curso, la mayor parte del trabajo se realiza desde la **terminal de línea de comandos**, no desde la interfaz gráfica. La terminal permite una interacción directa con el sistema operativo: gestionar archivos, administrar procesos, configurar permisos y automatizar tareas mediante scripts.
-
-La interfaz gráfica abstrae y oculta la complejidad del sistema, lo cual es útil para el uso cotidiano pero insuficiente para comprender cómo funciona internamente un sistema operativo. La línea de comandos expone esa complejidad y permite manipularla directamente.
-
-```bash
-# Verificar si tienes un entorno gráfico activo
-echo $XDG_CURRENT_DESKTOP
-
-# Ver el servidor de pantalla en uso
-echo $XDG_SESSION_TYPE
-
-# Estos comandos pueden no mostrar nada si estás en un servidor sin interfaz gráfica
-# Eso es perfectamente normal — el sistema funciona sin ella
-```
-
-En el laboratorio virtual de LinuxLab, trabajarás directamente con la terminal. No hay interfaz gráfica, y eso es intencional: el objetivo es que aprendas a interactuar con el sistema operativo tal como lo harías administrando un servidor real.
+- NDG Linux Essentials. Cisco Networking Academy, 2024.
+- Wikipedia (ES). *Entornos de escritorio en Linux*.

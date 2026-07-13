@@ -4,36 +4,23 @@
   "title": "Introducción a Linux",
   "description": "Historia, arquitectura y fundamentos del sistema operativo Linux",
   "subtopics": [
-    { "id": "historia", "title": "Historia de Linux", "file": "01-historia.md" },
+    { "id": "historia", "title": "¿Qué es Linux? Dónde todo empezó", "file": "01-historia.md" },
     { "id": "kernel", "title": "El Kernel", "file": "02-kernel.md" },
     { "id": "entorno-ventanas", "title": "Entorno de ventanas", "file": "03-entorno-ventanas.md" },
-    { "id": "instalacion", "title": "Instalación", "file": "04-instalacion.md" },
-    { "id": "software-libre", "title": "Software libre y licenciamiento", "file": "05-software-libre.md" }
+    { "id": "instalacion", "title": "Instalación", "file": "04-instalacion.md" }
   ],
   "resources": [
     {
-      "type": "pdf",
-      "title": "The Linux Command Line (William Shotts)",
-      "url": "https://linuxcommand.org/tlcl.php",
-      "detail": "Libro completo — Creative Commons"
+      "type": "video",
+      "title": "Historia de Linux — Nate Gentile",
+      "url": "https://youtu.be/UUJ0dFpj1-M",
+      "detail": "YouTube · Nate Gentile"
     },
     {
-      "type": "link",
-      "title": "Documentación oficial del kernel Linux",
-      "url": "https://www.kernel.org/doc/html/latest/",
-      "detail": "kernel.org"
-    },
-    {
-      "type": "link",
-      "title": "GNU Project — Filosofía del software libre",
-      "url": "https://www.gnu.org/philosophy/free-sw.html",
-      "detail": "gnu.org"
-    },
-    {
-      "type": "link",
-      "title": "DistroWatch — Comparativa de distribuciones",
-      "url": "https://distrowatch.com/",
-      "detail": "distrowatch.com"
+      "type": "video",
+      "title": "Linux desde cero: mi guía personal para novatos — Nate Gentile",
+      "url": "https://youtu.be/knrc4q1S_q0",
+      "detail": "YouTube · Nate Gentile"
     }
   ]
 }

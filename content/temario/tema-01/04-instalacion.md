@@ -1,83 +1,70 @@
-# Instalación de Linux
+<!-- IMAGE: instalacion-linux-portada.png | Proceso de instalación de Linux -->
 
-## Distribuciones de Linux
+## ¿Qué es una distribución?
 
-Linux no se distribuye como un único producto. El kernel Linux, combinado con diferentes conjuntos de software, configuraciones y gestores de paquetes, da lugar a lo que se conoce como **distribuciones** (o "distros"). Cada distribución empaqueta el kernel junto con las herramientas del sistema, un gestor de paquetes, un entorno de escritorio (opcional) y software preinstalado, creando un sistema operativo completo listo para usar.
+Linux no viene en una sola versión. El kernel es el núcleo, pero para tener un sistema operativo completo y usable necesitas mucho más: un gestor de paquetes para instalar software, herramientas del sistema, un entorno gráfico, configuraciones por defecto. Quien empaqueta todo eso junto y lo distribuye es lo que se llama una **distribución** (o simplemente "distro").
 
-Existen cientos de distribuciones, pero la mayoría se derivan de tres familias principales:
+Por eso existen tantas. Cada distribución toma el mismo kernel y lo combina con diferentes herramientas, filosofías y públicos objetivo. Ubuntu apunta a la facilidad de uso. Fedora va hacia desarrolladores que quieren lo más reciente. Arch es para quien quiere construir y entender cada parte del sistema. Hay distros para servidores, para equipos viejos, para privacidad, para diseño gráfico, para gaming.
 
-### Familia Debian
+Lo importante: los comandos que vas a aprender en este curso funcionan igual en todas ellas. La terminal es la misma.
 
-Utiliza el formato de paquetes `.deb` y el gestor de paquetes `apt`. Es conocida por su estabilidad y la amplitud de su repositorio de software.
+## El proceso de instalación
 
-- **Debian:** La distribución madre, extremadamente estable, preferida para servidores.
-- **Ubuntu:** Basada en Debian, orientada a la facilidad de uso. Es la distribución más popular para escritorio y servidores.
-- **Linux Mint:** Basada en Ubuntu, con un enfoque en la experiencia de escritorio tradicional.
+Instalar Linux en un computador sigue siempre la misma lógica, sin importar la distribución que elijas.
 
-### Familia Red Hat
+### 1. Elige tu distribución
 
-Utiliza el formato de paquetes `.rpm` y los gestores de paquetes `yum` o `dnf`. Es la familia dominante en el ámbito empresarial.
+El primer paso es decidir qué distribución vas a usar. Para alguien que está empezando, la recomendación más común es **Ubuntu** o **Linux Mint**: tienen buena documentación, comunidad activa y un instalador amigable. Si ya tienes algo de experiencia o quieres algo más moderno, **Fedora** es una opción sólida.
 
-- **Red Hat Enterprise Linux (RHEL):** Distribución comercial con soporte empresarial.
-- **Fedora:** Distribución comunitaria que sirve como base de pruebas para RHEL. Incorpora tecnologías recientes.
-- **CentOS Stream / AlmaLinux / Rocky Linux:** Alternativas gratuitas compatibles con RHEL.
+### 2. Descarga la imagen ISO
 
-### Familia Arch
+Desde el sitio oficial de la distribución elegida descargas un archivo `.iso`. Ese archivo es una imagen del sistema operativo completo, lista para ser grabada en un dispositivo de arranque.
 
-Utiliza el gestor de paquetes `pacman` y sigue una filosofía de "rolling release" (actualizaciones continuas sin versiones fijas).
+### 3. Crea el USB booteable
 
-- **Arch Linux:** Distribución minimalista que el usuario construye desde cero. Ideal para aprender cómo funciona Linux internamente.
-- **Manjaro:** Basada en Arch, pero con una instalación más accesible.
+Con la ISO en mano, necesitas grabarla en un pendrive de mínimo 8 GB usando una herramienta como **Rufus** (Windows) o **Balena Etcher** (multiplataforma). Esto convierte el pendrive en un instalador desde el que puede arrancar el computador.
 
-## Métodos de instalación
+### 4. Configura el arranque
 
-### Instalación en disco (bare metal)
+Reinicia el computador con el pendrive conectado y entra al menú de arranque. Dependiendo del equipo, la tecla es **F12**, **F2**, **ESC** o **DEL**. Ahí seleccionas el pendrive como dispositivo de arranque principal.
 
-La forma tradicional: descargar la imagen ISO de la distribución, grabarla en una memoria USB y arrancar el computador desde ella. El instalador guía el proceso de particionado del disco, configuración de usuarios y selección de software. Este método ofrece el mejor rendimiento posible pero modifica el disco del equipo.
+### 5. Prueba en modo Live antes de instalar
 
-### Máquina virtual
+La mayoría de distribuciones te dan la opción de correr el sistema desde el USB sin instalar nada. Se llama **modo Live**. Sirve para verificar que el hardware funciona correctamente con Linux antes de comprometerte con la instalación.
 
-Utilizando software como VirtualBox, VMware o QEMU/KVM, se puede ejecutar Linux dentro de una ventana del sistema operativo actual sin modificar el disco. La máquina virtual simula un computador completo donde se instala Linux como si fuera hardware real. Es ideal para experimentar sin riesgos, aunque el rendimiento es menor al de una instalación nativa.
+### 6. Instala el sistema
 
-### Dual boot
+Cuando estés listo, inicias el instalador. El proceso incluye:
 
-Consiste en instalar Linux junto al sistema operativo existente (generalmente Windows) en el mismo disco, creando particiones separadas para cada uno. Al encender el computador, un menú permite elegir qué sistema operativo iniciar. Ofrece rendimiento nativo para ambos sistemas pero requiere gestionar el espacio del disco.
+- Selección de idioma y teclado
+- Configuración de particiones de disco (el instalador tiene opción automática si no quieres hacerlo manual)
+- Creación de usuario y contraseña
+- Selección de software adicional
 
-### WSL (Windows Subsystem for Linux)
+### 7. Reinicia y actualiza
 
-Una capa de compatibilidad de Microsoft que permite ejecutar distribuciones Linux directamente dentro de Windows sin necesidad de una máquina virtual. Es práctico para desarrollo, aunque tiene limitaciones en el acceso al hardware y en ciertos aspectos del kernel.
-
-### Contenedores y entornos en la nube
-
-Servicios como Docker permiten ejecutar entornos Linux aislados sin instalar una distribución completa. Las plataformas en la nube (AWS, Google Cloud, Azure) ofrecen instancias Linux que se pueden crear y destruir en segundos. Este es el modelo que emplea el laboratorio LinuxLab para proporcionarte una terminal funcional sin que debas instalar nada.
-
-## El proceso de instalación típico
-
-Independientemente de la distribución elegida, la instalación generalmente incluye los siguientes pasos:
-
-1. **Selección del idioma y teclado:** Configuración regional del sistema.
-2. **Particionado del disco:** Definir cómo se divide el espacio de almacenamiento. Las particiones básicas son:
-   - `/` (raíz): Donde se instala el sistema operativo.
-   - `/home`: Donde se almacenan los archivos de los usuarios.
-   - `swap`: Espacio de intercambio para extender la memoria RAM.
-3. **Creación del usuario:** Definir el nombre de usuario y contraseña del administrador.
-4. **Selección de software:** Elegir qué paquetes y entorno de escritorio instalar.
-5. **Configuración del arranque:** Instalar el gestor de arranque (GRUB) que permite iniciar el sistema.
+Al terminar la instalación, retiras el USB y el sistema arranca desde el disco. Una vez dentro, lo primero es actualizar los paquetes del sistema:
 
 ```bash
-# Después de instalar, puedes verificar la distribución instalada
-cat /etc/os-release
-
-# Ver información del sistema
-uname -a
-
-# Ver el espacio en disco y las particiones
-lsblk
-df -h
+sudo apt update && sudo apt upgrade
 ```
+
+Eso en distribuciones basadas en Debian/Ubuntu. En Fedora sería `dnf upgrade`, en Arch `pacman -Syu`.
 
 ## ¿Qué distribución usar?
 
-Para el curso de Sistemas Operativos, la distribución específica es secundaria: los conceptos fundamentales (procesos, archivos, permisos, shell) son comunes a todas. El laboratorio LinuxLab utiliza un entorno basado en Debian/Ubuntu, que es la familia con mayor documentación disponible y la más utilizada en entornos educativos y servidores.
+No hay una respuesta universal, pero sí hay opciones que encajan mejor según para qué la quieres.
 
-Si deseas instalar Linux en tu equipo personal para practicar fuera del laboratorio, Ubuntu o Linux Mint son las opciones más accesibles para comenzar.
+| Distribución | Para quién |
+|---|---|
+| **Ubuntu / Linux Mint** | Personas que vienen de Windows y quieren empezar sin complicaciones |
+| **Fedora** | Desarrolladores que quieren software actualizado y tecnologías recientes |
+| **Arch Linux** | Usuarios que quieren construir su sistema desde cero y entender cada parte |
+| **Debian** | Servidores y entornos que necesitan estabilidad por encima de todo |
+| **CachyOS** | Gamers y usuarios que quieren rendimiento máximo del hardware |
+
+---
+
+**Fuentes**
+
+- Instituto Linux. *Instalación de Linux*. institutolinux.com/instalacion-de-linux
