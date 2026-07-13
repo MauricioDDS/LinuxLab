@@ -14,7 +14,7 @@ export function ThemeToggle({ className }: ThemeToggleProps) {
   const { resolvedTheme, setTheme } = useTheme()
   const [mounted, setMounted] = useState(false)
 
-  // Avoid hydration mismatch — render a placeholder until mounted.
+  // Avoid hydration mismatch: render a placeholder until mounted.
   useEffect(() => setMounted(true), [])
 
   const isDark = resolvedTheme === "dark"

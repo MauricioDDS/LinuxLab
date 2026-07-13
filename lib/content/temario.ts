@@ -4,13 +4,13 @@ import type { Topic } from "@/lib/domain/topic"
  * THE canonical temario for the Operating Systems course.
  *
  * This is fixed content (RF-01): teachers enable/disable topics per course but
- * never edit this list. It is the single source of truth — every screen that
+ * never edit this list. It is the single source of truth: every screen that
  * shows topics imports from here. Titles and subtopics are authoritative;
  * descriptions are short navigational summaries, NOT lesson content. The actual
  * teaching material (text, video, links per topic) lives in `content/temario/`
  * and is authored by the thesis team.
  *
- * 13 topics; topic 13 is complementary (optional).
+ * 14 topics; topic 14 is complementary (optional).
  */
 export const temario: Topic[] = [
   {
@@ -27,27 +27,39 @@ export const temario: Topic[] = [
   },
   {
     number: 2,
+    slug: "la-terminal",
+    title: "La Terminal",
+    description:
+      "La línea de comandos, el shell Bash y los comandos esenciales para moverte por el sistema.",
+    subTopics: [
+      { number: 1, title: "La línea de comandos" },
+      { number: 2, title: "Anatomía de un comando" },
+      { number: 3, title: "Navegación esencial" },
+    ],
+  },
+  {
+    number: 3,
     slug: "directorios",
     title: "Directorios",
     description: "Tipos de directorios del sistema: etc/, home/, var/, tmp/, entre otros.",
     subTopics: [],
   },
   {
-    number: 3,
+    number: 4,
     slug: "sistema-de-archivos",
     title: "Sistema de archivos",
     description: "Inodos y estructura del sistema de archivos.",
     subTopics: [],
   },
   {
-    number: 4,
+    number: 5,
     slug: "creacion-de-directorios",
     title: "Creación de directorios",
     description: "Uso de mkdir y construcción de una estructura jerárquica.",
     subTopics: [],
   },
   {
-    number: 5,
+    number: 6,
     slug: "creacion-de-archivos",
     title: "Creación de archivos",
     description: "touch y editores de texto: vi, pico, nano.",
@@ -57,7 +69,7 @@ export const temario: Topic[] = [
     ],
   },
   {
-    number: 6,
+    number: 7,
     slug: "permisos",
     title: "Permisos",
     description: "Gestión de permisos con chmod, chown y umask.",
@@ -68,14 +80,14 @@ export const temario: Topic[] = [
     ],
   },
   {
-    number: 7,
+    number: 8,
     slug: "compresion",
     title: "Compresión",
     description: "Compresión de archivos con tar, gzip, bzip2 y zip.",
     subTopics: [],
   },
   {
-    number: 8,
+    number: 9,
     slug: "busqueda",
     title: "Búsqueda",
     description: "Patrones, expresiones regulares y uso de find y grep.",
@@ -86,7 +98,7 @@ export const temario: Topic[] = [
     ],
   },
   {
-    number: 9,
+    number: 10,
     slug: "usuarios-y-grupos",
     title: "Usuarios y grupos",
     description: "passwd, shadow y creación de cuentas con useradd y groupadd.",
@@ -97,7 +109,7 @@ export const temario: Topic[] = [
     ],
   },
   {
-    number: 10,
+    number: 11,
     slug: "gestion-de-procesos",
     title: "Gestión de procesos",
     description: "ps, top, kill, jobs y manejo de primer y segundo plano (fg, bg, &).",
@@ -108,7 +120,7 @@ export const temario: Topic[] = [
     ],
   },
   {
-    number: 11,
+    number: 12,
     slug: "servicios-y-demonios",
     title: "Servicios y demonios",
     description: "systemctl y estados de los servicios.",
@@ -118,14 +130,14 @@ export const temario: Topic[] = [
     ],
   },
   {
-    number: 12,
+    number: 13,
     slug: "shell-scripting",
     title: "Shell scripting",
     description: "Variables, condicionales, ciclos y funciones en Bash.",
     subTopics: [],
   },
   {
-    number: 13,
+    number: 14,
     slug: "instalacion-de-paquetes",
     title: "Instalación de paquetes",
     description: "Gestión de paquetes con apt y dnf.",

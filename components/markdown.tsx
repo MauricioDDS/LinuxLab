@@ -2,6 +2,7 @@ import ReactMarkdown from "react-markdown"
 import remarkGfm from "remark-gfm"
 import rehypeRaw from "rehype-raw"
 import type { Components } from "react-markdown"
+import { CodeWindow } from "@/components/code-window"
 
 /** Renders lesson markdown with the LinuxLab theme. */
 const components: Components = {
@@ -42,11 +43,10 @@ const components: Components = {
       {children}
     </blockquote>
   ),
-  pre: ({ children }) => (
-    <pre className="bg-[#0d1117] border border-border rounded-md p-4 overflow-x-auto my-4 text-sm leading-6">
-      {children}
-    </pre>
-  ),
+  // Every fenced block gets the same window frame. Shell commands are pulled out
+  // earlier as terminal blocks (see lib/content/lesson-blocks.ts), so what reaches
+  // here are diagrams and quoted text: same frame, no "bash" label.
+  pre: ({ children }) => <CodeWindow>{children}</CodeWindow>,
   code: ({ className, children }) => {
     const text = String(children)
     const isInline = !className && !text.includes("\n")
@@ -57,7 +57,7 @@ const components: Components = {
         </code>
       )
     }
-    return <code className="text-zinc-100 font-mono whitespace-pre">{children}</code>
+    return <code className="block text-zinc-100 font-mono whitespace-pre">{children}</code>
   },
   hr: () => <hr className="my-6 border-border" />,
   table: ({ children }) => (
@@ -78,7 +78,7 @@ const components: Components = {
 /**
  * `rehypeRaw` enables inline HTML authored inside the lesson markdown (e.g.
  * `<span class="text-primary">`). Safe here because lesson content is authored by
- * the team and read from disk — never user input.
+ * the team and read from disk, never user input.
  */
 export function Markdown({ children }: { children: string }) {
   return (

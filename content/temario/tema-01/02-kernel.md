@@ -12,6 +12,10 @@ Cuando ejecutas un comando en la terminal, abres un archivo o te conectas a inte
 
 El kernel es responsable de crear, planificar y terminar procesos. Un proceso es una instancia de un programa en ejecución. En un sistema Linux típico hay cientos de procesos corriendo simultáneamente, y el kernel decide cuánto tiempo de CPU recibe cada uno, cuándo se ejecuta y cuándo se pausa.
 
+Las aplicaciones no tienen acceso directo a los recursos del sistema. En cambio, le hacen solicitudes al kernel: memoria, tiempo de CPU, espacio en disco. Cuando dos aplicaciones piden el mismo recurso al mismo tiempo, el kernel decide cuál lo obtiene. En casos extremos, puede terminar un proceso para evitar que el sistema colapse por completo.
+
+El kernel también maneja el cambio entre procesos, lo que se conoce como **multitarea**. Un computador tiene un número limitado de núcleos de CPU. Cuando hay más procesos activos que núcleos disponibles, el kernel pausa unos y ejecuta otros en turnos tan rápidos que da la impresión de que todo corre en paralelo. Eso es lo que sucede cuando tienes abierto el navegador, la terminal y el reproductor de música al mismo tiempo.
+
 ```bash
 # Ver los procesos en ejecución
 ps aux
@@ -24,9 +28,13 @@ top
 
 El kernel administra la memoria RAM del sistema, asignando bloques de memoria a los procesos que lo solicitan y liberándolos cuando ya no se necesitan. También implementa la memoria virtual, que permite que los procesos utilicen más memoria de la que está físicamente disponible mediante el uso del espacio de intercambio (swap) en disco.
 
+Desde la perspectiva de cada proceso, parece que tiene un gran bloque de memoria solo para él. Esa ilusión la mantiene el kernel: reasigna bloques físicos más pequeños según la demanda, comparte memoria entre procesos cuando es posible, y mueve al disco los bloques que llevan tiempo sin usarse. El proceso no sabe nada de todo eso; simplemente ve memoria disponible.
+
 ### Sistema de archivos
 
 El kernel gestiona cómo se almacenan, organizan y recuperan los datos en los dispositivos de almacenamiento. Linux soporta múltiples sistemas de archivos: ext4 (el más común), XFS, Btrfs, NTFS (para compatibilidad con Windows), entre otros. Para el kernel, todo es un archivo: los documentos, los directorios, los dispositivos de hardware e incluso los procesos en ejecución se representan como archivos dentro de una estructura jerárquica.
+
+Una de las decisiones de diseño más importantes del kernel es la abstracción. Cuando una aplicación necesita leer un archivo, no sabe si ese dato está en un SSD, en un disco mecánico o en un recurso compartido de red. No tiene por qué saberlo. El kernel expone una interfaz de programación (API) uniforme y se encarga de las diferencias del hardware por debajo. Por eso el mismo programa funciona igual sin importar en qué tipo de almacenamiento estén los datos.
 
 ### Gestión de dispositivos
 

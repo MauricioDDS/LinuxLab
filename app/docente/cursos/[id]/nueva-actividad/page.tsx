@@ -43,7 +43,7 @@ export default function NuevaActividadPage() {
   const [error, setError] = useState<string | null>(null)
   const [publishing, setPublishing] = useState(false)
 
-  // Terminal (teacher test environment) — routed through the terminal seam.
+  // Terminal (teacher test environment), routed through the terminal seam.
   const session = useMemo(() => createTerminalSession({ user: "docente" }), [])
   const greeting = useMemo<TerminalLine[]>(
     () => session.greeting.map((content) => ({ type: "output", content })),

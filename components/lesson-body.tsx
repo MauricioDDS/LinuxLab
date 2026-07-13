@@ -1,5 +1,6 @@
 import { Image as ImageIcon, Film } from "lucide-react"
 import { Markdown } from "@/components/markdown"
+import { CodeWindow } from "@/components/code-window"
 import type { LessonBlock } from "@/lib/content/lesson-blocks"
 
 const IMG_CLASS = "mx-auto my-8 max-h-80 w-auto max-w-full rounded-lg"
@@ -12,6 +13,9 @@ export function LessonBody({ blocks }: { blocks: LessonBlock[] }) {
         switch (block.kind) {
           case "markdown":
             return <Markdown key={i}>{block.content}</Markdown>
+
+          case "terminal":
+            return <TerminalBlock key={i} command={block.command} output={block.output} />
 
           case "image":
             return block.exists ? (
@@ -74,6 +78,24 @@ export function LessonBody({ blocks }: { blocks: LessonBlock[] }) {
         }
       })}
     </>
+  )
+}
+
+/**
+ * A terminal window inside a lesson. Same chrome as the app's live terminal, so
+ * a command in the material and a command in the real terminal look alike.
+ * Command and its output share one window: they are one session.
+ */
+function TerminalBlock({ command, output }: { command: string; output?: string }) {
+  return (
+    <CodeWindow label="bash — estudiante@linuxlab">
+      <pre className="text-zinc-100 whitespace-pre">{command}</pre>
+      {output && (
+        <pre className="text-zinc-400 whitespace-pre mt-2 pt-2 border-t border-zinc-800">
+          {output}
+        </pre>
+      )}
+    </CodeWindow>
   )
 }
 

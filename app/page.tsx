@@ -18,7 +18,7 @@ export default function LoginPage() {
     try {
       await signIn(email, password)
       // On success the backend will establish the session and redirect.
-      // (Auth is not implemented yet — see lib/auth/context.tsx.)
+      // (Auth is not implemented yet. See lib/auth/context.tsx.)
     } catch (err) {
       setError(err instanceof Error ? err.message : "No se pudo iniciar sesión.")
     } finally {

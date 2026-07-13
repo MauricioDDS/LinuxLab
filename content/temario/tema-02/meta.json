@@ -1,0 +1,19 @@
+{
+  "id": "tema-02",
+  "number": 2,
+  "title": "La Terminal",
+  "description": "La línea de comandos, el shell Bash y los comandos esenciales para moverte por el sistema",
+  "subtopics": [
+    { "id": "terminal", "title": "La línea de comandos", "file": "01-terminal.md" },
+    { "id": "anatomia-comando", "title": "Anatomía de un comando", "file": "02-anatomia-comando.md" },
+    { "id": "navegacion", "title": "Navegación esencial", "file": "03-navegacion.md" }
+  ],
+  "resources": [
+    {
+      "type": "book",
+      "title": "The Linux Command Line — William Shotts",
+      "url": "https://linuxcommand.org/tlcl.php",
+      "detail": "linuxcommand.org · Gratis, Creative Commons"
+    }
+  ]
+}

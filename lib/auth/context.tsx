@@ -19,7 +19,7 @@ const AuthContext = createContext<AuthContextValue | null>(null)
 /**
  * Client auth seam. Holds the current user (none yet) and exposes the auth
  * actions. The actions throw `notImplemented` until the email+password backend
- * is wired — call sites already handle the rejected promise.
+ * is wired. Call sites already handle the rejected promise.
  */
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user] = useState<User | null>(null)

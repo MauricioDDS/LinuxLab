@@ -4,14 +4,14 @@ import type { TopicContentMeta } from "@/lib/domain/content"
 import { temario } from "./temario"
 
 /**
- * Content seam (server-only — reads from disk).
+ * Content seam (server-only, reads from disk).
  *
  * Lesson material lives under `content/temario/tema-NN/`: a `meta.json` manifest
  * plus one markdown file per subtopic. Their images live under
  * `public/temario/tema-NN/` so Next can serve them statically.
  *
  * Most topics have no content yet, in which case these return null and the UI
- * shows an empty state. Drop a `tema-NN` directory in to publish a topic — no
+ * shows an empty state. Drop a `tema-NN` directory in to publish a topic. No
  * code changes needed.
  */
 

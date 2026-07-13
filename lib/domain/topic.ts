@@ -1,6 +1,6 @@
 /**
  * Temario (course syllabus) types. The temario is FIXED content authored by the
- * thesis team — see `lib/content/temario.ts` for the canonical data. Lesson
+ * thesis team. See `lib/content/temario.ts` for the canonical data. Lesson
  * bodies (the actual teaching material) are NOT part of this shape; they are
  * loaded separately through the content seam.
  */

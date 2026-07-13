@@ -1,5 +1,5 @@
 /**
- * MOCK terminal — in-browser fake, NOT a real shell.
+ * MOCK terminal: in-browser fake, NOT a real shell.
  *
  * This is the only place demo command output lives. It exists purely so the
  * terminal UI is demonstrable before the real Xterm.js + WebSocket gateway is
@@ -14,7 +14,7 @@ export function createMockTerminalSession(
 
   return {
     greeting: [
-      "LinuxLab UFPS — terminal de demostración (mock).",
+      "LinuxLab UFPS: terminal de demostración (mock).",
       "Aún no conectada a un entorno Linux real. Escribe 'help' para ver los comandos simulados.\n",
     ],
     async run(command: string): Promise<TerminalResult> {

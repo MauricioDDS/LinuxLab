@@ -6,7 +6,7 @@
  * renders its empty/loading states, and writes throw `notImplemented(...)`.
  *
  * This is the single place to wire a real backend later (Next Route Handlers +
- * Postgres, or a separate API). Replace the function bodies — the call sites and
+ * Postgres, or a separate API). Replace the function bodies. The call sites and
  * types stay the same.
  */
 

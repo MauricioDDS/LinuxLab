@@ -1,7 +1,7 @@
 /**
  * Typed, lazy access to environment variables.
  *
- * Nothing here is wired yet — the runtime (database, terminal gateway, auth) is
+ * Nothing here is wired yet: the runtime (database, terminal gateway, auth) is
  * deferred. These are placeholders so the rest of the code can reference config
  * without scattering `process.env` lookups. They do NOT throw on missing values;
  * when the backend is implemented, switch the relevant ones to `requireEnv`.
