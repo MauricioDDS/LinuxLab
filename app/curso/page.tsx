@@ -28,9 +28,8 @@ export default async function CursoPage({
     : null
   const blocks = markdown ? parseLessonBlocks(markdown, topic.number) : null
 
-  const { prev, next } = activeSubtopic
-    ? getLessonNeighbours(topic.number, activeSubtopic.id)
-    : { prev: null, next: null }
+  // Works for topics without content too, so you can keep advancing the temario.
+  const { prev, next } = getLessonNeighbours(topic.number, activeSubtopic?.id ?? null)
 
   return (
     <div className="h-screen flex flex-col bg-background">

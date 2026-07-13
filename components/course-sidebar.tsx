@@ -6,6 +6,7 @@ import {
   ChevronDown,
   ChevronRight,
   Circle,
+  Home,
   PanelLeftClose,
   PanelLeftOpen,
 } from "lucide-react"
@@ -36,7 +37,7 @@ export function CourseSidebar({
 
   if (!open) {
     return (
-      <aside className="w-12 shrink-0 border-r border-border bg-sidebar h-full flex flex-col items-center py-3">
+      <aside className="w-12 shrink-0 border-r border-border bg-sidebar h-full flex flex-col items-center gap-1 py-3">
         <button
           onClick={() => setOpen(true)}
           title="Mostrar contenidos"
@@ -45,6 +46,14 @@ export function CourseSidebar({
         >
           <PanelLeftOpen className="w-4 h-4" />
         </button>
+        <Link
+          href="/inicio"
+          title="Volver al inicio"
+          aria-label="Volver al inicio"
+          className="w-8 h-8 flex items-center justify-center rounded-md text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors"
+        >
+          <Home className="w-4 h-4" />
+        </Link>
       </aside>
     )
   }
@@ -52,12 +61,19 @@ export function CourseSidebar({
   return (
     <aside className="w-72 shrink-0 border-r border-border bg-sidebar h-full flex flex-col">
       {/* Course Header */}
-      <div className="p-4 border-b border-border flex items-start justify-between gap-2">
-        <div className="min-w-0">
+      <div className="p-4 border-b border-border flex items-center justify-between gap-2">
+        <div className="flex items-center gap-2 min-w-0">
+          <Link
+            href="/inicio"
+            title="Volver al inicio"
+            aria-label="Volver al inicio"
+            className="w-8 h-8 shrink-0 flex items-center justify-center rounded-md text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors"
+          >
+            <Home className="w-4 h-4" />
+          </Link>
           <h2 className="font-semibold text-foreground text-sm truncate">
             {courseName ?? "Contenidos del curso"}
           </h2>
-          <p className="text-xs text-muted-foreground mt-1">Sistemas Operativos · UFPS</p>
         </div>
         <button
           onClick={() => setOpen(false)}

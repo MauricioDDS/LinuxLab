@@ -53,30 +53,45 @@ export function lessonAssetExists(topicNumber: number, file: string): boolean {
   return existsSync(join(ASSET_ROOT, topicDir(topicNumber), file))
 }
 
-/** One lesson (topic + subtopic) in reading order. */
+/** One step of the course in reading order: a subtopic, or a whole topic if it has no content yet. */
 export interface LessonRef {
   topicNumber: number
   topicSlug: string
   topicTitle: string
-  subtopicId: string
-  subtopicTitle: string
+  /** null when the topic has no published content (the step is the topic itself). */
+  subtopicId: string | null
+  subtopicTitle: string | null
   href: string
 }
 
 /**
- * Every published lesson, flattened in temario order. Topics without content are
- * skipped, so "next" always lands on real material instead of an empty state.
+ * The whole course flattened in temario order. A topic with content contributes
+ * one step per subtopic; a topic without content still contributes one step, so
+ * "Siguiente" keeps advancing from tema 1 → tema 2 → … instead of dead-ending.
  */
 export function getLessonSequence(): LessonRef[] {
   const refs: LessonRef[] = []
   for (const topic of temario) {
     const meta = getTopicContentMeta(topic.number)
-    if (!meta) continue
+    const base = {
+      topicNumber: topic.number,
+      topicSlug: topic.slug,
+      topicTitle: topic.title,
+    }
+
+    if (!meta || meta.subtopics.length === 0) {
+      refs.push({
+        ...base,
+        subtopicId: null,
+        subtopicTitle: null,
+        href: `/curso?tema=${topic.slug}`,
+      })
+      continue
+    }
+
     for (const sub of meta.subtopics) {
       refs.push({
-        topicNumber: topic.number,
-        topicSlug: topic.slug,
-        topicTitle: topic.title,
+        ...base,
         subtopicId: sub.id,
         subtopicTitle: sub.title,
         href: `/curso?tema=${topic.slug}&sub=${sub.id}`,
@@ -86,10 +101,10 @@ export function getLessonSequence(): LessonRef[] {
   return refs
 }
 
-/** Previous/next lesson around the given position. */
+/** Previous/next step around the given position. */
 export function getLessonNeighbours(
   topicNumber: number,
-  subtopicId: string,
+  subtopicId: string | null,
 ): { prev: LessonRef | null; next: LessonRef | null } {
   const sequence = getLessonSequence()
   const i = sequence.findIndex(

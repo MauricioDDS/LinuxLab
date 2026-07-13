@@ -16,9 +16,12 @@ interface ContentAreaProps {
 }
 
 /**
- * Renders the lesson material for the active topic/subtopic. The content comes
- * from the content seam (lib/content/lessons.ts); when a topic has no published
- * content this shows an empty state.
+ * Renders the lesson material for the active topic/subtopic.
+ *
+ * The `key` on <main> is load-bearing: this element is the scroll container, so
+ * without it a client-side navigation would keep the previous scroll position and
+ * drop you at the bottom of the next lesson. Changing the key remounts it, which
+ * starts the new lesson at the top.
  */
 export function ContentArea({
   topic,
@@ -29,7 +32,10 @@ export function ContentArea({
   next,
 }: ContentAreaProps) {
   return (
-    <main className="flex-1 overflow-y-auto bg-background">
+    <main
+      key={`${topic.slug}/${activeSubtopic?.id ?? ""}`}
+      className="flex-1 overflow-y-auto bg-background"
+    >
       <div className="px-6 py-4 border-b border-border">
         <p className="text-sm text-muted-foreground">
           {topic.number}. {topic.title}
@@ -41,26 +47,7 @@ export function ContentArea({
 
       <div className="p-6 max-w-3xl">
         {blocks && blocks.length > 0 ? (
-          <>
-            <LessonBody blocks={blocks} />
-
-            {/* Navegación entre sublecciones: va antes de Recursos, porque los
-                recursos son del tema completo y no cambian entre sublecciones. */}
-            <LessonNav prev={prev} next={next} />
-
-            {meta && meta.resources.length > 0 && (
-              <section className="mt-10 pt-6 border-t border-border">
-                <h2 className="text-sm font-medium text-muted-foreground uppercase tracking-wide mb-4">
-                  Recursos
-                </h2>
-                <div className="grid gap-3">
-                  {meta.resources.map((resource) => (
-                    <ResourceCard key={resource.url} resource={resource} />
-                  ))}
-                </div>
-              </section>
-            )}
-          </>
+          <LessonBody blocks={blocks} />
         ) : (
           <div className="max-w-md mx-auto text-center py-16">
             <div className="w-12 h-12 mx-auto mb-4 rounded-lg bg-secondary/60 flex items-center justify-center">
@@ -71,6 +58,23 @@ export function ContentArea({
               El contenido de este tema aún no está publicado.
             </p>
           </div>
+        )}
+
+        {/* Navegación: va antes de Recursos, porque los recursos son del tema
+            completo y no cambian entre sublecciones. */}
+        <LessonNav currentTopicNumber={topic.number} prev={prev} next={next} />
+
+        {meta && meta.resources.length > 0 && (
+          <section className="mt-10 pt-6 border-t border-border">
+            <h2 className="text-sm font-medium text-muted-foreground uppercase tracking-wide mb-4">
+              Recursos
+            </h2>
+            <div className="grid gap-3">
+              {meta.resources.map((resource) => (
+                <ResourceCard key={resource.url} resource={resource} />
+              ))}
+            </div>
+          </section>
         )}
       </div>
     </main>
