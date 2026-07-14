@@ -1,5 +1,3 @@
-<!-- IMAGE: anatomia-comando.png | Diagrama de la estructura de un comando Linux -->
-
 ## ¿Qué es un comando?
 
 Un comando es un programa que, al ejecutarse en la terminal, realiza una acción sobre el sistema. Algunos son simples y se usan solos. Otros aceptan información adicional para funcionar de maneras distintas.

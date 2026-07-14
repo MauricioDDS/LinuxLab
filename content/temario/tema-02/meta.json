@@ -6,7 +6,8 @@
   "subtopics": [
     { "id": "terminal", "title": "La línea de comandos", "file": "01-terminal.md" },
     { "id": "anatomia-comando", "title": "Anatomía de un comando", "file": "02-anatomia-comando.md" },
-    { "id": "navegacion", "title": "Navegación esencial", "file": "03-navegacion.md" }
+    { "id": "navegacion", "title": "Navegación esencial", "file": "03-navegacion.md" },
+    { "id": "variables", "title": "Variables en Bash", "file": "04-variables.md" }
   ],
   "resources": [
     {

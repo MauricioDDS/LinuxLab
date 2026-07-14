@@ -1,6 +1,7 @@
 import { BookOpen, FileText, Link2, Video, type LucideIcon } from "lucide-react"
 import { LessonBody } from "@/components/lesson-body"
 import { LessonNav } from "@/components/lesson-nav"
+import { LessonSources } from "@/components/lesson-sources"
 import type { Topic } from "@/lib/domain/topic"
 import type { LessonResource, LessonSubtopic, TopicContentMeta } from "@/lib/domain/content"
 import type { LessonBlock } from "@/lib/content/lesson-blocks"
@@ -31,6 +32,12 @@ export function ContentArea({
   prev,
   next,
 }: ContentAreaProps) {
+  // The bibliography is rendered after the nav, not inline with the lesson.
+  const sources = blocks?.find(
+    (b): b is Extract<LessonBlock, { kind: "sources" }> => b.kind === "sources",
+  )
+  const bodyBlocks = blocks?.filter((b) => b.kind !== "sources") ?? null
+
   return (
     <main
       key={`${topic.slug}/${activeSubtopic?.id ?? ""}`}
@@ -46,8 +53,8 @@ export function ContentArea({
       </div>
 
       <div className="p-6 max-w-3xl">
-        {blocks && blocks.length > 0 ? (
-          <LessonBody blocks={blocks} />
+        {bodyBlocks && bodyBlocks.length > 0 ? (
+          <LessonBody blocks={bodyBlocks} />
         ) : (
           <div className="max-w-md mx-auto text-center py-16">
             <div className="w-12 h-12 mx-auto mb-4 rounded-lg bg-secondary/60 flex items-center justify-center">
@@ -60,12 +67,15 @@ export function ContentArea({
           </div>
         )}
 
-        {/* Navegación: va antes de Recursos, porque los recursos son del tema
-            completo y no cambian entre sublecciones. */}
+        {/* Pie de la subleccción. Una sola línea separa la lección de todo esto.
+            Primero la navegación, luego las fuentes plegadas (de esta subleccción),
+            y al final los recursos, que son del tema entero y se repiten. */}
         <LessonNav currentTopicNumber={topic.number} prev={prev} next={next} />
 
+        {sources && <LessonSources content={sources.content} />}
+
         {meta && meta.resources.length > 0 && (
-          <section className="mt-10 pt-6 border-t border-border">
+          <section className="mt-8">
             <h2 className="text-sm font-medium text-muted-foreground uppercase tracking-wide mb-4">
               Recursos
             </h2>
@@ -83,6 +93,7 @@ export function ContentArea({
 
 const RESOURCE_ICONS: Record<string, LucideIcon> = {
   pdf: FileText,
+  book: BookOpen,
   video: Video,
   link: Link2,
 }

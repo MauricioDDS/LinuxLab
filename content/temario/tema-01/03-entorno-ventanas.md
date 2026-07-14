@@ -1,5 +1,3 @@
-<!-- IMAGE: desktop-linux-ejemplo.png | Escritorio Linux con entorno gráfico -->
-
 ## Dos formas de hablarle al sistema
 
 Hay dos maneras de interactuar con un sistema operativo.
@@ -9,6 +7,8 @@ La primera es la **interfaz gráfica (GUI)**: ventanas, íconos, menús. El sist
 La segunda es la **interfaz de línea de comandos (CLI)**: texto puro. Escribes lo que quieres hacer, el sistema lo ejecuta. Hay una forma de verlo que es bastante clara: cuando haces clic en un ícono, es el computador el que te está diciendo qué puedes hacer. Cuando escribes un comando, eres tú el que le dice al computador qué tiene que hacer.
 
 Linux tiene ambas.
+
+<!-- IMAGE: desktop-linux-ejemplo.JPEG | Escritorio Linux con entorno gráfico -->
 
 ## Linux no es solo una pantalla negra
 
@@ -20,7 +20,7 @@ Linux tiene escritorios gráficos. Escritorios que se ven bien, que funcionan bi
 
 Un **entorno de escritorio** es la capa visual del sistema: las ventanas, el panel, los íconos del escritorio, el menú de aplicaciones. No es parte del kernel. Es software independiente que se instala encima, y en Linux puedes elegir cuál usar o incluso cambiarlo después. Esa flexibilidad no existe en Windows ni en macOS, donde la interfaz la define la empresa y no la tocas.
 
-<!-- IMAGE: kde-gnome-comparacion.png | Comparación entre GNOME y KDE Plasma en Linux -->
+<!-- IMAGE: kde-gnome-comparacion.webp | Comparación entre GNOME y KDE Plasma en Linux -->
 
 Lo que más importa entender no es qué entornos existen, sino que **en Linux la interfaz gráfica y el sistema operativo son cosas separadas**. El sistema funciona aunque no haya pantalla. En servidores, Linux corre sin entorno gráfico porque no lo necesita. Eso lo hace más eficiente, más seguro y más flexible.
 

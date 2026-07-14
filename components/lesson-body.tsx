@@ -14,6 +14,10 @@ export function LessonBody({ blocks }: { blocks: LessonBlock[] }) {
           case "markdown":
             return <Markdown key={i}>{block.content}</Markdown>
 
+          // Rendered separately, after the nav (see ContentArea).
+          case "sources":
+            return null
+
           case "terminal":
             return <TerminalBlock key={i} command={block.command} output={block.output} />
 

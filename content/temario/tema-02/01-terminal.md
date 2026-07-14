@@ -1,8 +1,8 @@
-<!-- IMAGE: terminal-linux.png | Terminal de línea de comandos en Linux -->
-
 ## La línea de comandos
 
 La **línea de comandos** es un sistema de entrada de texto donde le dices al computador exactamente qué quieres que haga. Puedes escribir desde un comando simple hasta un script completo de cien líneas. Es directa, sin capas visuales en el medio.
+
+<!-- IMAGE: terminal-linux.png | Terminal de línea de comandos en Linux -->
 
 ## Cómo acceder a la terminal
 

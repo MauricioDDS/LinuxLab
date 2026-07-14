@@ -12,15 +12,21 @@
   "resources": [
     {
       "type": "video",
-      "title": "Historia de Linux — Nate Gentile",
+      "title": "Historia de Linux",
       "url": "https://youtu.be/UUJ0dFpj1-M",
       "detail": "YouTube · Nate Gentile"
     },
     {
       "type": "video",
-      "title": "Linux desde cero: mi guía personal para novatos — Nate Gentile",
+      "title": "Linux desde cero: mi guía personal para novatos",
       "url": "https://youtu.be/knrc4q1S_q0",
       "detail": "YouTube · Nate Gentile"
+    },
+    {
+      "type": "video",
+      "title": "Linux para principiantes: instala Ubuntu y aprende todo lo que debes saber",
+      "url": "https://youtu.be/tdjGchccSws",
+      "detail": "YouTube · Más Tecnología"
     }
   ]
 }

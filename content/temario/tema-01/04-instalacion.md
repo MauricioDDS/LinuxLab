@@ -1,5 +1,3 @@
-<!-- IMAGE: instalacion-linux-portada.png | Proceso de instalación de Linux -->
-
 ## ¿Qué es una distribución?
 
 Linux no viene en una sola versión. El kernel es el núcleo, pero para tener un sistema operativo completo y usable necesitas mucho más: un gestor de paquetes para instalar software, herramientas del sistema, un entorno gráfico, configuraciones por defecto. Quien empaqueta todo eso junto y lo distribuye es lo que se llama una **distribución** (o simplemente "distro").
@@ -11,6 +9,8 @@ Lo importante: los comandos que vas a aprender en este curso funcionan igual en 
 ## El proceso de instalación
 
 Instalar Linux en un computador sigue siempre la misma lógica, sin importar la distribución que elijas.
+
+<!-- IMAGE: instalacion-linux-portada.png | Proceso de instalación de Linux -->
 
 ### 1. Elige tu distribución
 

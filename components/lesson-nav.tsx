@@ -37,7 +37,7 @@ export function LessonNav({
   const nextInfo = next ? describe(next, currentTopicNumber, "next") : null
 
   return (
-    <nav className="mt-12 pt-6 border-t border-border flex items-center justify-between gap-4">
+    <nav className="mt-10 flex items-center justify-between gap-4">
       {prev && prevInfo ? (
         <Link
           href={prev.href}

@@ -2,9 +2,9 @@
 
 ## Moverse por el sistema
 
-El sistema de archivos de Linux es una jerarquía de directorios. Para moverte por ella desde la terminal necesitas un puñado de comandos. No son muchos, pero los vas a usar todo el tiempo.
+El sistema de archivos de Linux es una jerarquía de directorios. Para moverte por ella desde la terminal necesitas saber usar ciertos comandos. No son muchos, pero los vas a usar todo el tiempo.
 
-## pwd — ¿dónde estoy?
+## pwd: ¿dónde estoy?
 
 `pwd` (print working directory) te dice en qué directorio estás en este momento:
 
@@ -18,7 +18,7 @@ pwd
 
 Siempre que no sepas dónde estás parado, `pwd` te lo dice.
 
-## ls — ¿qué hay aquí?
+## ls: ¿qué hay aquí?
 
 `ls` lista el contenido del directorio actual:
 
@@ -40,7 +40,7 @@ ls -a
 .  ..  .bashrc  .profile  Documentos  Descargas  proyectos  notas.txt
 ```
 
-Combinándolo con el `-l` que ya viste en *Anatomía de un comando*, obtienes el listado que más vas a usar: todo el contenido del directorio, incluidos los ocultos, con sus permisos, tamaño y fecha.
+Combinándolo con el `-l` como ya vimos anteriormente, obtienes todo el contenido del directorio, incluidos los ocultos, con sus permisos, tamaño y fecha.
 
 ```bash
 ls -la
@@ -58,7 +58,7 @@ drwxr-xr-x 3 estudiante estudiante 4096 mar 12 11:02 proyectos
 -rw-r--r-- 1 estudiante estudiante   84 mar 12 11:05 notas.txt
 ```
 
-## cd — moverse entre directorios
+## cd: moverse entre directorios
 
 `cd` (change directory) te mueve a otro directorio:
 
@@ -81,7 +81,7 @@ cd
 
 `cd` sin argumentos siempre te lleva a tu directorio de inicio.
 
-## mkdir — crear un directorio
+## mkdir: crear un directorio
 
 `mkdir` (make directory) crea un nuevo directorio:
 
@@ -97,7 +97,7 @@ mkdir -p proyectos/linux/practicas
 
 Sin `-p`, si alguno de los directorios intermedios no existe, el comando falla.
 
-## touch — crear un archivo vacío
+## touch:  crear un archivo vacío
 
 `touch` crea un archivo vacío si no existe, o actualiza su fecha de modificación si ya existe:
 
@@ -107,7 +107,7 @@ touch notas.txt
 
 Es útil para crear archivos de forma rápida antes de editarlos, o para marcar que un archivo fue "tocado" en cierta fecha.
 
-## tree — ver la estructura completa
+## tree:  ver la estructura completa
 
 `tree` muestra el contenido de un directorio y todos sus subdirectorios en forma de árbol. No viene instalado por defecto en todas las distribuciones, pero es uno de los comandos más útiles para entender cómo está organizado el sistema:
 

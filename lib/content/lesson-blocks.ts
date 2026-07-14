@@ -21,6 +21,7 @@ import { lessonAssetExists, lessonAssetUrl } from "./lessons"
 
 export type LessonBlock =
   | { kind: "markdown"; content: string }
+  | { kind: "sources"; content: string }
   | { kind: "terminal"; command: string; output?: string }
   | { kind: "image"; src: string; alt: string; exists: boolean; expectedPath: string }
   | {
@@ -47,6 +48,14 @@ const DIRECTIVE_RE =
   /<!--\s*(IMAGE-DARK|IMAGE-LIGHT|IMAGE|VIDEO)\s*:\s*([^|\s][^|]*?)\s*(?:\|\s*(.*?)\s*)?-->/g
 
 const FENCE_RE = /```([a-zA-Z0-9]*)[ \t]*\r?\n([\s\S]*?)```/g
+
+/**
+ * The bibliography every lesson closes with, written as an optional `---` rule
+ * followed by `**Fuentes**` and a list. It is pulled out of the body so it can be
+ * rendered as a collapsed disclosure instead of a wall of citations between the
+ * lesson and the "Siguiente" button.
+ */
+const SOURCES_RE = /\n+(?:---[ \t]*\n+)?\*\*Fuentes\*\*[ \t]*\n+([\s\S]*)$/
 
 /** Languages we render as a terminal window. */
 const TERMINAL_LANGS = new Set(["bash", "sh", "shell", "zsh", "console"])
@@ -137,13 +146,22 @@ function findPartner(
 }
 
 export function parseLessonBlocks(markdown: string, topicNumber: number): LessonBlock[] {
+  // 0. Peel the bibliography off the end; it is rendered as a disclosure.
+  let body = markdown
+  let sources: string | null = null
+  const sourcesMatch = markdown.match(SOURCES_RE)
+  if (sourcesMatch && sourcesMatch.index !== undefined) {
+    sources = sourcesMatch[1].trim()
+    body = markdown.slice(0, sourcesMatch.index).trimEnd()
+  }
+
   // 1. Split the markdown around the media directives.
   const tokens: Token[] = []
   let cursor = 0
-  for (const match of markdown.matchAll(DIRECTIVE_RE)) {
+  for (const match of body.matchAll(DIRECTIVE_RE)) {
     const start = match.index ?? 0
     if (start > cursor) {
-      tokens.push({ kind: "markdown", content: markdown.slice(cursor, start) })
+      tokens.push({ kind: "markdown", content: body.slice(cursor, start) })
     }
     tokens.push({
       kind: "directive",
@@ -155,8 +173,8 @@ export function parseLessonBlocks(markdown: string, topicNumber: number): Lesson
     })
     cursor = start + match[0].length
   }
-  if (cursor < markdown.length) {
-    tokens.push({ kind: "markdown", content: markdown.slice(cursor) })
+  if (cursor < body.length) {
+    tokens.push({ kind: "markdown", content: body.slice(cursor) })
   }
 
   // 2. Turn tokens into blocks, pairing dark/light images.
@@ -216,6 +234,9 @@ export function parseLessonBlocks(markdown: string, topicNumber: number): Lesson
       expectedPath: `public${lessonAssetUrl(topicNumber, value)}`,
     })
   }
+
+  // 3. The bibliography always closes the lesson.
+  if (sources) blocks.push({ kind: "sources", content: sources })
 
   return blocks
 }
