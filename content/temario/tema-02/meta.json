@@ -11,8 +11,14 @@
   ],
   "resources": [
     {
+      "type": "pdf",
+      "title": "Comandos Esenciales: Cheat Sheet",
+      "url": "/temario/tema-02/comandos-esenciales.pdf",
+      "detail": "LinuxLab · Referencia rápida de comandos"
+    },
+    {
       "type": "book",
-      "title": "The Linux Command Line — William Shotts",
+      "title": "The Linux Command Line",
       "url": "https://linuxcommand.org/tlcl.php",
       "detail": "linuxcommand.org · Gratis, Creative Commons"
     }
