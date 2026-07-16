@@ -103,6 +103,19 @@ export function getLessonSequence(): LessonRef[] {
   return refs
 }
 
+/**
+ * How many lessons each topic has, keyed by topic number. Topics without
+ * published content are absent, so the UI can skip their progress bar.
+ */
+export function getTopicLessonCounts(): Record<number, number> {
+  const counts: Record<number, number> = {}
+  for (const topic of temario) {
+    const meta = getTopicContentMeta(topic.number)
+    if (meta && meta.subtopics.length > 0) counts[topic.number] = meta.subtopics.length
+  }
+  return counts
+}
+
 /** Previous/next step around the given position. */
 export function getLessonNeighbours(
   topicNumber: number,

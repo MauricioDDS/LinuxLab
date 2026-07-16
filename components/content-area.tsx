@@ -3,6 +3,7 @@ import { LessonBody } from "@/components/lesson-body"
 import { LessonNav } from "@/components/lesson-nav"
 import { LessonSources } from "@/components/lesson-sources"
 import { SimulatorLesson } from "@/components/simulator-lesson"
+import { LessonScrollArea } from "@/components/lesson-scroll-area"
 import type { Topic } from "@/lib/domain/topic"
 import type { LessonResource, LessonSubtopic, TopicContentMeta } from "@/lib/domain/content"
 import type { LessonBlock } from "@/lib/content/lesson-blocks"
@@ -20,10 +21,10 @@ interface ContentAreaProps {
 /**
  * Renders the lesson material for the active topic/subtopic.
  *
- * The `key` on <main> is load-bearing: this element is the scroll container, so
- * without it a client-side navigation would keep the previous scroll position and
- * drop you at the bottom of the next lesson. Changing the key remounts it, which
- * starts the new lesson at the top.
+ * The `key` on the scroll area is load-bearing: that element is the scroll
+ * container, so without it a client-side navigation would keep the previous
+ * scroll position and drop you at the bottom of the next lesson. Changing the key
+ * remounts it, which starts the new lesson at the top.
  */
 export function ContentArea({
   topic,
@@ -40,19 +41,19 @@ export function ContentArea({
   const bodyBlocks = blocks?.filter((b) => b.kind !== "sources") ?? null
 
   return (
-    <main
+    <LessonScrollArea
       key={`${topic.slug}/${activeSubtopic?.id ?? ""}`}
-      className="flex-1 overflow-y-auto bg-background flex flex-col"
-    >
-      <div className="px-6 py-4 border-b border-border">
-        <p className="text-sm text-muted-foreground">
+      topicNumber={topic.number}
+      subtopicId={activeSubtopic?.id ?? null}
+      header={
+        <p className="text-sm text-muted-foreground truncate">
           {topic.number}. {topic.title}
           {activeSubtopic && (
             <span className="text-foreground"> / {activeSubtopic.title}</span>
           )}
         </p>
-      </div>
-
+      }
+    >
       {activeSubtopic?.type === "simulator" ? (
         <SimulatorLesson
           src={`/temario/tema-${String(topic.number).padStart(2, "0")}/${activeSubtopic.file}`}
@@ -94,7 +95,7 @@ export function ContentArea({
           )}
         </div>
       )}
-    </main>
+    </LessonScrollArea>
   )
 }
 

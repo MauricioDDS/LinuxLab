@@ -3,6 +3,7 @@
 import { useState } from "react"
 import Link from "next/link"
 import {
+  CheckCircle2,
   ChevronDown,
   ChevronRight,
   Circle,
@@ -12,6 +13,8 @@ import {
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { temario } from "@/lib/content/temario"
+import { NeonProgress } from "@/components/neon-progress"
+import { useLessonProgress } from "@/lib/progress/context"
 import type { LessonSubtopic } from "@/lib/domain/content"
 
 interface CourseSidebarProps {
@@ -19,6 +22,8 @@ interface CourseSidebarProps {
   activeSubtopicId?: string
   /** Subtopics of the active topic, when it has published content. */
   contentSubtopics?: LessonSubtopic[]
+  /** Lesson count per topic number, for the progress bars. */
+  lessonCounts: Record<number, number>
   courseName?: string
 }
 
@@ -31,9 +36,11 @@ export function CourseSidebar({
   activeTopicSlug,
   activeSubtopicId,
   contentSubtopics,
+  lessonCounts,
   courseName,
 }: CourseSidebarProps) {
   const [open, setOpen] = useState(true)
+  const { readCountForTopic, isRead } = useLessonProgress()
 
   if (!open) {
     return (
@@ -96,6 +103,10 @@ export function CourseSidebar({
                 : null
             const hasSubs = subs ? subs.length > 0 : topic.subTopics.length > 0
 
+            const total = lessonCounts[topic.number] ?? 0
+            const done = total > 0 ? Math.min(readCountForTopic(topic.number), total) : 0
+            const pct = total > 0 ? Math.round((done / total) * 100) : 0
+
             return (
               <li key={topic.slug}>
                 <Link
@@ -108,7 +119,11 @@ export function CourseSidebar({
                   )}
                 >
                   <div className="w-5 h-5 rounded-full bg-secondary flex items-center justify-center shrink-0">
-                    <Circle className="w-3 h-3 text-muted-foreground" />
+                    {pct === 100 ? (
+                      <CheckCircle2 className="w-3.5 h-3.5 text-primary" />
+                    ) : (
+                      <Circle className="w-3 h-3 text-muted-foreground" />
+                    )}
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2">
@@ -124,6 +139,14 @@ export function CourseSidebar({
                         {topic.title}
                       </span>
                     </div>
+                    {total > 0 && (
+                      <div className="flex items-center gap-2 mt-1.5">
+                        <NeonProgress value={pct} className="h-1" />
+                        <span className="shrink-0 w-8 text-right text-[10px] font-mono tabular-nums text-muted-foreground">
+                          {pct}%
+                        </span>
+                      </div>
+                    )}
                   </div>
                   {hasSubs &&
                     (isActive ? (
@@ -148,7 +171,11 @@ export function CourseSidebar({
                                   : "text-muted-foreground hover:text-primary"
                               )}
                             >
-                              <Circle className="w-3 h-3" />
+                              {isRead(topic.number, sub.id) ? (
+                                <CheckCircle2 className="w-3 h-3 shrink-0 text-primary" />
+                              ) : (
+                                <Circle className="w-3 h-3 shrink-0" />
+                              )}
                               <span className="truncate">{sub.title}</span>
                             </Link>
                           </li>

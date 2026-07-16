@@ -7,8 +7,10 @@ import {
   getTopicContentMeta,
   getSubtopicMarkdown,
   getLessonNeighbours,
+  getTopicLessonCounts,
 } from "@/lib/content/lessons"
 import { parseLessonBlocks } from "@/lib/content/lesson-blocks"
+import { LessonProgressProvider } from "@/lib/progress/context"
 
 export default async function CursoPage({
   searchParams,
@@ -38,24 +40,27 @@ export default async function CursoPage({
   const { prev, next } = getLessonNeighbours(topic.number, activeSubtopic?.id ?? null)
 
   return (
-    <div className="h-screen flex flex-col bg-background">
-      <Navbar />
-      <div className="flex-1 flex overflow-hidden">
-        <CourseSidebar
-          activeTopicSlug={topic.slug}
-          activeSubtopicId={activeSubtopic?.id}
-          contentSubtopics={meta?.subtopics}
-        />
-        <ContentArea
-          topic={topic}
-          meta={meta}
-          activeSubtopic={activeSubtopic}
-          blocks={blocks}
-          prev={prev}
-          next={next}
-        />
-        <CourseTerminal />
+    <LessonProgressProvider>
+      <div className="h-screen flex flex-col bg-background">
+        <Navbar />
+        <div className="flex-1 flex overflow-hidden">
+          <CourseSidebar
+            activeTopicSlug={topic.slug}
+            activeSubtopicId={activeSubtopic?.id}
+            contentSubtopics={meta?.subtopics}
+            lessonCounts={getTopicLessonCounts()}
+          />
+          <ContentArea
+            topic={topic}
+            meta={meta}
+            activeSubtopic={activeSubtopic}
+            blocks={blocks}
+            prev={prev}
+            next={next}
+          />
+          <CourseTerminal />
+        </div>
       </div>
-    </div>
+    </LessonProgressProvider>
   )
 }
