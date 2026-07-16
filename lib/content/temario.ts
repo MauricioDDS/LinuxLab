@@ -42,7 +42,10 @@ export const temario: Topic[] = [
     slug: "directorios",
     title: "Directorios",
     description: "Tipos de directorios del sistema: etc/, home/, var/, tmp/, entre otros.",
-    subTopics: [],
+    subTopics: [
+      { number: 1, title: "El sistema de archivos" },
+      { number: 2, title: "Simulador: navega el árbol" },
+    ],
   },
   {
     number: 4,

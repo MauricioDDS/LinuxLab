@@ -2,6 +2,7 @@ import { BookOpen, FileText, Link2, Video, type LucideIcon } from "lucide-react"
 import { LessonBody } from "@/components/lesson-body"
 import { LessonNav } from "@/components/lesson-nav"
 import { LessonSources } from "@/components/lesson-sources"
+import { SimulatorLesson } from "@/components/simulator-lesson"
 import type { Topic } from "@/lib/domain/topic"
 import type { LessonResource, LessonSubtopic, TopicContentMeta } from "@/lib/domain/content"
 import type { LessonBlock } from "@/lib/content/lesson-blocks"
@@ -41,7 +42,7 @@ export function ContentArea({
   return (
     <main
       key={`${topic.slug}/${activeSubtopic?.id ?? ""}`}
-      className="flex-1 overflow-y-auto bg-background"
+      className="flex-1 overflow-y-auto bg-background flex flex-col"
     >
       <div className="px-6 py-4 border-b border-border">
         <p className="text-sm text-muted-foreground">
@@ -52,41 +53,47 @@ export function ContentArea({
         </p>
       </div>
 
-      <div className="p-6 max-w-3xl">
-        {bodyBlocks && bodyBlocks.length > 0 ? (
-          <LessonBody blocks={bodyBlocks} />
-        ) : (
-          <div className="max-w-md mx-auto text-center py-16">
-            <div className="w-12 h-12 mx-auto mb-4 rounded-lg bg-secondary/60 flex items-center justify-center">
-              <BookOpen className="w-6 h-6 text-muted-foreground" />
+      {activeSubtopic?.type === "simulator" ? (
+        <SimulatorLesson
+          src={`/temario/tema-${String(topic.number).padStart(2, "0")}/${activeSubtopic.file}`}
+          prev={prev}
+          next={next}
+          currentTopicNumber={topic.number}
+        />
+      ) : (
+        <div className="p-6 max-w-3xl">
+          {bodyBlocks && bodyBlocks.length > 0 ? (
+            <LessonBody blocks={bodyBlocks} />
+          ) : (
+            <div className="max-w-md mx-auto text-center py-16">
+              <div className="w-12 h-12 mx-auto mb-4 rounded-lg bg-secondary/60 flex items-center justify-center">
+                <BookOpen className="w-6 h-6 text-muted-foreground" />
+              </div>
+              <h2 className="text-base font-medium text-foreground mb-1">Material no disponible</h2>
+              <p className="text-sm text-muted-foreground">
+                El contenido de este tema aún no está publicado.
+              </p>
             </div>
-            <h2 className="text-base font-medium text-foreground mb-1">Material no disponible</h2>
-            <p className="text-sm text-muted-foreground">
-              El contenido de este tema aún no está publicado.
-            </p>
-          </div>
-        )}
+          )}
 
-        {/* Pie de la subleccción. Una sola línea separa la lección de todo esto.
-            Primero la navegación, luego las fuentes plegadas (de esta subleccción),
-            y al final los recursos, que son del tema entero y se repiten. */}
-        <LessonNav currentTopicNumber={topic.number} prev={prev} next={next} />
+          <LessonNav currentTopicNumber={topic.number} prev={prev} next={next} />
 
-        {sources && <LessonSources content={sources.content} />}
+          {sources && <LessonSources content={sources.content} />}
 
-        {meta && meta.resources.length > 0 && (
-          <section className="mt-8">
-            <h2 className="text-sm font-medium text-muted-foreground uppercase tracking-wide mb-4">
-              Recursos
-            </h2>
-            <div className="grid gap-3">
-              {meta.resources.map((resource) => (
-                <ResourceCard key={resource.url} resource={resource} />
-              ))}
-            </div>
-          </section>
-        )}
-      </div>
+          {meta && meta.resources.length > 0 && (
+            <section className="mt-8">
+              <h2 className="text-sm font-medium text-muted-foreground uppercase tracking-wide mb-4">
+                Recursos
+              </h2>
+              <div className="grid gap-3">
+                {meta.resources.map((resource) => (
+                  <ResourceCard key={resource.url} resource={resource} />
+                ))}
+              </div>
+            </section>
+          )}
+        </div>
+      )}
     </main>
   )
 }

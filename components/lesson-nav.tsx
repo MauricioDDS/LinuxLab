@@ -58,7 +58,11 @@ export function LessonNav({
       {next && nextInfo ? (
         <Link
           href={next.href}
-          className="group flex items-center gap-3 max-w-[55%] rounded-md bg-primary text-primary-foreground px-5 py-3 text-right neon-glow hover:neon-glow-strong hover:bg-primary/90 transition-all duration-300"
+          className={`group flex items-center gap-3 max-w-[55%] rounded-md px-5 py-3 text-right transition-all duration-300 ${
+            next.isSimulator
+              ? "bg-emerald-600 text-white hover:bg-emerald-500 shadow-[0_0_18px_rgba(52,211,153,0.45)] hover:shadow-[0_0_28px_rgba(52,211,153,0.7)]"
+              : "bg-primary text-primary-foreground neon-glow hover:neon-glow-strong hover:bg-primary/90"
+          }`}
         >
           <span className="min-w-0">
             <span className="block text-xs text-primary-foreground/80">{nextInfo.kicker}</span>

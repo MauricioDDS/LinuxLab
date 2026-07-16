@@ -62,6 +62,7 @@ export interface LessonRef {
   subtopicId: string | null
   subtopicTitle: string | null
   href: string
+  isSimulator?: boolean
 }
 
 /**
@@ -95,6 +96,7 @@ export function getLessonSequence(): LessonRef[] {
         subtopicId: sub.id,
         subtopicTitle: sub.title,
         href: `/curso?tema=${topic.slug}&sub=${sub.id}`,
+        isSimulator: sub.type === "simulator",
       })
     }
   }

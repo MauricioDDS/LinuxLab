@@ -18,6 +18,8 @@ export interface LessonSubtopic {
   title: string
   /** Markdown filename relative to the topic directory. */
   file: string
+  /** "simulator" renders a full-width iframe instead of markdown. Default: "markdown". */
+  type?: "markdown" | "simulator"
 }
 
 export interface TopicContentMeta {

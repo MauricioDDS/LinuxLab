@@ -20,7 +20,17 @@ Cuando escribes un comando en la terminal y presionas Enter, la terminal no lo e
 
 El shell es el puente entre tú y el kernel.
 
-Linux permite usar varios shells distintos. El más común en la mayoría de distribuciones es **Bash** (Bourne Again Shell), y es el que usarás en este curso.
+## Familias de shell
+
+Linux ofrece varios shells para elegir. La mayoría difieren en lo que permiten personalizar y en la sintaxis de su lenguaje de scripting. Todos los shells modernos descienden de dos familias originales de los años 70:
+
+**Familia Bourne:** Creado por Stephen Bourne en Bell Labs, el Bourne shell fue uno de los primeros en UNIX. Su descendiente moderno es **Bash** (Bourne Again Shell), que añade historial de comandos, autocompletado y scripting avanzado. Es el shell por defecto en la mayoría de distribuciones Linux.
+
+**Familia C:** El C shell tomó su nombre de que su sintaxis se parece al lenguaje de programación C. Su versión moderna es **tcsh**. Aunque sigue disponible en muchos sistemas, es menos común que Bash.
+
+A partir de estas dos familias, los programadores tomaron lo mejor de cada una para crear otros shells como el **Korn shell (ksh)** y el **Z shell (zsh)**. Zsh en particular ganó popularidad en años recientes y es el shell por defecto en macOS desde 2019.
+
+La elección del shell es mayormente personal. Un usuario cómodo con Bash puede trabajar efectivamente en prácticamente cualquier sistema Linux, ya que es el estándar de facto.
 
 ## Bash
 

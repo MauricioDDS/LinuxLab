@@ -23,10 +23,16 @@ export default async function CursoPage({
     ? (meta.subtopics.find((s) => s.id === sub) ?? meta.subtopics[0] ?? null)
     : null
 
-  const markdown = activeSubtopic
-    ? getSubtopicMarkdown(topic.number, activeSubtopic.file)
-    : null
-  const blocks = markdown ? parseLessonBlocks(markdown, topic.number) : null
+  const isSimulator = activeSubtopic?.type === "simulator"
+  const markdown =
+    activeSubtopic && !isSimulator
+      ? getSubtopicMarkdown(topic.number, activeSubtopic.file)
+      : null
+  const blocks = isSimulator
+    ? [{ kind: "simulator" as const, src: `/temario/tema-${String(topic.number).padStart(2, "0")}/${activeSubtopic!.file}` }]
+    : markdown
+      ? parseLessonBlocks(markdown, topic.number)
+      : null
 
   // Works for topics without content too, so you can keep advancing the temario.
   const { prev, next } = getLessonNeighbours(topic.number, activeSubtopic?.id ?? null)

@@ -33,6 +33,7 @@ export type LessonBlock =
       expectedPaths: string[]
     }
   | { kind: "video"; title: string; src: string; exists: boolean; expectedPath: string }
+  | { kind: "simulator"; src: string }
 
 interface Directive {
   type: string

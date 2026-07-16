@@ -1,0 +1,1104 @@
+<title>Simulador de Directorios · LinuxLab</title>
+<style>
+:root {
+  --bg:     #0D1117;
+  --surf:   #161B22;
+  --surf2:  #1C2128;
+  --border: #21262D;
+  --red:    #FF0030;
+  --red-bg: #1E0008;
+  --red-dim:rgba(255,0,48,.12);
+  --green:  #2ECC71;
+  --grn-bg: #071610;
+  --grn-dim:rgba(46,204,113,.1);
+  --blue:   #58A6FF;
+  --purple: #A371F7;
+  --orange: #E8803A;
+  --text:   #C9D1D9;
+  --bright: #F0F6FC;
+  --muted:  #6B8399;
+  --dim:    #21262D;
+  --gold:   #FFC400;
+  --mono:'SF Mono','Fira Mono','Cascadia Mono',Consolas,'Courier New',monospace;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{height:100%;background:var(--bg);overflow:hidden}
+body{
+  display:flex;flex-direction:column;
+  color:var(--text);font-family:var(--mono);overflow:hidden;
+  /* Scale to match 133% browser zoom at native 100% */
+  width:calc(100vw / 1.3);height:calc(100vh / 1.3);
+  transform:scale(1.3);transform-origin:0 0;
+  background:var(--bg);
+}
+
+.hdr{display:flex;align-items:center;gap:10px;padding:9px 16px;background:var(--surf);border-bottom:1px solid var(--border);flex-shrink:0;min-height:48px;}
+.logo-box{width:28px;height:28px;border-radius:5px;border:1.5px solid var(--red);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:900;color:var(--red);letter-spacing:-.5px;filter:drop-shadow(0 0 6px rgba(255,0,48,.5));flex-shrink:0;}
+.logo-name{font-size:14px;font-weight:700;letter-spacing:.03em;color:var(--red);filter:drop-shadow(0 0 8px rgba(255,0,48,.3));flex-shrink:0;}
+.logo-name .wh{color:var(--bright);filter:none}
+.hdr-sep{width:1px;height:18px;background:var(--border);flex-shrink:0}
+.hdr-obj{display:flex;align-items:baseline;gap:8px;flex:1;min-width:0;overflow:hidden;}
+.hdr-eyebrow{font-size:9px;text-transform:uppercase;letter-spacing:.16em;color:var(--gold);font-weight:700;flex-shrink:0;filter:drop-shadow(0 0 6px rgba(255,196,0,.4));}
+.hdr-path{font-size:13px;color:var(--bright);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.rbadge{display:none;align-items:center;border-radius:4px;padding:3px 8px;font-size:10px;font-weight:700;letter-spacing:.1em;flex-shrink:0;border:1px solid;animation:badge-pulse 2s ease-in-out infinite;}
+.rbadge.show{display:flex}
+@keyframes badge-pulse{0%,100%{opacity:1}50%{opacity:.6}}
+#badge-bonus{color:var(--gold);border-color:var(--gold);background:rgba(255,196,0,.1)}
+#badge-blind{color:var(--purple);border-color:var(--purple);background:rgba(163,113,247,.1)}
+#badge-touch{color:var(--blue);border-color:var(--blue);background:rgba(88,166,255,.1)}
+#badge-hidden{color:var(--orange);border-color:var(--orange);background:rgba(232,128,58,.1)}
+.hdr-dots{display:flex;gap:5px;align-items:center;flex-shrink:0}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--dim);transition:background .3s,box-shadow .3s;}
+.dot.done{background:var(--green)}
+.dot.done-gold{background:var(--gold);box-shadow:0 0 5px rgba(255,196,0,.5)}
+.dot.cur{background:var(--red);box-shadow:0 0 7px rgba(255,0,48,.75)}
+.hdr-n{font-size:12px;color:var(--muted);flex-shrink:0;font-variant-numeric:tabular-nums}
+.score-pill{background:var(--surf2);border:1px solid var(--border);border-radius:4px;padding:4px 10px;font-size:12px;font-weight:700;color:var(--gold);flex-shrink:0;min-width:58px;text-align:center;font-variant-numeric:tabular-nums;}
+.pwd-pill{background:var(--surf2);border:1px solid var(--border);border-radius:4px;padding:4px 10px;font-size:12px;color:var(--text);flex-shrink:0;}
+.restart-btn{background:transparent;border:1px solid var(--border);border-radius:4px;color:var(--muted);font-family:var(--mono);font-size:11px;padding:4px 10px;cursor:pointer;flex-shrink:0;transition:color .2s,border-color .2s;}
+.restart-btn:hover{color:var(--text);border-color:var(--muted)}
+.leg{display:flex;align-items:center;gap:20px;padding:5px 16px;background:var(--surf);border-bottom:1px solid var(--border);flex-shrink:0;}
+.li{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--muted)}
+.ls{width:12px;height:12px;border-radius:3px;border:1.5px solid transparent}
+.ls.r{border-color:var(--red);background:var(--red-dim)}
+.ls.g{border-color:var(--green);background:var(--grn-dim)}
+.ls.d{border-color:var(--dim);background:var(--surf2)}
+.tree-wrap{flex:1;position:relative;overflow:hidden;min-height:0}
+#svg{width:100%;height:100%;display:block}
+.wm{position:absolute;bottom:14px;right:16px;font-size:12px;color:var(--red);opacity:.16;letter-spacing:.08em;font-weight:700;pointer-events:none;}
+
+/* NICE! overlay */
+#nice{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none;opacity:0;transition:opacity .25s;z-index:10;}
+#nice.show{opacity:1}
+#nice-txt{font-size:90px;font-weight:900;letter-spacing:-.02em;color:#2ECC71;filter:drop-shadow(0 0 28px rgba(46,204,113,.95)) drop-shadow(0 0 70px rgba(46,204,113,.45));}
+@keyframes nice-pop{0%{transform:scale(.45);opacity:0}65%{transform:scale(1.1)}100%{transform:scale(1);opacity:1}}
+#nice.show #nice-txt{animation:nice-pop .38s ease-out forwards}
+@keyframes nice-out{0%{transform:scale(1);opacity:1}100%{transform:scale(1.25);opacity:0}}
+#nice.hide #nice-txt{animation:nice-out .3s ease-in forwards}
+
+/* MODE overlay (BONUS / TOUCH / OCULTO) */
+#mode-overlay{
+  position:absolute;inset:0;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;
+  background:rgba(10,13,18,.85);
+  pointer-events:none;opacity:0;transition:opacity .3s;z-index:15;
+}
+#mode-overlay.show{opacity:1}
+#mo-name{font-size:68px;font-weight:900;letter-spacing:-.02em;}
+#mode-overlay.show #mo-name{animation:nice-pop .38s ease-out forwards}
+#mo-sub{font-size:12px;color:var(--text);opacity:.55;letter-spacing:.12em;text-transform:uppercase;}
+
+/* BLIND overlay */
+#bat-overlay{
+  position:absolute;inset:0;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;
+  background:rgba(10,13,18,0.88);
+  pointer-events:none;opacity:0;transition:opacity .4s;z-index:20;
+}
+#bat-overlay.show{opacity:1}
+.bat-title{
+  font-size:52px;font-weight:900;letter-spacing:-.02em;
+  color:var(--purple);
+  filter:drop-shadow(0 0 28px rgba(163,113,247,.9)) drop-shadow(0 0 60px rgba(163,113,247,.4));
+}
+#bat-overlay.show .bat-title{animation:nice-pop .4s ease-out forwards}
+.bat-sub{font-size:12px;color:var(--text);letter-spacing:.12em;text-transform:uppercase;opacity:.65;}
+#bat-count{
+  font-size:82px;font-weight:900;color:var(--purple);
+  font-variant-numeric:tabular-nums;
+  filter:drop-shadow(0 0 18px rgba(163,113,247,.7));
+  transition:transform .1s ease-out;
+}
+
+.term{background:var(--surf);border-top:1px solid var(--border);flex-shrink:0;height:170px;padding:10px 16px 12px;display:flex;flex-direction:column;gap:5px;}
+.hist{font-size:13px;line-height:1.65;flex:1;overflow-y:auto;min-height:0;scrollbar-width:thin;scrollbar-color:var(--border) transparent;}
+.tl{color:var(--text)}
+.tl.cmd{color:var(--muted)}
+.tl.err{color:#F85149}
+.tl.ok{color:var(--green)}
+.tl.inf{color:var(--blue)}
+.tl.bonus{color:var(--gold)}
+.tl.blind{color:var(--purple)}
+.tl.touch{color:var(--blue)}
+.tl.hidden{color:var(--orange)}
+.inp-row{display:flex;align-items:center;gap:7px;flex-shrink:0}
+.prompt{font-size:13px;color:var(--green);flex-shrink:0;white-space:nowrap}
+.inp{background:transparent;border:none;outline:none;color:var(--bright);font-family:var(--mono);font-size:13.5px;flex:1;caret-color:var(--red);}
+.inp:disabled{opacity:.3}
+
+@keyframes pulse-g{0%,100%{stroke-opacity:1}50%{stroke-opacity:.25}}
+.tgt-rect{animation:pulse-g 1.8s ease-in-out infinite}
+#flash{position:fixed;inset:0;pointer-events:none;opacity:0;transition:opacity .15s;}
+#flash.on{opacity:1}
+
+/* Mode help tooltip */
+.help-wrap{position:relative;margin-left:auto;}
+.help-btn{
+  width:18px;height:18px;border-radius:50%;
+  border:1px solid var(--muted);color:var(--muted);
+  font-size:11px;font-weight:700;line-height:1;
+  display:flex;align-items:center;justify-content:center;
+  cursor:default;transition:border-color .15s,color .15s;
+  font-family:var(--mono);
+}
+.help-wrap:hover .help-btn{color:var(--bright);border-color:var(--text)}
+.help-card{
+  display:none;position:absolute;
+  top:calc(100% + 8px);right:0;
+  background:var(--surf2);border:1px solid var(--border);
+  border-radius:8px;padding:14px 16px;
+  z-index:200;min-width:300px;
+  box-shadow:0 6px 24px rgba(0,0,0,.6);
+  flex-direction:column;gap:10px;
+  pointer-events:none;
+}
+.help-wrap:hover .help-card{display:flex}
+.help-row{display:flex;align-items:baseline;gap:10px;font-size:11px;color:var(--text)}
+.help-key{font-weight:700;font-size:10px;letter-spacing:.07em;min-width:74px;flex-shrink:0;text-transform:uppercase}
+.hk-normal{color:var(--muted)}
+.hk-bonus{color:var(--gold)}
+.hk-blind{color:var(--purple)}
+.hk-touch{color:var(--blue)}
+.hk-hidden{color:var(--orange)}
+.help-desc{color:var(--muted);font-size:10.5px;line-height:1.5}
+
+/* RESULTS overlay */
+#results-overlay{
+  position:absolute;inset:0;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  background:rgba(10,13,18,.92);
+  opacity:0;pointer-events:none;transition:opacity .4s;z-index:30;
+}
+#results-overlay.show{opacity:1;pointer-events:all}
+.res-box{
+  border:2px solid var(--gold);border-radius:12px;
+  padding:38px 52px;
+  display:flex;flex-direction:column;align-items:center;gap:14px;
+  box-shadow:0 0 48px rgba(255,196,0,.22),0 0 90px rgba(255,196,0,.07);
+  min-width:290px;
+}
+.res-title{font-size:11px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);filter:drop-shadow(0 0 8px rgba(255,196,0,.65));}
+.res-score{font-size:80px;font-weight:900;letter-spacing:-.03em;color:var(--bright);font-variant-numeric:tabular-nums;line-height:1;}
+.res-pts{font-size:11px;color:var(--muted);letter-spacing:.14em;text-transform:uppercase;margin-top:-4px;}
+.res-btns{display:flex;gap:12px;margin-top:14px;}
+.res-btn{font-family:var(--mono);font-size:13px;font-weight:700;padding:10px 22px;border-radius:7px;cursor:pointer;border:none;transition:all .18s;}
+.res-btn.primary{background:var(--gold);color:#000;}
+.res-btn.primary:hover{background:#ffe033;box-shadow:0 0 18px rgba(255,196,0,.5);}
+.res-btn.secondary{background:transparent;color:var(--muted);border:1px solid var(--border);}
+.res-btn.secondary:hover{color:var(--text);border-color:var(--muted);}
+</style>
+
+<div class="hdr">
+  <div class="logo-box">&gt;_</div>
+  <span class="logo-name">Linux<span class="wh">Lab</span></span>
+  <div class="hdr-sep"></div>
+  <div class="hdr-obj">
+    <span class="hdr-eyebrow">Objetivo</span>
+    <span class="hdr-path" id="obj-path"></span>
+  </div>
+  <div class="rbadge" id="badge-bonus">★ BONUS</div>
+  <div class="rbadge" id="badge-blind">◉ A CIEGAS</div>
+  <div class="rbadge" id="badge-touch">✦ TOUCH</div>
+  <div class="rbadge" id="badge-hidden">? OCULTO</div>
+  <div class="hdr-dots" id="dots"></div>
+  <span class="hdr-n" id="obj-n">1 / 5</span>
+  <div class="hdr-sep"></div>
+  <div class="score-pill">⭐ <span id="score-val">0</span></div>
+  <div class="hdr-sep"></div>
+  <button class="restart-btn" onclick="init()">↺ Reiniciar</button>
+  <div class="hdr-sep"></div>
+  <div class="pwd-pill" id="pwd">~</div>
+</div>
+
+<div class="leg">
+  <div class="li"><div class="ls r"></div>Posición actual</div>
+  <div class="li"><div class="ls g"></div>Destino</div>
+  <div class="li"><div class="ls d"></div>Directorio</div>
+  <div class="help-wrap">
+    <div class="help-btn">?</div>
+    <div class="help-card">
+      <div class="help-row"><span class="help-key hk-normal">Normal</span><span class="help-desc">navega al directorio destino</span></div>
+      <div class="help-row"><span class="help-key hk-bonus">Bonus</span><span class="help-desc">llega al destino con un único <code>cd</code> de ruta absoluta</span></div>
+      <div class="help-row"><span class="help-key hk-blind">A ciegas</span><span class="help-desc">la rama se oculta tras una animación, síguele la pista a los destellos amarillos</span></div>
+      <div class="help-row"><span class="help-key hk-touch">Touch</span><span class="help-desc">crea el archivo indicado con <code>touch /ruta/absoluta/archivo</code> desde /</span></div>
+      <div class="help-row"><span class="help-key hk-hidden">Oculto</span><span class="help-desc">encuentra el archivo oculto usando <code>ls -a</code> y sigue las pistas</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="tree-wrap">
+  <svg id="svg" preserveAspectRatio="xMidYMid meet"></svg>
+  <div class="wm">LinuxLab</div>
+  <div id="nice"><span id="nice-txt">NICE!</span></div>
+  <div id="mode-overlay">
+    <div id="mo-name"></div>
+    <div id="mo-sub"></div>
+  </div>
+  <div id="bat-overlay">
+    <div class="bat-title">MODO A CIEGAS</div>
+    <div class="bat-sub">presta atención a los directorios</div>
+    <div id="bat-count">4</div>
+  </div>
+  <div id="results-overlay">
+    <div class="res-box">
+      <div class="res-title">Resultado</div>
+      <div class="res-score" id="res-score-val">0</div>
+      <div class="res-pts">puntos</div>
+      <div class="res-btns">
+        <button class="res-btn primary" onclick="init()">↺ Jugar de nuevo</button>
+        <button class="res-btn secondary" onclick="exitSim()">Salir</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="term">
+  <div class="hist" id="hist"></div>
+  <div class="inp-row">
+    <span class="prompt" id="pr">estudiante@linuxlab:~$</span>
+    <input class="inp" id="inp" type="text" autocomplete="off" spellcheck="false" autofocus>
+  </div>
+</div>
+<div id="flash"></div>
+
+<script>
+// ─── FILESYSTEMS ───────────────────────────────────────────────────────────
+
+const FS = [
+  {name:'/',children:[
+    {name:'home',children:[{name:'estudiante',children:[
+      {name:'Documentos',children:[{name:'tesis',children:[]},{name:'apuntes',children:[]}]},
+      {name:'Descargas',children:[]},
+      {name:'proyectos',children:[{name:'linux',children:[]},{name:'web',children:[]}]}
+    ]}]},
+    {name:'etc',children:[{name:'nginx',children:[]},{name:'ssh',children:[]}]},
+    {name:'var',children:[{name:'log',children:[]},{name:'www',children:[]}]},
+    {name:'usr',children:[{name:'bin',children:[]},{name:'local',children:[{name:'bin',children:[]}]}]}
+  ]},
+  {name:'/',children:[
+    {name:'home',children:[{name:'estudiante',children:[
+      {name:'codigo',children:[{name:'python',children:[]},{name:'bash',children:[]}]},
+      {name:'musica',children:[]},
+      {name:'config',children:[{name:'vim',children:[]},{name:'git',children:[]}]}
+    ]}]},
+    {name:'opt',children:[{name:'apps',children:[]},{name:'tools',children:[]}]},
+    {name:'etc',children:[{name:'cron.d',children:[]},{name:'ssh',children:[]}]},
+    {name:'srv',children:[{name:'www',children:[{name:'html',children:[]},{name:'assets',children:[]}]}]}
+  ]},
+  {name:'/',children:[
+    {name:'home',children:[{name:'estudiante',children:[
+      {name:'proyectos',children:[
+        {name:'api',children:[{name:'src',children:[]},{name:'tests',children:[]}]},
+        {name:'web',children:[{name:'public',children:[]},{name:'src',children:[]}]}
+      ]},
+      {name:'notas',children:[]}
+    ]}]},
+    {name:'etc',children:[{name:'apt',children:[]},{name:'hosts.d',children:[]}]},
+    {name:'var',children:[{name:'log',children:[{name:'syslog',children:[]},{name:'apache2',children:[]}]}]},
+    {name:'opt',children:[{name:'conda',children:[{name:'envs',children:[]}]},{name:'local',children:[]}]}
+  ]}
+];
+
+// ─── TREE UTILS ────────────────────────────────────────────────────────────
+
+const clone=o=>JSON.parse(JSON.stringify(o));
+function linkParents(n,p=null){n.parent=p;(n.children||[]).forEach(c=>linkParents(c,n));}
+
+function pathOf(n){
+  if(!n.parent)return'/';
+  const parts=[];let x=n;
+  while(x.parent){parts.unshift(x.name);x=x.parent;}
+  return'/'+parts.join('/');
+}
+
+function byPath(root,p){
+  if(p==='/')return root;
+  let n=root;
+  for(const seg of p.split('/').filter(Boolean)){
+    n=(n.children||[]).find(c=>c.name===seg);
+    if(!n)return null;
+  }
+  return n;
+}
+
+function allPaths(n){return[pathOf(n),...(n.children||[]).flatMap(allPaths)];}
+function isAnc(anc,node){let n=node;while(n.parent){if(n===anc)return true;n=n.parent;}return false;}
+function onPathTo(from,to,cur){return to===cur||isAnc(to,cur);}
+const shuffle=a=>{const b=[...a];for(let i=b.length-1;i>0;i--){const j=0|Math.random()*(i+1);[b[i],b[j]]=[b[j],b[i]];}return b;};
+
+// ─── LAYOUT ────────────────────────────────────────────────────────────────
+
+const NW=92,NH=32,HG=26,VG=72;
+
+function assignCols(n,d,li){
+  if(!n.children||!n.children.length){n._c=li;n._d=d;return li+1;}
+  let cur=li;
+  for(const c of n.children)cur=assignCols(c,d+1,cur);
+  n._c=(n.children[0]._c+n.children[n.children.length-1]._c)/2;
+  n._d=d;return cur;
+}
+
+function flatNodes(n,r=[]){r.push(n);(n.children||[]).forEach(c=>flatNodes(c,r));return r;}
+
+function layout(root){
+  assignCols(root,0,0);
+  const all=flatNodes(root);
+  const maxD=Math.max(...all.map(n=>n._d));
+  const maxC=Math.max(...all.map(n=>n._c));
+  const PAD=36;
+  const VBW=(maxC+1)*(NW+HG)-HG+PAD*2;
+  const VBH=(maxD+1)*(NH+VG)-VG+PAD*2+16;
+  for(const n of all){
+    n.px=PAD+n._c*(NW+HG)+NW/2;
+    n.py=PAD+n._d*(NH+VG)+NH/2;
+  }
+  return{all,VBW,VBH};
+}
+
+// ─── RENDER ────────────────────────────────────────────────────────────────
+
+const NS='http://www.w3.org/2000/svg';
+const se=(tag,at,p)=>{const e=document.createElementNS(NS,tag);Object.entries(at).forEach(([k,v])=>e.setAttribute(k,v));p&&p.appendChild(e);return e;};
+
+function render(root,svg,current,target){
+  svg.innerHTML='';
+  const{all,VBW,VBH}=layout(root);
+  svg.setAttribute('viewBox',`0 0 ${VBW} ${VBH}`);
+
+  const defs=se('defs',{},svg);
+  const mkGlow=(id,blur,col)=>{
+    const f=se('filter',{id,x:'-50%',y:'-50%',width:'200%',height:'200%'},defs);
+    se('feGaussianBlur',{in:'SourceGraphic',stdDeviation:blur,result:'b'},f);
+    se('feFlood',{'flood-color':col,'flood-opacity':'1',result:'fc'},f);
+    se('feComposite',{in:'fc',in2:'b',operator:'in',result:'gc'},f);
+    const m=se('feMerge',{},f);se('feMergeNode',{in:'gc'},m);se('feMergeNode',{in:'SourceGraphic'},m);
+  };
+  mkGlow('glow-r','5','#FF0030');
+  mkGlow('glow-g','4','#2ECC71');
+  mkGlow('glow-gold','6','#FFC400');
+
+  const tgtPath=target?pathOf(target):null;
+  const curPath=pathOf(current);
+
+  // ── edges
+  const eG=se('g',{},svg);
+  for(const n of all){
+    for(const ch of n.children||[]){
+      if(isBlind(ch))continue;
+      const chPath=pathOf(ch);
+      const chTop=chPath.split('/').filter(Boolean)[0];
+      const inBranch=chTop&&blindTopPaths.has('/'+chTop);
+      const x1=n.px,y1=n.py+NH/2,x2=ch.px,y2=ch.py-NH/2;
+      const my=(y1+y2)/2;
+      const active=onPathTo(n,ch,current);
+      const edge=se('path',{
+        d:`M${x1},${y1}C${x1},${my} ${x2},${my} ${x2},${y2}`,
+        fill:'none',
+        stroke:active?'rgba(255,0,48,.5)':'#21262D',
+        'stroke-width':active?'1.5':'1',
+        'stroke-linecap':'round',
+      },eG);
+      if(inBranch&&blindAnimActive)
+        edge.setAttribute('opacity',blindFadeOpacity.toFixed(3));
+    }
+  }
+
+  // ── nodes
+  for(const n of all){
+    if(isBlind(n))continue;
+
+    const np=pathOf(n);
+    const isCur=np===curPath;
+    const isTgt=tgtPath&&np===tgtPath&&!isCur;
+    const isAnces=!isCur&&isAnc(n,current);
+    const npTop=np.split('/').filter(Boolean)[0];
+    const inBranch=npTop&&blindTopPaths.has('/'+npTop);
+    const isGold=(inBranch&&blindHighlightPath&&np===blindHighlightPath)||hiddenSideHighlight.has(np);
+
+    const g=se('g',{transform:`translate(${n.px-NW/2},${n.py-NH/2})`},svg);
+
+    // Apply fade opacity while animation is active (fades simultaneously with hops)
+    if(inBranch&&blindAnimActive)
+      g.setAttribute('opacity',blindFadeOpacity.toFixed(3));
+
+    let fill,stroke,sw,txCol,txW,filt;
+    if(isGold){
+      fill='rgba(255,196,0,.18)'; stroke='#FFC400'; sw='2.5';
+      txCol='#FFC400'; txW='700'; filt='url(#glow-gold)';
+    } else {
+      fill=isCur?'#1E0008':isTgt?'#071610':'#161B22';
+      stroke=isCur?'#FF0030':isTgt?'#2ECC71':isAnces?'rgba(255,0,48,.28)':'#21262D';
+      sw=isCur||isTgt?'2':'1';
+      txCol=isCur?'#FF0030':isTgt?'#2ECC71':isAnces?'#8899AA':'#5A7A90';
+      txW=isCur||isTgt?'700':'400';
+      filt=isCur?'url(#glow-r)':isTgt?'url(#glow-g)':'';
+    }
+
+    const rect=se('rect',{width:NW,height:NH,rx:'6',fill,stroke,'stroke-width':sw},g);
+    if(filt)rect.setAttribute('filter',filt);
+    if(isTgt){rect.setAttribute('class','tgt-rect');rect.setAttribute('stroke-dasharray','5 3');}
+    if(isTgt){
+      const lbl=se('text',{x:NW/2,y:-11,'text-anchor':'middle',fill:'#2ECC71','font-family':'monospace','font-size':'13','font-weight':'700',opacity:'1'},g);
+      lbl.textContent='▼ ir aquí';
+    }
+    if(isCur) se('circle',{cx:NW-9,cy:9,r:'3.5',fill:'#FF0030',filter:'url(#glow-r)'},g);
+
+    const tx=se('text',{
+      x:NW/2,y:NH/2+4.5,'text-anchor':'middle',
+      fill:txCol,'font-family':"'SF Mono','Fira Mono',Consolas,'Courier New',monospace",
+      'font-size':'11','font-weight':txW,
+    },g);
+    tx.textContent=n.name==='/'?'/':n.name+'/';
+
+    if(n._files&&n._files.length){
+      n._files.forEach((f,i)=>{
+        const fy=NH+5+i*20;
+        se('rect',{x:2,y:fy,width:NW-4,height:16,rx:3,fill:'#101820',stroke:'#253040','stroke-width':'1'},g);
+        const ft=se('text',{x:NW/2,y:fy+11,'text-anchor':'middle',fill:'#58A6FF','font-family':'monospace','font-size':'9'},g);
+        ft.textContent=f;
+      });
+    }
+  }
+}
+
+// ─── STATE ─────────────────────────────────────────────────────────────────
+
+const HOME='/home/estudiante';
+const TOUCH_FILES=['notas.txt','config.json','tarea.md','datos.csv','script.sh'];
+const HIDDEN_FILES=['.bashrc','.debug_log','.secret','.cache','.profile'];
+
+let root,current,objectives,objIdx,cmdHist=[],hIdx=-1;
+let roundTypes=[];
+let roundState={};
+let score=0;
+let completedSpecial=new Set();
+
+// blind state — blindTopPaths hides entire sides of the tree
+let blindTopPaths=new Set(); // set of top-level paths that are hidden ('/etc', '/var', …)
+let revealedPaths=new Set();
+let blindHighlightPath=null;
+let blindFadeOpacity=1;
+let blindFadeTimer=null;
+let blindAnimActive=false;
+let blindTimers=[];
+
+// round-specific info
+let touchInfo=null;
+let hiddenInfo=null;
+let hiddenSideHighlight=new Set(); // paths of children to underline when a directional clue fires
+
+function init(){
+  clearBlindTimers();
+  root=clone(FS[Math.floor(Math.random()*FS.length)]);
+  linkParents(root);
+  current=byPath(root,HOME)||root;
+  score=0; updateScore();
+  completedSpecial=new Set();
+
+  const nonHomeCands=shuffle(allPaths(root).filter(p=>!p.startsWith('/home')&&p!=='/'&&p.split('/').length>=3));
+  const allCands=allPaths(root).filter(p=>p!=='/'&&p!==HOME&&p.split('/').length>=4);
+
+  // All 3 specials appear every game, in random positions
+  // Round 0 is always normal. Specials appear with ~40% chance each; bonus with ~30%.
+  roundTypes=['normal','normal','normal','normal','normal'];
+  const slots=shuffle([1,2,3,4]);
+  const specials=shuffle(['blind','touch','hidden']);
+  let si=0;
+  for(const slot of slots){
+    if(si<specials.length&&Math.random()<0.42){
+      roundTypes[slot]=specials[si++];
+    } else if(Math.random()<0.32){
+      roundTypes[slot]='bonus';
+    }
+  }
+
+  const used=new Set([HOME,'/']);
+  objectives=[];
+  for(let i=0;i<5;i++){
+    let pick=nonHomeCands.find(p=>!used.has(p));
+    if(!pick) pick=allCands.find(p=>!used.has(p))||allCands[0];
+    used.add(pick);
+    objectives.push(pick);
+  }
+
+  objIdx=0;
+  resetRound();
+  document.getElementById('hist').innerHTML='';
+  log('inf','Sistema cargado. Estás en '+HOME);
+  log('inf','Comandos: cd  ls  ls -a  pwd  touch  clear');
+  activateRound();
+  redraw(); refresh();
+}
+
+function resetRound(){
+  clearBlindTimers();
+  roundState={cdCount:0};
+  blindTopPaths=new Set();
+  touchInfo=null;
+  hiddenInfo=null;
+  hiddenSideHighlight=new Set();
+  ['badge-bonus','badge-blind','badge-touch','badge-hidden'].forEach(id=>
+    document.getElementById(id).classList.remove('show'));
+}
+
+function clearBlindTimers(){
+  blindTimers.forEach(t=>{clearTimeout(t);clearInterval(t);});
+  blindTimers=[];
+  if(blindFadeTimer){clearInterval(blindFadeTimer);blindFadeTimer=null;}
+  blindAnimActive=false;
+  blindHighlightPath=null;
+  blindFadeOpacity=1;
+  revealedPaths=new Set();
+  document.getElementById('bat-overlay').classList.remove('show');
+  document.getElementById('mode-overlay').classList.remove('show');
+  document.getElementById('results-overlay').classList.remove('show');
+  document.getElementById('inp').disabled=false;
+}
+
+// ─── BLIND ROUND ───────────────────────────────────────────────────────────
+
+function setupBlind(){
+  // Determine which half of root's children the player is currently in
+  const cp=pathOf(current);
+  const topSeg=cp.split('/').filter(Boolean)[0];
+  const topNode=topSeg?(root.children||[]).find(c=>c.name===topSeg):null;
+  const topIdx=topNode?(root.children||[]).indexOf(topNode):-1;
+  const totalTop=(root.children||[]).length;
+  // If at root (topIdx=-1) or left half → blind the right half, and vice versa
+  const playerOnLeft=topIdx<0||topIdx<totalTop/2;
+
+  blindTopPaths=new Set();
+  revealedPaths=new Set(['/']);
+  for(const c of root.children||[]){
+    const cIdx=(root.children||[]).indexOf(c);
+    const cIsLeft=cIdx<totalTop/2;
+    const cPath=pathOf(c);
+    if(playerOnLeft?!cIsLeft:cIsLeft){
+      blindTopPaths.add(cPath); // this side is hidden
+    } else {
+      revealedPaths.add(cPath);
+      revealAll(c); // player's side stays visible
+    }
+  }
+
+  // Reassign objective to a path inside the blind side
+  const blindCands=allPaths(root).filter(p=>{
+    if(p==='/'||p.split('/').length<3)return false;
+    const seg=p.split('/').filter(Boolean)[0];
+    return seg&&blindTopPaths.has('/'+seg);
+  });
+  if(blindCands.length>0) objectives[objIdx]=shuffle(blindCands)[0];
+}
+
+function revealAll(n){revealedPaths.add(pathOf(n));(n.children||[]).forEach(c=>revealAll(c));}
+
+function isBlind(n){
+  if(blindTopPaths.size===0||blindAnimActive||blindFadeTimer!==null)return false;
+  const p=pathOf(n);
+  if(p==='/')return false;
+  const topSeg=p.split('/').filter(Boolean)[0];
+  if(!blindTopPaths.has('/'+topSeg))return false;
+  if(revealedPaths.has(p))return false;
+  // Always show player's current location (path from root to current)
+  const cp=pathOf(current);
+  if(p===cp||cp.startsWith(p+'/'))return false;
+  return true;
+}
+
+function revealChildren(parent){(parent.children||[]).forEach(c=>revealedPaths.add(pathOf(c)));}
+
+function runBlindAnim(){
+  const tgtPath=objectives[objIdx];
+  const tgtNode=byPath(root,tgtPath);
+  if(!tgtNode)return;
+
+  // Collect ALL nodes on the blind side for the shell game
+  const blindNodes=flatNodes(root).filter(n=>{
+    const p=pathOf(n);
+    if(p==='/')return false;
+    const topSeg=p.split('/').filter(Boolean)[0];
+    return blindTopPaths.has('/'+topSeg);
+  });
+
+  // Shell-game: bounce across blind nodes, always end on target
+  // 8 hops total to give enough time to track
+  const others=shuffle(blindNodes.filter(n=>n!==tgtNode));
+  const seq=[tgtNode,...others.slice(0,7),tgtNode];
+
+  // Overlay + disable input
+  blindAnimActive=true;
+  document.getElementById('inp').disabled=true;
+  const overlay=document.getElementById('bat-overlay');
+  const countEl=document.getElementById('bat-count');
+  overlay.classList.add('show');
+
+  // Countdown 4→1
+  let cnt=4; countEl.textContent=cnt;
+  const civ=setInterval(()=>{
+    cnt--;
+    if(cnt>0){
+      countEl.style.transform='scale(1.3)';
+      setTimeout(()=>countEl.style.transform='scale(1)',120);
+      countEl.textContent=cnt;
+    }else clearInterval(civ);
+  },1000);
+  blindTimers.push(civ);
+
+  // START fade + animation SIMULTANEOUSLY (fade lasts 3.8s)
+  startBlindFade(3800);
+
+  // Hops at 450ms intervals — 9 hops × 450ms = 4050ms total
+  seq.forEach((node,i)=>{
+    const t=setTimeout(()=>{
+      blindHighlightPath=pathOf(node);
+      // no redraw needed — the fade interval drives redraws
+    },i*450);
+    blindTimers.push(t);
+  });
+
+  // Hide overlay + enable input at 4.5s, AFTER fade complete
+  const endT=setTimeout(()=>{
+    overlay.classList.remove('show');
+    blindAnimActive=false;
+    blindHighlightPath=null;
+    document.getElementById('inp').disabled=false;
+    document.getElementById('inp').focus();
+    redraw(); // key: re-render NOW with blindAnimActive=false so isBlind() returns true
+    log('blind','   El lado oculto está cerrado. Usa ls para explorar directorio a directorio');
+  },4700);
+  blindTimers.push(endT);
+}
+
+function startBlindFade(duration){
+  blindFadeOpacity=1;
+  const steps=60;
+  const ms=duration/steps;
+  blindFadeTimer=setInterval(()=>{
+    blindFadeOpacity-=1/steps;
+    if(blindFadeOpacity<=0){
+      blindFadeOpacity=0;
+      clearInterval(blindFadeTimer);blindFadeTimer=null;
+      // DON'T redraw here — endT timeout triggers the final redraw once blindAnimActive=false
+    } else {
+      redraw();
+    }
+  },ms);
+}
+
+// ─── HIDDEN ROUND ──────────────────────────────────────────────────────────
+
+function setupHidden(){
+  current=root;
+
+  const tgt=objectives[objIdx];
+  const tgtNode=byPath(root,tgt);
+  if(!tgtNode)return;
+
+  const hf=shuffle([...HIDDEN_FILES])[0];
+  tgtNode._hiddenFiles=[hf];
+  hiddenInfo={file:hf};
+
+  const segs=tgt.split('/').filter(Boolean);
+  let node=root;
+  for(let i=0;i<segs.length;i++){
+    const children=node.children||[];
+    const nextNode=children.find(c=>c.name===segs[i]);
+    if(!nextNode)break;
+
+    const idx=children.indexOf(nextNode);
+    const isParent=(i===segs.length-1);
+    const isRootNode=(node===root);
+
+    if(children.length===1){
+      // Single child: direction is meaningless — say "below"
+      node._hiddenClue= isParent ? 'está justo abajo de aquí' : 'sigue hacia abajo';
+    } else {
+      const side=idx<children.length/2?'izquierda':'derecha';
+      node._hiddenClue= isParent
+        ? `muy cerca, busca hacia la ${side}`
+        : `busca hacia la ${side}`;
+    }
+    node=nextNode;
+  }
+
+  (tgtNode.children||[]).forEach(c=>{c._hiddenClue='está en un nivel superior';});
+}
+
+// ─── SCORING ───────────────────────────────────────────────────────────────
+
+function updateScore(){document.getElementById('score-val').textContent=score;}
+
+// ─── ACTIVATE ROUND ────────────────────────────────────────────────────────
+
+function activateRound(){
+  // Objective must never equal the player's current position
+  if(objectives[objIdx]===pathOf(current)){
+    const usedPaths=new Set(objectives);
+    const fresh=shuffle(allPaths(root).filter(p=>
+      !p.startsWith('/home')&&p!=='/'&&p.split('/').length>=3
+      &&!usedPaths.has(p)&&p!==pathOf(current)
+    ));
+    if(fresh.length) objectives[objIdx]=fresh[0];
+  }
+  const type=roundTypes[objIdx];
+
+  if(type==='bonus'){
+    document.getElementById('badge-bonus').classList.add('show');
+    showModeOverlay('BONUS','#FFC400','llega al destino en un solo cd');
+    log('bonus','★  BONUS: llega al destino con un solo cd desde donde estás');
+    log('bonus','   ej: cd /ruta/absoluta/al/destino');
+
+  } else if(type==='blind'){
+    document.getElementById('badge-blind').classList.add('show');
+    current=root;
+    setupBlind();
+    log('blind','◉  A CIEGAS: presta atención a los directorios que se iluminan!');
+    runBlindAnim(); // bat-overlay handles the visual announcement
+
+  } else if(type==='touch'){
+    document.getElementById('badge-touch').classList.add('show');
+    touchInfo={file:shuffle([...TOUCH_FILES])[0]};
+    current=root;
+    showModeOverlay('TOUCH','#58A6FF','crea el archivo con ruta absoluta');
+    log('touch',`✦  TOUCH: desde /, crea "${touchInfo.file}" en el directorio indicado`);
+    log('touch',`   Usa touch con ruta absoluta. No uses cd`);
+
+  } else if(type==='hidden'){
+    document.getElementById('badge-hidden').classList.add('show');
+    setupHidden();
+    showModeOverlay('OCULTO','#E8803A','sigue las pistas con ls -a');
+    log('hidden','?  OCULTO: hay un archivo oculto en algún directorio del sistema');
+    log('hidden','   Usa ls -a para buscar pistas. Empieza desde / y sigue las pistas');
+  }
+}
+
+function showModeOverlay(name,color,sub,dur){
+  const el=document.getElementById('mode-overlay');
+  const nm=document.getElementById('mo-name');
+  const sb=document.getElementById('mo-sub');
+  nm.textContent=name;
+  nm.style.color=color;
+  nm.style.filter=`drop-shadow(0 0 28px ${color}99)`;
+  sb.textContent=sub||'';
+  el.classList.add('show');
+  setTimeout(()=>el.classList.remove('show'),dur||3200);
+}
+
+// ─── COMPLETE OBJECTIVE ────────────────────────────────────────────────────
+
+function completeObjective(wasNiceArg){
+  const type=roundTypes[objIdx];
+  // Specials (except bonus) always complete with NICE! — bonus only if 1 cd
+  const isNice= type==='blind'||type==='touch'||type==='hidden'
+    ? true
+    : (type==='bonus'&&roundState.cdCount===1);
+  const pts=isNice?100:25;
+  score+=pts; updateScore();
+
+  if(isNice){
+    completedSpecial.add(objIdx);
+    showNice();
+    const niceMsg=
+      type==='bonus'  ? `★  NICE! Un solo cd. +${pts} puntos!` :
+      type==='touch'  ? `✦  NICE! Archivo creado. +${pts} puntos!` :
+      type==='hidden' ? `?  NICE! Archivo oculto encontrado. +${pts} puntos!` :
+      type==='blind'  ? `◉  NICE! Lo encontraste. +${pts} puntos!` :
+                        `✓  NICE! +${pts} puntos!`;
+    log('ok', niceMsg);
+    doFlash('rgba(46,204,113,.08)',600);
+  } else {
+    log('ok',`✓  Completado. +${pts} puntos`);
+    doFlash('rgba(46,204,113,.06)',350);
+  }
+
+  const nextDelay=isNice?2300:400;
+  setTimeout(()=>{
+    if(objIdx<objectives.length-1){
+      objIdx++; resetRound();
+      const newType=roundTypes[objIdx];
+      if(newType!=='hidden') log('inf','Siguiente: '+objectives[objIdx]);
+      activateRound();
+      redraw(); refresh();
+    } else {
+      log('ok',`¡Perfecto! Puntuación final: ${score} puntos`);
+      setTimeout(showResults,800);
+    }
+  },nextDelay);
+}
+
+// ─── COMMANDS ──────────────────────────────────────────────────────────────
+
+function exec(raw){
+  const cmd=raw.trim(); if(!cmd)return;
+  const[verb,...rest]=cmd.split(/\s+/); const arg=rest.join(' ');
+  log('cmd',document.getElementById('pr').textContent+' '+cmd);
+
+  if(verb==='pwd'){
+    log('',pathOf(current));
+  } else if(verb==='ls'){
+    // Non-flag arguments are invalid (ls doesn't navigate here)
+    const badArg=rest.find(r=>!r.startsWith('-'));
+    if(badArg){
+      log('err',`ls: ${badArg}: No existe el directorio`);
+    } else {
+      const flag=rest.find(r=>r.startsWith('-'))||'';
+      doLs(flag);
+    }
+  } else if(verb==='cd'){
+    if(roundTypes[objIdx]==='touch'){
+      log('err','No te puedes mover de / para este desafio!');
+      redraw(); refresh(); check(); return;
+    }
+    const before=current;
+    cd(arg);
+    if(current!==before){
+      hiddenSideHighlight=new Set(); // clears directional hints when player moves
+      roundState.cdCount++;
+      if(roundTypes[objIdx]==='bonus'){
+        // Bonus requires one single absolute cd directly to the objective
+        const usedAbsolute=arg&&arg.startsWith('/');
+        const hitObj=pathOf(current)===objectives[objIdx];
+        if(!usedAbsolute||!hitObj){
+          roundTypes[objIdx]='normal';
+          document.getElementById('badge-bonus').classList.remove('show');
+          log('inf','Bonus cancelado: se requiere un cd con ruta absoluta al destino');
+        }
+      }
+    }
+  } else if(verb==='touch'){
+    doTouch(rest[0]);
+  } else if(verb==='clear'){
+    document.getElementById('hist').innerHTML=''; return;
+  } else {
+    log('err',`${verb}: comando no disponible aquí`);
+  }
+
+  redraw(); refresh(); check();
+}
+
+function cd(arg){
+  if(!arg||arg==='~'){current=byPath(root,HOME)||root;return;}
+  if(arg.startsWith('/')){
+    const segs=arg.split('/').filter(Boolean);
+    let n=root;
+    for(const seg of segs){
+      const ch=(n.children||[]).find(c=>c.name===seg);
+      if(!ch){log('err','cd: '+arg+': No existe el directorio');return;}
+      if(isBlind(ch)){log('err','cd: '+ch.name+': No existe el directorio');return;}
+      n=ch;
+    }
+    current=n; return;
+  }
+  let n=current;
+  for(const seg of arg.split('/')){
+    if(!seg||seg==='.')continue;
+    if(seg==='..'){if(n.parent)n=n.parent;continue;}
+    const ch=(n.children||[]).find(c=>c.name===seg);
+    if(!ch){log('err','cd: '+seg+': No existe el directorio');return;}
+    if(isBlind(ch)){log('err','cd: '+seg+': No existe el directorio');return;}
+    n=ch;
+  }
+  current=n;
+}
+
+function doLs(flag){
+  // Reveal blind nodes progressively as player explores (only after animation ends)
+  if(blindTopPaths.size>0&&!blindAnimActive&&blindFadeTimer===null){
+    const cp=pathOf(current);
+    if(cp==='/'){
+      // ls at root: reveal top-level blind dirs so they appear in the diagram
+      let changed=false;
+      for(const c of root.children||[]){
+        const cPath=pathOf(c);
+        if(blindTopPaths.has(cPath)&&!revealedPaths.has(cPath)){
+          revealedPaths.add(cPath); changed=true;
+        }
+      }
+      if(changed)redraw();
+    } else {
+      const cpTop=cp.split('/').filter(Boolean)[0];
+      if(cpTop&&blindTopPaths.has('/'+cpTop)){
+        revealChildren(current);
+        redraw();
+      }
+    }
+  }
+
+  if(flag==='-a'&&roundTypes[objIdx]==='hidden'){
+    doLsHidden(); return;
+  }
+
+  const dirs=(current.children||[]).map(c=>c.name+'/');
+  const files=current._files||[];
+  const hf=flag==='-a'?(current._hiddenFiles||[]):[];
+  const all=[...dirs,...files,...hf];
+  if(!all.length){log('','(vacío)');return;}
+  log('',all.join('   '));
+}
+
+function doLsHidden(){
+  const p=pathOf(current);
+  const tgt=objectives[objIdx];
+  const dirs=(current.children||[]).map(c=>c.name+'/');
+  const regularFiles=current._files||[];
+
+  if(p===tgt){
+    const hf=current._hiddenFiles||[];
+    log('',[...dirs,...regularFiles,...hf].join('   ')||'(vacío)');
+    if(hf.length) completeObjective();
+    return;
+  }
+
+  const clue=current._hiddenClue;
+  if(clue){
+    log('',[...dirs,...regularFiles,'.pista'].join('   ')||'(vacío)');
+    log('hidden',`  .pista: "${clue}"`);
+    // Populate side highlight when clue has a directional hint
+    hiddenSideHighlight=new Set();
+    if(clue.includes('derecha')||clue.includes('izquierda')){
+      const kids=current.children||[];
+      const goRight=clue.includes('derecha');
+      kids.forEach((c,i)=>{
+        const isRight=i>=kids.length/2;
+        if(goRight===isRight) hiddenSideHighlight.add(pathOf(c));
+      });
+      redraw();
+    }
+  } else {
+    score=Math.max(0,score-20);
+    updateScore();
+    log('',[...dirs,...regularFiles].join('   ')||'(vacío)');
+    log('err','  sin pistas aqui  -20 pts');
+  }
+}
+
+function doTouch(arg){
+  if(!arg){log('err','touch: falta el nombre del archivo');return;}
+  const type=roundTypes[objIdx];
+
+  if(type!=='touch'){
+    log('err','touch: comando disponible solo en modo TOUCH');
+    return;
+  }
+
+  // Resolve path: accept relative from current dir (e.g. var/www/file.txt from /)
+  let resolved=arg;
+  if(!arg.startsWith('/')){
+    const base=pathOf(current);
+    resolved=(base==='/'?'':base)+'/'+arg;
+  }
+
+  const segs=resolved.split('/').filter(Boolean);
+  const filename=segs.pop();
+  if(!filename){log('err','touch: ruta inválida');return;}
+  const dirPath=segs.length?'/'+segs.join('/'):'/' ;
+  const dirNode=byPath(root,dirPath);
+  if(!dirNode){log('err',`touch: ${dirPath}: No existe el directorio`);return;}
+  dirNode._files=dirNode._files||[];
+  if(!dirNode._files.includes(filename)) dirNode._files.push(filename);
+  redraw();
+  const rightDir=dirPath===objectives[objIdx];
+  const rightFile=touchInfo&&filename===touchInfo.file;
+  if(rightDir&&rightFile) completeObjective();
+  else if(rightDir&&!rightFile) log('inf',`Necesitas crear "${touchInfo.file}" aquí, no "${filename}"`);
+  else {
+    log('inf',`El archivo debe crearse en ${objectives[objIdx]}`);
+    log('touch',`  ej: touch ${objectives[objIdx]}/${touchInfo?.file}`);
+  }
+}
+
+function check(){
+  const type=roundTypes[objIdx];
+  if(type==='touch'||type==='hidden')return;
+  if(pathOf(current)!==objectives[objIdx])return;
+  completeObjective();
+}
+
+// ─── END GAME ──────────────────────────────────────────────────────────────
+
+function showResults(){
+  document.getElementById('res-score-val').textContent=score;
+  document.getElementById('results-overlay').classList.add('show');
+  document.getElementById('inp').disabled=true;
+}
+
+function exitSim(){
+  window.parent.postMessage({action:'close-simulator'},'*');
+}
+
+// ─── REFRESH / RENDER ──────────────────────────────────────────────────────
+
+function redraw(){
+  const type=roundTypes[objIdx]||'normal';
+  const showTgt=type!=='blind'&&type!=='hidden';
+  const tgt=showTgt?byPath(root,objectives[objIdx]):null;
+  render(root,document.getElementById('svg'),current,tgt);
+}
+
+function refresh(){
+  const p=pathOf(current);
+  const disp=p===HOME?'~':p.startsWith(HOME+'/')?'~'+p.slice(HOME.length):p;
+  document.getElementById('pwd').textContent=disp;
+  document.getElementById('pr').textContent=`estudiante@linuxlab:${disp}$`;
+
+  const type=roundTypes[objIdx];
+  const tgtLabel=
+    type==='touch'&&touchInfo ? `Crea "${touchInfo.file}" en  ${objectives[objIdx]}` :
+    type==='hidden'            ? `Encuentra el archivo oculto` :
+                                 `Navega a  ${objectives[objIdx]}`;
+  document.getElementById('obj-path').textContent=tgtLabel;
+  document.getElementById('obj-n').textContent=`${objIdx+1} / ${objectives.length}`;
+
+  const dc=document.getElementById('dots');
+  dc.innerHTML='';
+  objectives.forEach((_,i)=>{
+    const d=document.createElement('div');
+    d.className='dot '+(i<objIdx?(completedSpecial.has(i)?'done-gold':'done'):i===objIdx?'cur':'');
+    dc.appendChild(d);
+  });
+}
+
+// ─── ANIMATIONS ────────────────────────────────────────────────────────────
+
+function showNice(){
+  const el=document.getElementById('nice');
+  el.classList.remove('hide');el.classList.add('show');
+  setTimeout(()=>{el.classList.add('hide');el.classList.remove('show');
+    setTimeout(()=>el.classList.remove('hide'),320);
+  },1700);
+}
+
+function doFlash(color,dur){
+  const fl=document.getElementById('flash');
+  fl.style.background=color;fl.classList.add('on');
+  setTimeout(()=>fl.classList.remove('on'),dur);
+}
+
+// ─── I/O ───────────────────────────────────────────────────────────────────
+
+function log(cls,txt){
+  const h=document.getElementById('hist');
+  const d=document.createElement('div');d.className='tl '+cls;d.textContent=txt;
+  h.appendChild(d);h.scrollTop=h.scrollHeight;
+  while(h.children.length>32)h.removeChild(h.firstChild);
+}
+
+const inp=document.getElementById('inp');
+inp.addEventListener('keydown',e=>{
+  if(e.key==='Enter'){
+    const v=inp.value;inp.value='';
+    if(v.trim()){cmdHist.unshift(v);hIdx=-1;}
+    exec(v);
+  }else if(e.key==='ArrowUp'){
+    e.preventDefault();
+    if(hIdx<cmdHist.length-1){hIdx++;inp.value=cmdHist[hIdx];}
+  }else if(e.key==='ArrowDown'){
+    e.preventDefault();
+    if(hIdx>0){hIdx--;inp.value=cmdHist[hIdx];}else{hIdx=-1;inp.value='';}
+  }
+});
+document.addEventListener('click',()=>{ if(!document.getElementById('inp').disabled) inp.focus();});
+window.addEventListener('resize',redraw);
+
+init();
+</script>

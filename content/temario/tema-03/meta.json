@@ -1,0 +1,18 @@
+{
+  "id": "tema-03",
+  "number": 3,
+  "title": "Directorios",
+  "description": "El sistema de archivos de Linux, su estructura jerárquica y cómo navegar y manipular directorios desde la terminal",
+  "subtopics": [
+    { "id": "filesystem", "title": "El sistema de archivos", "file": "01-filesystem.md" },
+    { "id": "simulador", "title": "Simulador: navega el árbol", "file": "simulador-filesystem.html", "type": "simulator" }
+  ],
+  "resources": [
+    {
+      "type": "book",
+      "title": "The Linux Command Line",
+      "url": "https://linuxcommand.org/tlcl.php",
+      "detail": "linuxcommand.org · Gratis, Creative Commons"
+    }
+  ]
+}
