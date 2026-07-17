@@ -8,11 +8,11 @@ const JWT_SECRET = new TextEncoder().encode(
 
 const ROUTE_RULES = [
   { prefix: "/docente", roles: ["docente", "admin"] },
-  { prefix: "/inicio", roles: ["estudiante"] },
-  { prefix: "/terminal", roles: ["estudiante"] },
-  { prefix: "/contenidos", roles: ["estudiante"] },
+  { prefix: "/inicio", roles: ["estudiante", "admin"] },
+  { prefix: "/terminal", roles: ["estudiante", "admin"] },
+  { prefix: "/contenidos", roles: ["estudiante", "admin"] },
   { prefix: "/curso", roles: ["estudiante", "docente", "admin"] },
-  { prefix: "/actividad", roles: ["estudiante"] },
+  { prefix: "/actividad", roles: ["estudiante", "admin"] },
 ]
 
 export async function middleware(request: NextRequest) {
