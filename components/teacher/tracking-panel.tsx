@@ -3,20 +3,20 @@
 import { useState } from "react"
 import { Users, BarChart3, CheckCircle2, Search, ChevronDown } from "lucide-react"
 import { Input } from "@/components/ui/input"
-import { MetricCard } from "@/components/metric-card"
-import { StatusIndicator, ProgressBar } from "@/components/progress-indicators"
-import { StudentProgressDialog } from "@/components/student-progress-dialog"
+import { MetricCard } from "@/components/shared/metric-card"
+import { StatusIndicator, ProgressBar } from "@/components/shared/progress-indicators"
+import { StudentProgressDialog } from "@/components/teacher/student-progress-dialog"
 import type { CourseProgressSummary, StudentProgress } from "@/lib/domain/submission"
 import type { Topic } from "@/lib/domain/topic"
 
-interface SeguimientoPanelProps {
+interface TrackingPanelProps {
   courseId: string
   summary: CourseProgressSummary
   /** Topics enabled for this course (subset of the temario). */
   topics: Topic[]
 }
 
-export function SeguimientoPanel({ courseId, summary, topics }: SeguimientoPanelProps) {
+export function TrackingPanel({ courseId, summary, topics }: TrackingPanelProps) {
   const [searchQuery, setSearchQuery] = useState("")
   const [selectedTopic, setSelectedTopic] = useState("all")
   const [selectedStudent, setSelectedStudent] = useState<StudentProgress | null>(null)
@@ -74,19 +74,15 @@ export function SeguimientoPanel({ courseId, summary, topics }: SeguimientoPanel
         {/* Legend */}
         <div className="flex items-center gap-4 text-xs text-muted-foreground ml-auto">
           <div className="flex items-center gap-1.5">
-            <StatusIndicator status="completed" size="sm" />
             <span>Completado</span>
           </div>
           <div className="flex items-center gap-1.5">
-            <StatusIndicator status="in-progress" size="sm" />
             <span>En progreso</span>
           </div>
           <div className="flex items-center gap-1.5">
-            <StatusIndicator status="not-started" size="sm" />
             <span>Sin iniciar</span>
           </div>
           <div className="flex items-center gap-1.5">
-            <StatusIndicator status="overdue" size="sm" />
             <span>Vencido</span>
           </div>
         </div>

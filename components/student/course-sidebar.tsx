@@ -13,7 +13,7 @@ import {
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { syllabus } from "@/lib/content/temario"
-import { NeonProgress } from "@/components/neon-progress"
+import { NeonProgress } from "@/components/shared/neon-progress"
 import { useLessonProgress } from "@/lib/progress/context"
 import type { LessonSubtopic } from "@/lib/domain/content"
 

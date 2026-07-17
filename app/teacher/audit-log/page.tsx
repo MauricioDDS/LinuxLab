@@ -1,5 +1,5 @@
 import { listAuditLog } from "@/lib/data/audit"
-import { BitacoraTable } from "@/components/bitacora-table"
+import { AuditTable } from "@/components/teacher/audit-table"
 
 export default async function AuditLogPage() {
   const entries = await listAuditLog()
@@ -14,7 +14,7 @@ export default async function AuditLogPage() {
         </p>
       </div>
 
-      <BitacoraTable entries={entries} />
+      <AuditTable entries={entries} />
     </div>
   )
 }

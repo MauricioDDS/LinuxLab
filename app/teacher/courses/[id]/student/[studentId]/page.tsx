@@ -2,7 +2,7 @@ import { Fragment } from "react"
 import Link from "next/link"
 import { ChevronLeft, User, Calendar, Clock, CheckCircle2, AlertCircle } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { CircularProgress } from "@/components/progress-indicators"
+import { CircularProgress } from "@/components/shared/progress-indicators"
 import { cn } from "@/lib/utils"
 import { getStudentCourseDetail } from "@/lib/data/submissions"
 

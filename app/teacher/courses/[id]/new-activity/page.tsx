@@ -14,8 +14,8 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { Switch } from "@/components/ui/switch"
-import { RichTextEditor } from "@/components/rich-text-editor"
-import { CheckBuilder, type ActivityCheck } from "@/components/check-builder"
+import { RichTextEditor } from "@/components/teacher/rich-text-editor"
+import { CheckBuilder, type ActivityCheck } from "@/components/teacher/check-builder"
 import { cn } from "@/lib/utils"
 import { syllabus } from "@/lib/content/temario"
 import { createTerminalSession } from "@/lib/data/terminal"

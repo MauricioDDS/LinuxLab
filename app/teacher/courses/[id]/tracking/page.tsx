@@ -1,7 +1,7 @@
 import Link from "next/link"
 import { ChevronLeft } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { SeguimientoPanel } from "@/components/seguimiento-panel"
+import { TrackingPanel } from "@/components/teacher/tracking-panel"
 import { getCourse } from "@/lib/data/courses"
 import { getCourseProgress } from "@/lib/data/submissions"
 import { getTopic } from "@/lib/content/temario"
@@ -48,7 +48,7 @@ export default async function TrackingPage({
         </div>
       </div>
 
-      <SeguimientoPanel courseId={id} summary={summary} topics={topics} />
+      <TrackingPanel courseId={id} summary={summary} topics={topics} />
     </div>
   )
 }

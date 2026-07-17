@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation"
 import { BookOpen, Database, PlusCircle, Terminal, ArrowLeftRight, ScrollText, LogOut } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
-import { ThemeToggle } from "@/components/theme-toggle"
+import { ThemeToggle } from "@/components/shared/theme-toggle"
 import { useAuth, initialsOf } from "@/lib/auth/context"
 
 const navItems = [
@@ -31,7 +31,7 @@ const navItems = [
   },
 ]
 
-export function TeacherSidebar() {
+export function Sidebar() {
   const pathname = usePathname()
   const { user, signOut } = useAuth()
   const roleLabel =

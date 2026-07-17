@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useRef, useState } from "react"
-import { NeonProgress } from "@/components/neon-progress"
+import { NeonProgress } from "@/components/shared/neon-progress"
 import { useLessonProgress } from "@/lib/progress/context"
 
 /** Below this the lesson counts as read. Reaching an exact 100% is fiddly. */

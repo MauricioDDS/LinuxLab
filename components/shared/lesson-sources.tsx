@@ -1,5 +1,5 @@
 import { ChevronRight } from "lucide-react"
-import { Markdown } from "@/components/markdown"
+import { Markdown } from "@/components/shared/markdown"
 
 /**
  * The lesson's bibliography, collapsed by default. It stays attached to the

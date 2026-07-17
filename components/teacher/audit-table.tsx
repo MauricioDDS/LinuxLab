@@ -16,7 +16,7 @@ const roleLabel: Record<Role, string> = {
   admin: "Administrador",
 }
 
-export function BitacoraTable({ entries }: { entries: AuditEntry[] }) {
+export function AuditTable({ entries }: { entries: AuditEntry[] }) {
   const [search, setSearch] = useState("")
   const [desde, setDesde] = useState("")
   const [hasta, setHasta] = useState("")

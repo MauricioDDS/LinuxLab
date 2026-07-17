@@ -4,7 +4,7 @@ import Link from "next/link"
 import { Terminal, User } from "lucide-react"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
-import { ThemeToggle } from "@/components/theme-toggle"
+import { ThemeToggle } from "@/components/shared/theme-toggle"
 import { useAuth, initialsOf } from "@/lib/auth/context"
 
 export function Navbar() {

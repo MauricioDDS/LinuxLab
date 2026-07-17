@@ -1,4 +1,4 @@
-import { TopicGrid } from "@/components/topic-grid"
+import { TopicGrid } from "@/components/student/topic-grid"
 import { getTopicLessonCounts } from "@/lib/content/lessons"
 import { LessonProgressProvider } from "@/lib/progress/context"
 

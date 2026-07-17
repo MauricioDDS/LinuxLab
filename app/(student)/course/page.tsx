@@ -1,7 +1,7 @@
-import { Navbar } from "@/components/navbar"
-import { CourseSidebar } from "@/components/course-sidebar"
-import { ContentArea } from "@/components/content-area"
-import { CourseTerminal } from "@/components/course-terminal"
+import { Navbar } from "@/components/shared/navbar"
+import { CourseSidebar } from "@/components/student/course-sidebar"
+import { ContentArea } from "@/components/student/content-area"
+import { CourseTerminal } from "@/components/shared/course-terminal"
 import { syllabus, getTopicBySlug } from "@/lib/content/temario"
 import {
   getTopicContentMeta,

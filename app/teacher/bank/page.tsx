@@ -1,7 +1,7 @@
 import { Plus } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { listBankActivities } from "@/lib/data/activities"
-import { BancoTable } from "@/components/banco-table"
+import { BankTable } from "@/components/teacher/bank-table"
 
 export default async function BankPage() {
   const activities = await listBankActivities()
@@ -24,7 +24,7 @@ export default async function BankPage() {
         </Button>
       </div>
 
-      <BancoTable activities={activities} />
+      <BankTable activities={activities} />
     </div>
   )
 }

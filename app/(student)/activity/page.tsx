@@ -2,8 +2,8 @@
 
 import { useMemo, useState } from "react"
 import { ClipboardList } from "lucide-react"
-import { Navbar } from "@/components/navbar"
-import { TerminalEmulator } from "@/components/terminal-emulator"
+import { Navbar } from "@/components/shared/navbar"
+import { TerminalEmulator } from "@/components/shared/terminal-emulator"
 import { createTerminalSession } from "@/lib/data/terminal"
 
 interface TerminalLine {

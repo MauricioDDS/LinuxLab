@@ -1,7 +1,7 @@
 "use client"
 
 import { useMemo, useState } from "react"
-import { TerminalEmulator } from "@/components/terminal-emulator"
+import { TerminalEmulator } from "@/components/shared/terminal-emulator"
 import { createTerminalSession } from "@/lib/data/terminal"
 
 interface TerminalLine {

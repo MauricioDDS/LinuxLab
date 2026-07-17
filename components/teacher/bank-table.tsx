@@ -27,7 +27,7 @@ const difficultyClass: Record<string, string> = {
   advanced: "text-primary",
 }
 
-export function BancoTable({ activities }: { activities: Activity[] }) {
+export function BankTable({ activities }: { activities: Activity[] }) {
   const [searchQuery, setSearchQuery] = useState("")
   const [selectedTopic, setSelectedTopic] = useState("all")
   const [selectedDifficulty, setSelectedDifficulty] = useState("all")
@@ -51,7 +51,7 @@ export function BancoTable({ activities }: { activities: Activity[] }) {
           <div className="relative flex-1 max-w-md">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
             <Input
-              placeholder="Buscar actividades..."
+              placeholder="Search activities..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="pl-10 bg-secondary/30 border-border focus:border-primary"
@@ -60,10 +60,10 @@ export function BancoTable({ activities }: { activities: Activity[] }) {
 
           <Select value={selectedTopic} onValueChange={setSelectedTopic}>
             <SelectTrigger className="w-56 bg-secondary/30 border-border">
-              <SelectValue placeholder="Tema" />
+              <SelectValue placeholder="Topic" />
             </SelectTrigger>
             <SelectContent className="bg-card border-border">
-              <SelectItem value="all">Todos los temas</SelectItem>
+              <SelectItem value="all">All topics</SelectItem>
               {syllabus.map((topic) => (
                 <SelectItem key={topic.number} value={String(topic.number)}>
                   {topic.number}. {topic.title}
@@ -74,7 +74,7 @@ export function BancoTable({ activities }: { activities: Activity[] }) {
 
           <Select value={selectedDifficulty} onValueChange={setSelectedDifficulty}>
             <SelectTrigger className="w-36 bg-secondary/30 border-border">
-              <SelectValue placeholder="Dificultad" />
+              <SelectValue placeholder="Difficulty" />
             </SelectTrigger>
             <SelectContent className="bg-card border-border">
               <SelectItem value="all">All</SelectItem>
@@ -91,11 +91,11 @@ export function BancoTable({ activities }: { activities: Activity[] }) {
         <Table>
           <TableHeader>
             <TableRow className="border-border hover:bg-transparent">
-              <TableHead className="text-muted-foreground">Actividad</TableHead>
-              <TableHead className="text-muted-foreground">Tema</TableHead>
-              <TableHead className="text-muted-foreground">Dificultad</TableHead>
-              <TableHead className="text-muted-foreground">Tipo</TableHead>
-              <TableHead className="text-muted-foreground text-right">Usos</TableHead>
+              <TableHead className="text-muted-foreground">Activity</TableHead>
+              <TableHead className="text-muted-foreground">Topic</TableHead>
+              <TableHead className="text-muted-foreground">Difficulty</TableHead>
+              <TableHead className="text-muted-foreground">Type</TableHead>
+              <TableHead className="text-muted-foreground text-right">Uses</TableHead>
               <TableHead className="text-muted-foreground w-32"></TableHead>
             </TableRow>
           </TableHeader>
@@ -126,7 +126,7 @@ export function BancoTable({ activities }: { activities: Activity[] }) {
                   )}
                 </TableCell>
                 <TableCell className="text-muted-foreground">
-                  {activity.evaluationType === "manual" ? "Revisión manual" : "Autoevaluable"}
+                  {activity.evaluationType === "manual" ? "Manual review" : "Self-assessment"}
                 </TableCell>
                 <TableCell className="text-muted-foreground text-right">
                   {activity.uses ?? 0}
@@ -151,14 +151,14 @@ export function BancoTable({ activities }: { activities: Activity[] }) {
 
         {filtered.length === 0 && (
           <div className="px-4 py-12 text-center text-sm text-muted-foreground">
-            No hay actividades en el banco.
+            No activities in the bank.
           </div>
         )}
       </div>
 
       {/* Summary */}
       <div className="mt-4 text-sm text-muted-foreground">
-        Mostrando {filtered.length} de {activities.length} actividades
+        Showing {filtered.length} of {activities.length} activities
       </div>
     </>
   )

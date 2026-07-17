@@ -2,7 +2,7 @@ import Link from "next/link"
 import { Plus } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { listCourses } from "@/lib/data/courses"
-import { CoursesTable } from "@/components/courses-table"
+import { CoursesTable } from "@/components/teacher/courses-table"
 
 export default async function DashboardPage() {
   const courses = await listCourses()

@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation"
 import { getServerSession } from "@/lib/auth/session"
-import { TeacherSidebar } from "@/components/teacher-sidebar"
+import { Sidebar } from "@/components/teacher/sidebar"
 
 export default async function TeacherLayout({
   children,
@@ -14,7 +14,7 @@ export default async function TeacherLayout({
 
   return (
     <div className="flex h-screen overflow-hidden">
-      <TeacherSidebar />
+      <Sidebar />
       <main className="flex-1 overflow-auto bg-background">
         {children}
       </main>

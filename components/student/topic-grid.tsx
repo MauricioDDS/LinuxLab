@@ -3,7 +3,7 @@
 import Link from "next/link"
 import { syllabus } from "@/lib/content/temario"
 import { topicIcon } from "@/lib/content/topic-icons"
-import { NeonProgress } from "@/components/neon-progress"
+import { NeonProgress } from "@/components/shared/neon-progress"
 import { useLessonProgress } from "@/lib/progress/context"
 import type { Topic } from "@/lib/domain/topic"
 

@@ -2,7 +2,7 @@ import ReactMarkdown from "react-markdown"
 import remarkGfm from "remark-gfm"
 import rehypeRaw from "rehype-raw"
 import type { Components } from "react-markdown"
-import { CodeWindow } from "@/components/code-window"
+import { CodeWindow } from "@/components/shared/code-window"
 
 /** Renders lesson markdown with the LinuxLab theme. */
 const components: Components = {
