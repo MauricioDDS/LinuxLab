@@ -1,7 +1,7 @@
 import { existsSync, readFileSync } from "node:fs"
 import { join } from "node:path"
 import type { TopicContentMeta } from "@/lib/domain/content"
-import { temario } from "./temario"
+import { syllabus } from "./temario"
 
 /**
  * Content seam (server-only, reads from disk).
@@ -72,7 +72,7 @@ export interface LessonRef {
  */
 export function getLessonSequence(): LessonRef[] {
   const refs: LessonRef[] = []
-  for (const topic of temario) {
+  for (const topic of syllabus) {
     const meta = getTopicContentMeta(topic.number)
     const base = {
       topicNumber: topic.number,
@@ -85,7 +85,7 @@ export function getLessonSequence(): LessonRef[] {
         ...base,
         subtopicId: null,
         subtopicTitle: null,
-        href: `/curso?tema=${topic.slug}`,
+        href: `/course?tema=${topic.slug}`,
       })
       continue
     }
@@ -95,7 +95,7 @@ export function getLessonSequence(): LessonRef[] {
         ...base,
         subtopicId: sub.id,
         subtopicTitle: sub.title,
-        href: `/curso?tema=${topic.slug}&sub=${sub.id}`,
+        href: `/course?tema=${topic.slug}&sub=${sub.id}`,
         isSimulator: sub.type === "simulator",
       })
     }
@@ -109,7 +109,7 @@ export function getLessonSequence(): LessonRef[] {
  */
 export function getTopicLessonCounts(): Record<number, number> {
   const counts: Record<number, number> = {}
-  for (const topic of temario) {
+  for (const topic of syllabus) {
     const meta = getTopicContentMeta(topic.number)
     if (meta && meta.subtopics.length > 0) counts[topic.number] = meta.subtopics.length
   }

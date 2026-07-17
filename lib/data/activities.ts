@@ -1,5 +1,5 @@
 import type { Activity, CreateActivityInput } from "@/lib/domain/activity"
-import { notImplemented } from "./client"
+import { notImplemented } from "./stub"
 
 export async function listBankActivities(): Promise<Activity[]> {
   return []

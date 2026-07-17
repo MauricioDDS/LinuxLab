@@ -15,7 +15,7 @@ export interface TerminalSession {
 }
 
 export interface TerminalSessionOptions {
-  /** Prompt username, e.g. "estudiante" or "docente". */
+  /** Prompt username, e.g. "student" or "teacher". */
   user?: string
 }
 

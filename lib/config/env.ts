@@ -16,6 +16,10 @@ export const env = {
   terminalGatewayUrl: process.env.TERMINAL_GATEWAY_URL ?? "",
   /** Secret used to sign session tokens (future). */
   authSecret: process.env.AUTH_SECRET ?? "",
+  /** Backend API URL */
+  backendUrl: process.env.NEXT_PUBLIC_BACKEND_URL ?? "http://localhost:3000",
+  /** JWT secret for token verification (middleware). */
+  jwtSecret: process.env.JWT_SECRET ?? "linuxlab-jwt-secret-2026",
   nodeEnv: process.env.NODE_ENV ?? "development",
 } as const
 

@@ -1,7 +1,7 @@
 "use client"
 
 import { useMemo, useState } from "react"
-import { TerminalEmulator } from "@/components/terminal-emulator"
+import { TerminalEmulator } from "@/components/shared/terminal-emulator"
 import { createTerminalSession } from "@/lib/data/terminal"
 
 interface TerminalLine {
@@ -9,8 +9,8 @@ interface TerminalLine {
   content: string
 }
 
-export default function MiTerminalPage() {
-  const session = useMemo(() => createTerminalSession({ user: "estudiante" }), [])
+export default function TerminalPage() {
+  const session = useMemo(() => createTerminalSession({ user: "student" }), [])
   const [history, setHistory] = useState<TerminalLine[]>(
     session.greeting.map((content) => ({ type: "output", content }))
   )

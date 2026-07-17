@@ -2,7 +2,7 @@ import type {
   CourseProgressSummary,
   StudentCourseDetail,
 } from "@/lib/domain/submission"
-import { notImplemented } from "./client"
+import { notImplemented } from "./stub"
 
 const EMPTY_SUMMARY: CourseProgressSummary = {
   enrolledCount: 0,

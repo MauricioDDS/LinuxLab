@@ -1,5 +1,5 @@
 import type { Course, CreateCourseInput } from "@/lib/domain/course"
-import { notImplemented } from "./client"
+import { notImplemented } from "./stub"
 
 export async function listCourses(): Promise<Course[]> {
   return []

@@ -1,6 +1,6 @@
 import type { Enrollment } from "@/lib/domain/course"
 import type { Student } from "@/lib/domain/user"
-import { notImplemented } from "./client"
+import { notImplemented } from "./stub"
 
 export async function listEnrollments(_courseId: string): Promise<Enrollment[]> {
   return []

@@ -1,5 +1,5 @@
 import type { AuditEntry } from "@/lib/domain/audit"
-import { notImplemented } from "./client"
+import { notImplemented } from "./stub"
 
 export async function listAuditLog(): Promise<AuditEntry[]> {
   return []

@@ -10,22 +10,22 @@ import type { TerminalResult, TerminalSession, TerminalSessionOptions } from "./
 export function createMockTerminalSession(
   options: TerminalSessionOptions = {},
 ): TerminalSession {
-  const user = options.user ?? "estudiante"
+  const user = options.user ?? "student"
 
   return {
     greeting: [
-      "LinuxLab UFPS: terminal de demostración (mock).",
-      "Aún no conectada a un entorno Linux real. Escribe 'help' para ver los comandos simulados.\n",
+      "LinuxLab UFPS: demo terminal (mock).",
+      "Not yet connected to a real Linux environment. Type 'help' to see simulated commands.\n",
     ],
     async run(command: string): Promise<TerminalResult> {
       const cmd = command.trim().toLowerCase()
       if (cmd === "") return { output: "" }
       if (cmd === "help")
-        return { output: "Comandos simulados: ls, pwd, whoami, echo, cat, clear, help" }
+        return { output: "Simulated commands: ls, pwd, whoami, echo, cat, clear, help" }
       if (cmd === "pwd") return { output: `/home/${user}` }
       if (cmd === "whoami") return { output: user }
       if (cmd === "ls" || cmd === "ls -l" || cmd === "ls -la")
-        return { output: "documentos/  practicas/  notas.txt  script.sh" }
+        return { output: "documents/  exercises/  notes.txt  script.sh" }
       if (cmd === "clear") return { output: "", clear: true }
       if (cmd.startsWith("echo ")) return { output: command.substring(5).replace(/['"]/g, "") }
       if (cmd.startsWith("cat "))
