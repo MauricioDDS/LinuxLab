@@ -3,7 +3,7 @@
 import { createContext, useCallback, useContext, useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import { signInWithPopup, signOut as firebaseSignOut } from "firebase/auth"
-import { auth, googleProvider } from "@/lib/auth/firebase"
+import { getFirebaseAuth } from "@/lib/auth/firebase"
 import { apiFetch } from "@/lib/data/api"
 import type { User } from "@/lib/domain/user"
 
@@ -28,6 +28,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, [])
 
   const signInWithGoogle = useCallback(async () => {
+    const { auth, googleProvider } = getFirebaseAuth()
     const result = await signInWithPopup(auth, googleProvider)
     const idToken = await result.user.getIdToken()
 
@@ -41,9 +42,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const signOut = useCallback(async () => {
     try {
-      await firebaseSignOut(auth)
+      await firebaseSignOut(getFirebaseAuth().auth)
     } catch {
-      // Ignore firebase signOut errors
+      // Ignore firebase signOut errors (incl. "not configured")
     }
     try {
       await apiFetch("/api/auth/logout", { method: "POST" })
