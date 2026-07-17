@@ -1,10 +1,17 @@
+import { redirect } from "next/navigation"
+import { getServerSession } from "@/lib/auth/session"
 import { TeacherSidebar } from "@/components/teacher-sidebar"
 
-export default function TeacherLayout({
+export default async function TeacherLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
+  const session = await getServerSession()
+  if (!session || !["docente", "admin"].includes(session.user.role)) {
+    redirect("/")
+  }
+
   return (
     <div className="flex h-screen overflow-hidden">
       <TeacherSidebar />
