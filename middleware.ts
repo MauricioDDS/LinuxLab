@@ -46,8 +46,7 @@ export async function middleware(request: NextRequest) {
     const { payload } = await jwtVerify(token, JWT_SECRET)
     const role = payload.role as string
     if (!rule.roles.includes(role)) {
-      const redirectTo = role === "estudiante" ? "/inicio" : "/docente"
-      return NextResponse.redirect(new URL(redirectTo, request.url))
+      return NextResponse.redirect(new URL("/no-autorizado", request.url))
     }
     return NextResponse.next()
   } catch {
