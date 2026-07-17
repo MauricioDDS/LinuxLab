@@ -3,13 +3,15 @@
  * Keep field names in English; UI labels stay in Spanish.
  */
 
-export type Role = "student" | "teacher" | "admin"
+export type Role = "admin" | "docente" | "estudiante"
 
 export interface User {
   id: string
   name: string
   email: string
   role: Role
+  googleId?: string
+  active?: boolean
 }
 
 /** A person enrolled (or enrollable) as a student. */

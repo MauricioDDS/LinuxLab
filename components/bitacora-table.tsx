@@ -11,8 +11,8 @@ import { clearAuditLog } from "@/lib/data/audit"
 const PAGE_SIZE = 8
 
 const roleLabel: Record<Role, string> = {
-  student: "Estudiante",
-  teacher: "Docente",
+  estudiante: "Estudiante",
+  docente: "Docente",
   admin: "Administrador",
 }
 
@@ -149,7 +149,7 @@ export function BitacoraTable({ entries }: { entries: AuditEntry[] }) {
                       <span
                         className={cn(
                           "inline-flex items-center px-2 py-0.5 rounded text-xs font-medium",
-                          entry.role === "student"
+                          entry.role === "estudiante"
                             ? "bg-success/15 text-success"
                             : "bg-primary/15 text-primary"
                         )}
