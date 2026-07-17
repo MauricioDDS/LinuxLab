@@ -2,7 +2,7 @@ import { TopicGrid } from "@/components/topic-grid"
 import { getTopicLessonCounts } from "@/lib/content/lessons"
 import { LessonProgressProvider } from "@/lib/progress/context"
 
-export default function ContenidosPage() {
+export default function ContentsPage() {
   return (
     <div className="p-8">
       {/* Header */}

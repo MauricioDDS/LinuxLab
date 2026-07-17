@@ -12,7 +12,7 @@ import {
 import { parseLessonBlocks } from "@/lib/content/lesson-blocks"
 import { LessonProgressProvider } from "@/lib/progress/context"
 
-export default async function CursoPage({
+export default async function CoursePage({
   searchParams,
 }: {
   searchParams: Promise<{ tema?: string; sub?: string }>

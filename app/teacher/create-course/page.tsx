@@ -73,7 +73,7 @@ export default function CreateCoursePage() {
         <div className="flex items-center justify-between px-8 py-4">
           <div className="flex items-center gap-4">
             <Link
-              href="/docente"
+              href="/teacher"
               className="text-muted-foreground hover:text-foreground transition-colors"
             >
               <ArrowLeft className="w-5 h-5" />

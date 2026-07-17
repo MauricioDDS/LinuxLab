@@ -9,7 +9,7 @@ interface TerminalLine {
   content: string
 }
 
-export default function MiTerminalPage() {
+export default function TerminalPage() {
   const session = useMemo(() => createTerminalSession({ user: "student" }), [])
   const [history, setHistory] = useState<TerminalLine[]>(
     session.greeting.map((content) => ({ type: "output", content }))

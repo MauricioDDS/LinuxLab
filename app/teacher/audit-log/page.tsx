@@ -1,7 +1,7 @@
 import { listAuditLog } from "@/lib/data/audit"
 import { BitacoraTable } from "@/components/bitacora-table"
 
-export default async function BitacoraPage() {
+export default async function AuditLogPage() {
   const entries = await listAuditLog()
 
   return (

@@ -7,12 +7,12 @@ const JWT_SECRET = new TextEncoder().encode(
 )
 
 const ROUTE_RULES = [
-  { prefix: "/docente", roles: ["docente", "admin"] },
-  { prefix: "/inicio", roles: ["estudiante", "admin"] },
-  { prefix: "/terminal", roles: ["estudiante", "admin"] },
-  { prefix: "/contenidos", roles: ["estudiante", "admin"] },
-  { prefix: "/curso", roles: ["estudiante", "docente", "admin"] },
-  { prefix: "/actividad", roles: ["estudiante", "admin"] },
+  { prefix: "/teacher", roles: ["teacher", "admin"] },
+  { prefix: "/home", roles: ["student", "admin"] },
+  { prefix: "/terminal", roles: ["student", "admin"] },
+  { prefix: "/contents", roles: ["student", "admin"] },
+  { prefix: "/course", roles: ["student", "teacher", "admin"] },
+  { prefix: "/activity", roles: ["student", "admin"] },
 ]
 
 export async function middleware(request: NextRequest) {
@@ -26,7 +26,7 @@ export async function middleware(request: NextRequest) {
     try {
       const { payload } = await jwtVerify(token, JWT_SECRET)
       const role = payload.role as string
-      const redirectTo = role === "estudiante" ? "/inicio" : "/docente"
+      const redirectTo = role === "student" ? "/home" : "/teacher"
       return NextResponse.redirect(new URL(redirectTo, request.url))
     } catch {
       return NextResponse.next()
@@ -46,7 +46,7 @@ export async function middleware(request: NextRequest) {
     const { payload } = await jwtVerify(token, JWT_SECRET)
     const role = payload.role as string
     if (!rule.roles.includes(role)) {
-      return NextResponse.redirect(new URL("/no-autorizado", request.url))
+      return NextResponse.redirect(new URL("/unauthorized", request.url))
     }
     return NextResponse.next()
   } catch {

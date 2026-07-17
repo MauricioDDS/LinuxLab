@@ -31,14 +31,14 @@ export default async function CourseDetailPage({
         <div className="px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
-              <Link href="/docente">
+              <Link href="/teacher">
                 <Button variant="ghost" size="icon" className="shrink-0">
                   <ChevronLeft className="w-5 h-5" />
                 </Button>
               </Link>
               <div>
                 <nav className="text-xs text-muted-foreground mb-1">
-                  <Link href="/docente" className="hover:text-foreground">
+                  <Link href="/teacher" className="hover:text-foreground">
                     Mis Cursos
                   </Link>
                   <span className="mx-2">/</span>
@@ -66,7 +66,7 @@ export default async function CourseDetailPage({
           <p className="text-sm text-muted-foreground mb-6">
             Este curso no existe o aún no tiene datos.
           </p>
-          <Link href="/docente">
+          <Link href="/teacher">
             <Button variant="outline">Volver a Mis Cursos</Button>
           </Link>
         </div>
@@ -93,13 +93,13 @@ export default async function CourseDetailPage({
           {/* Quick Actions */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <QuickAction
-              href={`/docente/cursos/${id}/seguimiento`}
+              href={`/teacher/courses/${id}/tracking`}
               icon={BarChart3}
               title="Panel de Seguimiento"
               description="Ver progreso de estudiantes"
             />
             <QuickAction
-              href={`/docente/cursos/${id}/nueva-actividad`}
+              href={`/teacher/courses/${id}/new-activity`}
               icon={Plus}
               title="Nueva Actividad"
               description="Crear actividad personalizada"

@@ -3,7 +3,7 @@ import { Terminal, BookOpen } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { getServerSession } from "@/lib/auth/session"
 
-export default async function StudentHomePage() {
+export default async function HomePage() {
   const session = await getServerSession()
   const firstName = session?.user.name.split(" ")[0]
 
@@ -55,7 +55,7 @@ export default async function StudentHomePage() {
             prácticos sobre Linux.
           </p>
 
-          <Link href="/contenidos" className="mt-auto block">
+          <Link href="/contents" className="mt-auto block">
             <Button variant="outline" className="w-full gap-2">
               <BookOpen className="w-4 h-4" />
               Ver contenidos

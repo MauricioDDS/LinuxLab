@@ -27,7 +27,7 @@ interface TerminalLine {
   content: string
 }
 
-export default function NuevaActividadPage() {
+export default function NewActivityPage() {
   const params = useParams<{ id: string }>()
   const courseId = params?.id ?? ""
 
@@ -126,11 +126,11 @@ export default function NuevaActividadPage() {
         <div className="px-6 py-4">
           {/* Breadcrumb */}
           <nav className="flex items-center gap-2 text-sm text-muted-foreground mb-4">
-            <Link href="/docente" className="hover:text-foreground transition-colors">
+            <Link href="/teacher" className="hover:text-foreground transition-colors">
               Mis Cursos
             </Link>
             <ChevronRight className="w-4 h-4" />
-            <Link href={`/docente/cursos/${courseId}`} className="hover:text-foreground transition-colors">
+            <Link href={`/teacher/courses/${courseId}`} className="hover:text-foreground transition-colors">
               Curso
             </Link>
             <ChevronRight className="w-4 h-4" />
@@ -141,7 +141,7 @@ export default function NuevaActividadPage() {
           <div className="flex items-center justify-between">
             <h1 className="text-xl font-semibold text-foreground">Crear nueva actividad</h1>
             <div className="flex items-center gap-3">
-              <Link href={`/docente/cursos/${courseId}`}>
+              <Link href={`/teacher/courses/${courseId}`}>
                 <Button variant="ghost" className="text-muted-foreground hover:text-foreground">
                   Cancelar
                 </Button>
@@ -350,7 +350,7 @@ export default function NuevaActividadPage() {
                     El estudiante podrá enviar su trabajo desde la vista de la actividad.
                     Recibirás el aviso en el{" "}
                     <Link
-                      href={`/docente/cursos/${courseId}/seguimiento`}
+                      href={`/teacher/courses/${courseId}/tracking`}
                       className="text-primary hover:underline"
                     >
                       panel de seguimiento

@@ -7,7 +7,7 @@ import { getCourseProgress } from "@/lib/data/submissions"
 import { getTopic } from "@/lib/content/temario"
 import type { Topic } from "@/lib/domain/topic"
 
-export default async function SeguimientoPage({
+export default async function TrackingPage({
   params,
 }: {
   params: Promise<{ id: string }>
@@ -25,18 +25,18 @@ export default async function SeguimientoPage({
       <div className="sticky top-0 z-10 bg-background/95 backdrop-blur border-b border-border">
         <div className="px-6 py-4">
           <div className="flex items-center gap-4">
-            <Link href="/docente">
+            <Link href="/teacher">
               <Button variant="ghost" size="icon" className="shrink-0">
                 <ChevronLeft className="w-5 h-5" />
               </Button>
             </Link>
             <div>
               <nav className="text-xs text-muted-foreground mb-1">
-                <Link href="/docente" className="hover:text-foreground">
+                <Link href="/teacher" className="hover:text-foreground">
                   Mis Cursos
                 </Link>
                 <span className="mx-2">/</span>
-                <Link href={`/docente/cursos/${id}`} className="hover:text-foreground">
+                <Link href={`/teacher/courses/${id}`} className="hover:text-foreground">
                   {courseName}
                 </Link>
                 <span className="mx-2">/</span>

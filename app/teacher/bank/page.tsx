@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button"
 import { listBankActivities } from "@/lib/data/activities"
 import { BancoTable } from "@/components/banco-table"
 
-export default async function BancoActividadesPage() {
+export default async function BankPage() {
   const activities = await listBankActivities()
 
   return (

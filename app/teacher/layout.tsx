@@ -8,7 +8,7 @@ export default async function TeacherLayout({
   children: React.ReactNode
 }) {
   const session = await getServerSession()
-  if (!session || !["docente", "admin"].includes(session.user.role)) {
+  if (!session || !["teacher", "admin"].includes(session.user.role)) {
     redirect("/")
   }
 

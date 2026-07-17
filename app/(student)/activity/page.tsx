@@ -11,7 +11,7 @@ interface TerminalLine {
   content: string
 }
 
-export default function ActividadPage() {
+export default function ActivityPage() {
   const session = useMemo(() => createTerminalSession({ user: "student" }), [])
   const [history, setHistory] = useState<TerminalLine[]>(
     session.greeting.map((content) => ({ type: "output", content }))
