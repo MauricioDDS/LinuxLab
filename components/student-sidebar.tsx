@@ -16,7 +16,7 @@ const navItems = [
 
 export function StudentSidebar() {
   const pathname = usePathname()
-  const { user } = useAuth()
+  const { user, signOut } = useAuth()
 
   return (
     <aside className="w-64 bg-sidebar border-r border-border flex flex-col h-screen shrink-0">
@@ -84,13 +84,16 @@ export function StudentSidebar() {
           </div>
           <ThemeToggle className="h-8 w-8 shrink-0" />
         </div>
-        <Link
-          href="/"
-          className="flex items-center gap-3 px-3 py-2 text-sm rounded-md text-muted-foreground hover:text-foreground hover:bg-secondary/60 transition-colors"
+        <button
+          onClick={async () => {
+            await signOut()
+            window.location.href = "/"
+          }}
+          className="flex items-center gap-3 px-3 py-2 text-sm rounded-md text-muted-foreground hover:text-foreground hover:bg-secondary/60 transition-colors w-full"
         >
           <LogOut className="w-4 h-4" />
           Cerrar sesión
-        </Link>
+        </button>
       </div>
     </aside>
   )

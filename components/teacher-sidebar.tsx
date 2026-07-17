@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { BookOpen, Database, PlusCircle, Terminal, ArrowLeftRight, ScrollText } from "lucide-react"
+import { BookOpen, Database, PlusCircle, Terminal, ArrowLeftRight, ScrollText, LogOut } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { ThemeToggle } from "@/components/theme-toggle"
@@ -33,11 +33,11 @@ const navItems = [
 
 export function TeacherSidebar() {
   const pathname = usePathname()
-  const { user } = useAuth()
+  const { user, signOut } = useAuth()
   const roleLabel =
     user?.role === "admin"
       ? "Administrador"
-      : user?.role === "student"
+      : user?.role === "estudiante"
         ? "Estudiante"
         : "Docente"
 
@@ -108,6 +108,20 @@ export function TeacherSidebar() {
             </span>
           </div>
         </div>
+      </div>
+
+      {/* Logout */}
+      <div className="px-4 pb-2">
+        <button
+          onClick={async () => {
+            await signOut()
+            window.location.href = "/"
+          }}
+          className="flex items-center gap-3 px-3 py-2.5 text-sm rounded-md text-muted-foreground hover:text-foreground hover:bg-secondary/50 transition-colors w-full"
+        >
+          <LogOut className="w-4 h-4" />
+          Cerrar sesión
+        </button>
       </div>
 
       {/* Footer */}
