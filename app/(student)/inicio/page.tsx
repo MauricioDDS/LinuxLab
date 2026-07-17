@@ -1,10 +1,10 @@
 import Link from "next/link"
 import { Terminal, BookOpen } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { getSession } from "@/lib/auth/session"
+import { getServerSession } from "@/lib/auth/session"
 
 export default async function StudentHomePage() {
-  const session = await getSession()
+  const session = await getServerSession()
   const firstName = session?.user.name.split(" ")[0]
 
   return (
