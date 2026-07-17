@@ -3,7 +3,7 @@
  * Keep field names in English; UI labels stay in Spanish.
  */
 
-export type Role = "admin" | "docente" | "estudiante"
+export type Role = "admin" | "teacher" | "student"
 
 export interface User {
   id: string

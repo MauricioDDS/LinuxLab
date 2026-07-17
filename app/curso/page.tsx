@@ -2,7 +2,7 @@ import { Navbar } from "@/components/navbar"
 import { CourseSidebar } from "@/components/course-sidebar"
 import { ContentArea } from "@/components/content-area"
 import { CourseTerminal } from "@/components/course-terminal"
-import { temario, getTopicBySlug } from "@/lib/content/temario"
+import { syllabus, getTopicBySlug } from "@/lib/content/temario"
 import {
   getTopicContentMeta,
   getSubtopicMarkdown,
@@ -18,7 +18,7 @@ export default async function CursoPage({
   searchParams: Promise<{ tema?: string; sub?: string }>
 }) {
   const { tema, sub } = await searchParams
-  const topic = (tema ? getTopicBySlug(tema) : undefined) ?? temario[0]
+  const topic = (tema ? getTopicBySlug(tema) : undefined) ?? syllabus[0]
 
   const meta = getTopicContentMeta(topic.number)
   const activeSubtopic = meta
@@ -36,7 +36,7 @@ export default async function CursoPage({
       ? parseLessonBlocks(markdown, topic.number)
       : null
 
-  // Works for topics without content too, so you can keep advancing the temario.
+  // Works for topics without content too, so you can keep advancing the syllabus.
   const { prev, next } = getLessonNeighbours(topic.number, activeSubtopic?.id ?? null)
 
   return (

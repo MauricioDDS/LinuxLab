@@ -17,7 +17,7 @@ import { Switch } from "@/components/ui/switch"
 import { RichTextEditor } from "@/components/rich-text-editor"
 import { CheckBuilder, type ActivityCheck } from "@/components/check-builder"
 import { cn } from "@/lib/utils"
-import { temario } from "@/lib/content/temario"
+import { syllabus } from "@/lib/content/temario"
 import { createTerminalSession } from "@/lib/data/terminal"
 import { createActivity } from "@/lib/data/activities"
 import type { EvaluationType } from "@/lib/domain/activity"
@@ -37,14 +37,14 @@ export default function NuevaActividadPage() {
   const [dueDate, setDueDate] = useState("")
   const [isRequired, setIsRequired] = useState(true)
   const [instructions, setInstructions] = useState("")
-  const [evaluationType, setEvaluationType] = useState<EvaluationType>("atomica")
+  const [evaluationType, setEvaluationType] = useState<EvaluationType>("atomic")
   const [checks, setChecks] = useState<ActivityCheck[]>([])
   const [distributeEvenly, setDistributeEvenly] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [publishing, setPublishing] = useState(false)
 
   // Terminal (teacher test environment), routed through the terminal seam.
-  const session = useMemo(() => createTerminalSession({ user: "docente" }), [])
+  const session = useMemo(() => createTerminalSession({ user: "teacher" }), [])
   const greeting = useMemo<TerminalLine[]>(
     () => session.greeting.map((content) => ({ type: "output", content })),
     [session]
@@ -103,7 +103,7 @@ export default function NuevaActividadPage() {
       await createActivity({
         title: activityName,
         topicNumber: Number(selectedTopic) || 0,
-        source: "profesor",
+        source: "teacher",
         instructions,
         maxScore: Number(maxScore) || 0,
         dueDate: dueDate || undefined,
@@ -204,7 +204,7 @@ export default function NuevaActividadPage() {
                         <SelectValue placeholder="Seleccionar tema" />
                       </SelectTrigger>
                       <SelectContent className="bg-card border-border">
-                        {temario.map((topic) => (
+                        {syllabus.map((topic) => (
                           <SelectItem
                             key={topic.number}
                             value={String(topic.number)}
@@ -302,10 +302,10 @@ export default function NuevaActividadPage() {
 
               <div className="flex items-center gap-2 p-1 bg-secondary/40 border border-border rounded-md w-fit">
                 <button
-                  onClick={() => setEvaluationType("atomica")}
+                  onClick={() => setEvaluationType("atomic")}
                   className={cn(
                     "px-4 py-1.5 text-sm font-medium rounded transition-all",
-                    evaluationType === "atomica"
+                    evaluationType === "atomic"
                       ? "bg-card border border-border shadow-sm text-foreground"
                       : "text-muted-foreground hover:text-foreground"
                   )}
@@ -325,7 +325,7 @@ export default function NuevaActividadPage() {
                 </button>
               </div>
 
-              {evaluationType === "atomica" ? (
+              {evaluationType === "atomic" ? (
                 <>
                   <p className="text-sm text-muted-foreground leading-relaxed">
                     Define cómo se valida la actividad agregando aserciones del catálogo.

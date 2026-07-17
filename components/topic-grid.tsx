@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { temario } from "@/lib/content/temario"
+import { syllabus } from "@/lib/content/temario"
 import { topicIcon } from "@/lib/content/topic-icons"
 import { NeonProgress } from "@/components/neon-progress"
 import { useLessonProgress } from "@/lib/progress/context"
@@ -13,7 +13,7 @@ export function TopicGrid({ lessonCounts }: { lessonCounts: Record<number, numbe
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-      {temario.map((topic) => {
+      {syllabus.map((topic) => {
         const total = lessonCounts[topic.number] ?? 0
         return (
           <TopicCard

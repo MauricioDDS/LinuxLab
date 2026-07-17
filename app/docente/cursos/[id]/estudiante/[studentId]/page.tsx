@@ -253,12 +253,12 @@ export default async function StudentDetailPage({
                                 <span
                                   className={cn(
                                     "text-xs px-1.5 py-0.5",
-                                    grade.source === "banco"
+                                    grade.source === "bank"
                                       ? "bg-primary/20 text-primary"
                                       : "bg-secondary text-muted-foreground"
                                   )}
                                 >
-                                  {grade.source === "banco" ? "Banco" : "Profesor"}
+                                  {grade.source === "bank" ? "Bank" : "Teacher"}
                                 </span>
                               </td>
                               <td className="px-4 py-2.5 text-center">

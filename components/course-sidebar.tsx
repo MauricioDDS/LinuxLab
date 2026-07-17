@@ -12,7 +12,7 @@ import {
   PanelLeftOpen,
 } from "lucide-react"
 import { cn } from "@/lib/utils"
-import { temario } from "@/lib/content/temario"
+import { syllabus } from "@/lib/content/temario"
 import { NeonProgress } from "@/components/neon-progress"
 import { useLessonProgress } from "@/lib/progress/context"
 import type { LessonSubtopic } from "@/lib/domain/content"
@@ -95,7 +95,7 @@ export function CourseSidebar({
       {/* Topics Navigation */}
       <nav className="flex-1 overflow-y-auto p-2">
         <ul className="space-y-1">
-          {temario.map((topic) => {
+          {syllabus.map((topic) => {
             const isActive = topic.slug === activeTopicSlug
             const subs =
               isActive && contentSubtopics && contentSubtopics.length > 0

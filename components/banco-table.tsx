@@ -19,18 +19,18 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import type { Activity } from "@/lib/domain/activity"
-import { temario, getTopic } from "@/lib/content/temario"
+import { syllabus, getTopic } from "@/lib/content/temario"
 
 const difficultyClass: Record<string, string> = {
-  "Básico": "text-success",
-  "Intermedio": "text-warning",
-  "Avanzado": "text-primary",
+  basic: "text-success",
+  intermediate: "text-warning",
+  advanced: "text-primary",
 }
 
 export function BancoTable({ activities }: { activities: Activity[] }) {
   const [searchQuery, setSearchQuery] = useState("")
   const [selectedTopic, setSelectedTopic] = useState("all")
-  const [selectedDifficulty, setSelectedDifficulty] = useState("Todas")
+  const [selectedDifficulty, setSelectedDifficulty] = useState("all")
 
   const filtered = activities.filter((activity) => {
     const matchesSearch = activity.title
@@ -39,7 +39,7 @@ export function BancoTable({ activities }: { activities: Activity[] }) {
     const matchesTopic =
       selectedTopic === "all" || activity.topicNumber === Number(selectedTopic)
     const matchesDifficulty =
-      selectedDifficulty === "Todas" || activity.difficulty === selectedDifficulty
+      selectedDifficulty === "all" || activity.difficulty === selectedDifficulty
     return matchesSearch && matchesTopic && matchesDifficulty
   })
 
@@ -64,7 +64,7 @@ export function BancoTable({ activities }: { activities: Activity[] }) {
             </SelectTrigger>
             <SelectContent className="bg-card border-border">
               <SelectItem value="all">Todos los temas</SelectItem>
-              {temario.map((topic) => (
+              {syllabus.map((topic) => (
                 <SelectItem key={topic.number} value={String(topic.number)}>
                   {topic.number}. {topic.title}
                 </SelectItem>
@@ -77,10 +77,10 @@ export function BancoTable({ activities }: { activities: Activity[] }) {
               <SelectValue placeholder="Dificultad" />
             </SelectTrigger>
             <SelectContent className="bg-card border-border">
-              <SelectItem value="Todas">Todas</SelectItem>
-              <SelectItem value="Básico">Básico</SelectItem>
-              <SelectItem value="Intermedio">Intermedio</SelectItem>
-              <SelectItem value="Avanzado">Avanzado</SelectItem>
+              <SelectItem value="all">All</SelectItem>
+              <SelectItem value="basic">Basic</SelectItem>
+              <SelectItem value="intermediate">Intermediate</SelectItem>
+              <SelectItem value="advanced">Advanced</SelectItem>
             </SelectContent>
           </Select>
         </div>

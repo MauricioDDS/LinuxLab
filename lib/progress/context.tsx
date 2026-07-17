@@ -2,7 +2,7 @@
 
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react"
 
-const STORAGE_KEY = "linuxlab:lecciones-leidas"
+const STORAGE_KEY = "linuxlab:read-lessons"
 
 function lessonKey(topicNumber: number, subtopicId: string): string {
   return `${topicNumber}/${subtopicId}`

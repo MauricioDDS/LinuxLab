@@ -2,10 +2,10 @@
 
 import { Checkbox } from "@/components/ui/checkbox"
 import { cn } from "@/lib/utils"
-import { temario } from "@/lib/content/temario"
+import { syllabus } from "@/lib/content/temario"
 
 interface TopicSelectorProps {
-  /** Selected temario topic numbers. */
+  /** Selected syllabus topic numbers. */
   selectedTopics: number[]
   onToggle: (topicNumber: number) => void
   onSelectAll: () => void
@@ -16,7 +16,7 @@ export function TopicSelector({
   onToggle,
   onSelectAll,
 }: TopicSelectorProps) {
-  const allSelected = selectedTopics.length === temario.length
+  const allSelected = selectedTopics.length === syllabus.length
 
   return (
     <div className="space-y-4">
@@ -29,13 +29,13 @@ export function TopicSelector({
           {allSelected ? "Deseleccionar todos" : "Seleccionar todos"}
         </button>
         <span className="text-xs text-muted-foreground">
-          {selectedTopics.length} de {temario.length} seleccionados
+          {selectedTopics.length} of {syllabus.length} selected
         </span>
       </div>
 
       {/* Topic List */}
       <div className="space-y-1">
-        {temario.map((topic) => {
+        {syllabus.map((topic) => {
           const isSelected = selectedTopics.includes(topic.number)
           return (
             <label

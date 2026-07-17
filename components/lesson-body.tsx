@@ -104,7 +104,7 @@ export function LessonBody({ blocks }: { blocks: LessonBlock[] }) {
  */
 function TerminalBlock({ command, output }: { command: string; output?: string }) {
   return (
-    <CodeWindow label="bash — estudiante@linuxlab">
+    <CodeWindow label="bash — student@linuxlab">
       <pre className="text-zinc-100 whitespace-pre">{command}</pre>
       {output && (
         <pre className="text-zinc-400 whitespace-pre mt-2 pt-2 border-t border-zinc-800">

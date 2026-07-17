@@ -4,7 +4,7 @@ import { createContext, useCallback, useContext, useEffect, useState } from "rea
 import { useRouter } from "next/navigation"
 import { signInWithPopup, signOut as firebaseSignOut } from "firebase/auth"
 import { auth, googleProvider } from "@/lib/auth/firebase"
-import { apiFetch } from "@/lib/data/client"
+import { apiFetch } from "@/lib/data/api"
 import type { User } from "@/lib/domain/user"
 
 interface AuthContextValue {

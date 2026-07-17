@@ -1,4 +1,4 @@
-import { apiFetch } from "@/lib/data/client"
+import { apiFetch } from "@/lib/data/api"
 import type { Role, Session } from "@/lib/domain/user"
 
 /**

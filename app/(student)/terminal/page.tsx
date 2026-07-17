@@ -10,7 +10,7 @@ interface TerminalLine {
 }
 
 export default function MiTerminalPage() {
-  const session = useMemo(() => createTerminalSession({ user: "estudiante" }), [])
+  const session = useMemo(() => createTerminalSession({ user: "student" }), [])
   const [history, setHistory] = useState<TerminalLine[]>(
     session.greeting.map((content) => ({ type: "output", content }))
   )

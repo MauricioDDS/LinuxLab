@@ -1,10 +1,10 @@
 /** Where an activity comes from: the shared bank, or a teacher's own creation. */
-export type ActivitySource = "banco" | "profesor"
+export type ActivitySource = "bank" | "teacher"
 
-export type Difficulty = "Básico" | "Intermedio" | "Avanzado"
+export type Difficulty = "basic" | "intermediate" | "advanced"
 
 /** How a teacher activity is graded. */
-export type EvaluationType = "atomica" | "manual"
+export type EvaluationType = "atomic" | "manual"
 
 /** One atomic assertion configured by the teacher (RF-17). */
 export interface ActivityCheck {

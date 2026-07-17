@@ -1,7 +1,7 @@
 import type { Topic } from "@/lib/domain/topic"
 
 /**
- * THE canonical temario for the Operating Systems course.
+ * THE canonical syllabus for the Operating Systems course.
  *
  * This is fixed content (RF-01): teachers enable/disable topics per course but
  * never edit this list. It is the single source of truth: every screen that
@@ -12,7 +12,7 @@ import type { Topic } from "@/lib/domain/topic"
  *
  * 14 topics; topic 14 is complementary (optional).
  */
-export const temario: Topic[] = [
+export const syllabus: Topic[] = [
   {
     number: 1,
     slug: "introduccion-a-linux",
@@ -151,10 +151,10 @@ export const temario: Topic[] = [
 
 /** Lookup a topic by its number. */
 export function getTopic(number: number): Topic | undefined {
-  return temario.find((t) => t.number === number)
+  return syllabus.find((t) => t.number === number)
 }
 
 /** Lookup a topic by its slug. */
 export function getTopicBySlug(slug: string): Topic | undefined {
-  return temario.find((t) => t.slug === slug)
+  return syllabus.find((t) => t.slug === slug)
 }

@@ -12,7 +12,7 @@ interface TerminalLine {
 }
 
 export function TerminalPanel({ onClose }: { onClose: () => void }) {
-  const session = useMemo(() => createTerminalSession({ user: "estudiante" }), [])
+  const session = useMemo(() => createTerminalSession({ user: "student" }), [])
   const [history, setHistory] = useState<TerminalLine[]>(
     session.greeting.map((content) => ({ type: "output", content }))
   )

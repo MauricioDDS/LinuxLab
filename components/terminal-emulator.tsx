@@ -132,7 +132,7 @@ export function TerminalEmulator({
           <div key={index} className="leading-6">
             {line.type === "prompt" ? (
               <div className="flex">
-                <span className="text-[#238636]">estudiante@linuxlab</span>
+                <span className="text-[#238636]">student@linuxlab</span>
                 <span className="text-zinc-100">:</span>
                 <span className="text-[#58a6ff]">~</span>
                 <span className="text-zinc-100">$ </span>

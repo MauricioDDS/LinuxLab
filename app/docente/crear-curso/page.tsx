@@ -9,7 +9,7 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { TopicSelector } from "@/components/topic-selector"
 import { StudentManager } from "@/components/student-manager"
-import { temario } from "@/lib/content/temario"
+import { syllabus } from "@/lib/content/temario"
 import { createCourse } from "@/lib/data/courses"
 import type { Student } from "@/lib/domain/user"
 
@@ -31,7 +31,7 @@ export default function CreateCoursePage() {
 
   const handleSelectAllTopics = () => {
     setSelectedTopics((prev) =>
-      prev.length === temario.length ? [] : temario.map((t) => t.number)
+      prev.length === syllabus.length ? [] : syllabus.map((t) => t.number)
     )
   }
 

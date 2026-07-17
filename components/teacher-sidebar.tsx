@@ -37,7 +37,7 @@ export function TeacherSidebar() {
   const roleLabel =
     user?.role === "admin"
       ? "Administrador"
-      : user?.role === "estudiante"
+      : user?.role === "student"
         ? "Estudiante"
         : "Docente"
 

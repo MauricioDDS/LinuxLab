@@ -2,7 +2,7 @@
  * The window chrome shared by every code block in a lesson: traffic-light dots,
  * the red accent line and the dark body.
  *
- * `label` is only set for real terminal sessions ("bash — estudiante@linuxlab").
+ * `label` is only set for real terminal sessions ("bash — student@linuxlab").
  * Blocks that are not a shell session (ASCII diagrams, quoted messages) get the
  * same frame but no label, so they look consistent without pretending to be a
  * terminal.
