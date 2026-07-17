@@ -113,7 +113,7 @@ export function CoursesTable({ initialCourses }: { initialCourses: Course[] }) {
                     </span>
                   </td>
                   <td className="px-4 py-3">
-                    <Link href={`/docente/cursos/${course.id}`} className="group block">
+                    <Link href={`/teacher/courses/${course.id}`} className="group block">
                       <span className="text-sm font-medium text-foreground group-hover:text-primary transition-colors">
                         {course.name}
                       </span>
@@ -133,9 +133,9 @@ export function CoursesTable({ initialCourses }: { initialCourses: Course[] }) {
                   </td>
                   <td className="px-4 py-3">
                     <div className="flex items-center justify-end gap-1">
-                      <IconAction href={`/docente/cursos/${course.id}`} label="Ver" icon={Eye} />
-                      <IconAction href={`/docente/cursos/${course.id}`} label="Estudiantes" icon={Users} />
-                      <IconAction href={`/docente/crear-curso`} label="Editar" icon={Pencil} />
+                      <IconAction href={`/teacher/courses/${course.id}`} label="View" icon={Eye} />
+                      <IconAction href={`/teacher/courses/${course.id}`} label="Students" icon={Users} />
+                      <IconAction href={`/teacher/create-course`} label="Edit" icon={Pencil} />
                       <button
                         onClick={() => toggleArchive(course)}
                         title={course.archived ? "Desarchivar" : "Archivar"}

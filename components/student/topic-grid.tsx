@@ -34,7 +34,7 @@ function TopicCard({ topic, total, done }: { topic: Topic; total: number; done: 
 
   return (
     <Link
-      href={`/curso?tema=${topic.slug}`}
+      href={`/course?tema=${topic.slug}`}
       className="group flex flex-col bg-card border border-border rounded-lg p-6 hover:border-primary/40 transition-colors"
     >
       <div className="w-11 h-11 bg-primary/10 flex items-center justify-center rounded-md mb-4 group-hover:bg-primary/15 transition-colors">

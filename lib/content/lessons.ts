@@ -85,7 +85,7 @@ export function getLessonSequence(): LessonRef[] {
         ...base,
         subtopicId: null,
         subtopicTitle: null,
-        href: `/curso?tema=${topic.slug}`,
+        href: `/course?tema=${topic.slug}`,
       })
       continue
     }
@@ -95,7 +95,7 @@ export function getLessonSequence(): LessonRef[] {
         ...base,
         subtopicId: sub.id,
         subtopicTitle: sub.title,
-        href: `/curso?tema=${topic.slug}&sub=${sub.id}`,
+        href: `/course?tema=${topic.slug}&sub=${sub.id}`,
         isSimulator: sub.type === "simulator",
       })
     }

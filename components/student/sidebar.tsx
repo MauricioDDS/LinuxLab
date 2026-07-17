@@ -9,9 +9,9 @@ import { ThemeToggle } from "@/components/shared/theme-toggle"
 import { useAuth, initialsOf } from "@/lib/auth/context"
 
 const navItems = [
-  { label: "Inicio", href: "/inicio", icon: Home },
-  { label: "Mi Terminal", href: "/terminal", icon: Terminal },
-  { label: "Contenidos", href: "/contenidos", icon: BookOpen },
+  { label: "Home", href: "/home", icon: Home },
+  { label: "Terminal", href: "/terminal", icon: Terminal },
+  { label: "Contents", href: "/contents", icon: BookOpen },
 ]
 
 export function Sidebar() {
@@ -22,7 +22,7 @@ export function Sidebar() {
     <aside className="w-64 bg-sidebar border-r border-border flex flex-col h-screen shrink-0">
       {/* Logo */}
       <div className="p-4 border-b border-border">
-        <Link href="/inicio" className="flex items-center gap-2 group">
+        <Link href="/home" className="flex items-center gap-2 group">
           <div className="w-9 h-9 bg-primary/15 flex items-center justify-center rounded-md group-hover:neon-glow transition-shadow">
             <Terminal className="w-5 h-5 text-primary" />
           </div>
@@ -58,11 +58,11 @@ export function Sidebar() {
       {/* Role switch */}
       <div className="px-3 pb-2">
         <Link
-          href="/docente"
+          href="/teacher"
           className="flex items-center gap-3 px-3 py-2.5 text-sm rounded-md text-muted-foreground hover:text-foreground hover:bg-secondary/60 transition-colors"
         >
           <ArrowLeftRight className="w-4 h-4" />
-          Ver vista docente
+          View teacher view
         </Link>
       </div>
 

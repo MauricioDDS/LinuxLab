@@ -29,7 +29,7 @@ interface CourseSidebarProps {
 
 /**
  * Topic navigation for the content view. URL-driven (links to
- * `/curso?tema=&sub=`); the active topic expands to show its subtopics from the
+  * `/course?tema=&sub=`); the active topic expands to show its subtopics from the
  * content manifest. Collapsible into a slim rail to give the lesson more room.
  */
 export function CourseSidebar({
@@ -54,9 +54,9 @@ export function CourseSidebar({
           <PanelLeftOpen className="w-4 h-4" />
         </button>
         <Link
-          href="/inicio"
-          title="Volver al inicio"
-          aria-label="Volver al inicio"
+          href="/home"
+          title="Back to home"
+          aria-label="Back to home"
           className="w-8 h-8 flex items-center justify-center rounded-md text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors"
         >
           <Home className="w-4 h-4" />
@@ -71,7 +71,7 @@ export function CourseSidebar({
       <div className="p-4 border-b border-border flex items-center justify-between gap-2">
         <div className="flex items-center gap-2 min-w-0">
           <Link
-            href="/inicio"
+            href="/home"
             title="Volver al inicio"
             aria-label="Volver al inicio"
             className="w-8 h-8 shrink-0 flex items-center justify-center rounded-md text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors"
@@ -110,7 +110,7 @@ export function CourseSidebar({
             return (
               <li key={topic.slug}>
                 <Link
-                  href={`/curso?tema=${topic.slug}`}
+                  href={`/course?tema=${topic.slug}`}
                   className={cn(
                     "w-full flex items-center gap-3 px-3 py-2 text-left transition-all duration-200",
                     isActive
@@ -163,7 +163,7 @@ export function CourseSidebar({
                       ? subs.map((sub) => (
                           <li key={sub.id}>
                             <Link
-                              href={`/curso?tema=${topic.slug}&sub=${sub.id}`}
+                              href={`/course?tema=${topic.slug}&sub=${sub.id}`}
                               className={cn(
                                 "w-full flex items-center gap-2 px-3 py-1.5 text-left text-xs transition-colors",
                                 sub.id === activeSubtopicId

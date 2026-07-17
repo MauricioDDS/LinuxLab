@@ -11,22 +11,22 @@ import { useAuth, initialsOf } from "@/lib/auth/context"
 const navItems = [
   {
     label: "Mis Cursos",
-    href: "/docente",
+    href: "/teacher",
     icon: BookOpen,
   },
   {
-    label: "Banco de Actividades",
-    href: "/docente/banco",
+    label: "Actividad Bank",
+    href: "/teacher/bank",
     icon: Database,
   },
   {
-    label: "Crear Curso",
-    href: "/docente/crear-curso",
+    label: "Create Course",
+    href: "/teacher/create-course",
     icon: PlusCircle,
   },
   {
-    label: "Bitácora",
-    href: "/docente/bitacora",
+    label: "Audit Log",
+    href: "/teacher/audit-log",
     icon: ScrollText,
   },
 ]
@@ -45,7 +45,7 @@ export function Sidebar() {
     <aside className="w-64 bg-card border-r border-border flex flex-col h-screen shrink-0">
       {/* Logo */}
       <div className="p-4 border-b border-border">
-        <Link href="/docente" className="flex items-center gap-2 group">
+        <Link href="/teacher" className="flex items-center gap-2 group">
           <div className="w-8 h-8 bg-primary/10 border border-primary/30 flex items-center justify-center group-hover:neon-glow transition-shadow">
             <Terminal className="w-4 h-4 text-primary" />
           </div>
@@ -83,11 +83,11 @@ export function Sidebar() {
       {/* Role switch */}
       <div className="px-4 pb-2">
         <Link
-          href="/inicio"
+          href="/home"
           className="flex items-center gap-3 px-3 py-2.5 text-sm rounded-md text-muted-foreground hover:text-foreground hover:bg-secondary/50 transition-colors"
         >
           <ArrowLeftRight className="w-4 h-4" />
-          Ver vista estudiante
+          View student view
         </Link>
       </div>
 
