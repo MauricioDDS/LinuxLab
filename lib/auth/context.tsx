@@ -1,43 +1,60 @@
 "use client"
 
-import { createContext, useCallback, useContext, useState } from "react"
+import { createContext, useCallback, useContext, useEffect, useState } from "react"
+import { useRouter } from "next/navigation"
+import { signInWithPopup, signOut as firebaseSignOut } from "firebase/auth"
+import { auth, googleProvider } from "@/lib/auth/firebase"
+import { apiFetch } from "@/lib/data/client"
 import type { User } from "@/lib/domain/user"
-import { notImplemented } from "@/lib/data/client"
 
 interface AuthContextValue {
   user: User | null
-  /** True while an auth check/request is in flight. */
   loading: boolean
-  signIn: (email: string, password: string) => Promise<void>
+  signInWithGoogle: () => Promise<void>
   signOut: () => Promise<void>
-  /** Set a new password (used on first-login forced change). */
-  changePassword: (newPassword: string) => Promise<void>
 }
 
 const AuthContext = createContext<AuthContextValue | null>(null)
 
-/**
- * Client auth seam. Holds the current user (none yet) and exposes the auth
- * actions. The actions throw `notImplemented` until the email+password backend
- * is wired. Call sites already handle the rejected promise.
- */
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [user] = useState<User | null>(null)
+  const [user, setUser] = useState<User | null>(null)
+  const [loading, setLoading] = useState(true)
 
-  const signIn = useCallback(async (_email: string, _password: string) => {
-    notImplemented("auth.signIn")
+  useEffect(() => {
+    apiFetch<{ user: User }>("/api/auth/me")
+      .then((data) => setUser(data.user))
+      .catch(() => setUser(null))
+      .finally(() => setLoading(false))
+  }, [])
+
+  const signInWithGoogle = useCallback(async () => {
+    const result = await signInWithPopup(auth, googleProvider)
+    const idToken = await result.user.getIdToken()
+
+    const data = await apiFetch<{ user: User }>("/api/auth/firebase", {
+      method: "POST",
+      body: JSON.stringify({ idToken }),
+    })
+
+    setUser(data.user)
   }, [])
 
   const signOut = useCallback(async () => {
-    notImplemented("auth.signOut")
-  }, [])
-
-  const changePassword = useCallback(async (_newPassword: string) => {
-    notImplemented("auth.changePassword")
+    try {
+      await firebaseSignOut(auth)
+    } catch {
+      // Ignore firebase signOut errors
+    }
+    try {
+      await apiFetch("/api/auth/logout", { method: "POST" })
+    } catch {
+      // Ignore backend logout errors
+    }
+    setUser(null)
   }, [])
 
   return (
-    <AuthContext.Provider value={{ user, loading: false, signIn, signOut, changePassword }}>
+    <AuthContext.Provider value={{ user, loading, signInWithGoogle, signOut }}>
       {children}
     </AuthContext.Provider>
   )
@@ -51,7 +68,6 @@ export function useAuth(): AuthContextValue {
   return ctx
 }
 
-/** Initials for an avatar fallback, e.g. "Ana Gómez" → "AG". */
 export function initialsOf(name: string | undefined | null): string {
   if (!name) return "?"
   const parts = name.trim().split(/\s+/).slice(0, 2)
