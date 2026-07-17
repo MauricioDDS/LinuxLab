@@ -1,14 +1,4 @@
-/**
- * Data-access seam.
- *
- * Every screen reads/writes through the `lib/data/*` modules instead of holding
- * its own state. Today these are stubs: reads resolve to empty results so the UI
- * renders its empty/loading states, and writes throw `notImplemented(...)`.
- *
- * This is the single place to wire a real backend later (Next Route Handlers +
- * Postgres, or a separate API). Replace the function bodies. The call sites and
- * types stay the same.
- */
+import { env } from "@/lib/config/env"
 
 export class NotImplementedError extends Error {
   constructor(operation: string) {
@@ -20,7 +10,29 @@ export class NotImplementedError extends Error {
   }
 }
 
-/** Throw from any mutation/endpoint that has no backend yet. */
 export function notImplemented(operation: string): never {
   throw new NotImplementedError(operation)
+}
+
+export async function apiFetch<T = unknown>(
+  path: string,
+  options?: RequestInit,
+): Promise<T> {
+  const res = await fetch(`${env.backendUrl}${path}`, {
+    ...options,
+    credentials: "include",
+    headers: {
+      "Content-Type": "application/json",
+      ...options?.headers,
+    },
+  })
+
+  if (!res.ok) {
+    const body = await res.json().catch(() => ({}))
+    const error = new Error(body.error || `HTTP ${res.status}`)
+    ;(error as any).status = res.status
+    throw error
+  }
+
+  return res.json()
 }
