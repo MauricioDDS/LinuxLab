@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import { Terminal } from "lucide-react"
-import { useAuth } from "@/lib/auth/context"
+import { useAuth } from "@/lib/features/auth/context"
 
 export default function LoginPage() {
   const { user, loading, signInWithGoogle } = useAuth()
@@ -13,7 +13,7 @@ export default function LoginPage() {
 
   useEffect(() => {
     if (!user) return
-    const target = user.role === "student" ? "/home" : "/teacher"
+    const target = user.role === "student" ? "/home" : "/home"
     router.replace(target)
   }, [user, router])
 
