@@ -1,40 +1,43 @@
 import { NextResponse } from "next/server"
 import type { NextRequest } from "next/server"
 import { jwtVerify } from "jose"
+import { adminRules } from "@/lib/features/admin/rules"
+import { teacherRules } from "@/lib/features/teacher/rules"
+import { studentRules } from "@/lib/features/student/rules"
+import { sharedRules } from "@/lib/features/shared/rules"
+import type { RouteRule } from "@/lib/features/shared/types"
 
 const JWT_SECRET = new TextEncoder().encode(
   process.env.JWT_SECRET || "linuxlab-jwt-secret-2026",
 )
 
-const ROUTE_RULES = [
-  { prefix: "/teacher", roles: ["teacher", "admin"] },
-  { prefix: "/home", roles: ["student", "admin"] },
-  { prefix: "/terminal", roles: ["student", "admin"] },
-  { prefix: "/contents", roles: ["student", "admin"] },
-  { prefix: "/course", roles: ["student", "teacher", "admin"] },
-  { prefix: "/activity", roles: ["student", "admin"] },
+const ROUTE_RULES: RouteRule[] = [
+  ...adminRules,
+  ...teacherRules,
+  ...studentRules,
+  ...sharedRules,
 ]
+
+function matchesRoute(pathname: string, rule: RouteRule): boolean {
+  return rule.exact ? pathname === rule.path : pathname.startsWith(rule.path)
+}
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
 
-  // Public route: login page
   if (pathname === "/") {
     const token = request.cookies.get("token")?.value
     if (!token) return NextResponse.next()
 
     try {
       const { payload } = await jwtVerify(token, JWT_SECRET)
-      const role = payload.role as string
-      const redirectTo = role === "student" ? "/home" : "/teacher"
-      return NextResponse.redirect(new URL(redirectTo, request.url))
+      return NextResponse.redirect(new URL("/home", request.url))
     } catch {
       return NextResponse.next()
     }
   }
 
-  // Check protected routes
-  const rule = ROUTE_RULES.find((r) => pathname.startsWith(r.prefix))
+  const rule = ROUTE_RULES.find((r) => matchesRoute(pathname, r))
   if (!rule) return NextResponse.next()
 
   const token = request.cookies.get("token")?.value
