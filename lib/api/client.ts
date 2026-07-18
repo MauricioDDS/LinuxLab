@@ -1,5 +1,14 @@
 import { env } from "@/lib/config/env"
 
+export class ApiError extends Error {
+  status: number
+  constructor(message: string, status: number) {
+    super(message)
+    this.name = "ApiError"
+    this.status = status
+  }
+}
+
 export async function apiFetch<T = unknown>(
   path: string,
   options?: RequestInit,
@@ -15,9 +24,7 @@ export async function apiFetch<T = unknown>(
 
   if (!res.ok) {
     const body = await res.json().catch(() => ({}))
-    const error = new Error(body.error || `HTTP ${res.status}`)
-    ;(error as any).status = res.status
-    throw error
+    throw new ApiError(body.error || `HTTP ${res.status}`, res.status)
   }
 
   return res.json()

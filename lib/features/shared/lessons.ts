@@ -1,6 +1,6 @@
 import { existsSync, readFileSync } from "node:fs"
 import { join } from "node:path"
-import type { TopicContentMeta } from "@/lib/domain/content"
+import type { TopicContentMeta } from "@/lib/features/shared/types"
 import { syllabus } from "./temario"
 
 /**

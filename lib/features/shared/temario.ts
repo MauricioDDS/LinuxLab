@@ -1,4 +1,4 @@
-import type { Topic } from "@/lib/domain/topic"
+import type { Topic } from "@/lib/features/student/types"
 
 /**
  * THE canonical syllabus for the Operating Systems course.

@@ -3,9 +3,9 @@
 import { createContext, useCallback, useContext, useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import { signInWithPopup, signOut as firebaseSignOut } from "firebase/auth"
-import { getFirebaseAuth } from "@/lib/auth/firebase"
-import { apiFetch } from "@/lib/data/api"
-import type { User } from "@/lib/domain/user"
+import { getFirebaseAuth } from "@/lib/features/auth/firebase"
+import { apiFetch } from "@/lib/api/client"
+import type { User } from "@/lib/features/auth/types"
 
 interface AuthContextValue {
   user: User | null

@@ -5,7 +5,7 @@
  * terminal UI is demonstrable before the real Xterm.js + WebSocket gateway is
  * wired (see `terminal.ts`). Do not build real features on top of it.
  */
-import type { TerminalResult, TerminalSession, TerminalSessionOptions } from "./terminal"
+import type { TerminalResult, TerminalSession, TerminalSessionOptions } from "./data"
 
 export function createMockTerminalSession(
   options: TerminalSessionOptions = {},

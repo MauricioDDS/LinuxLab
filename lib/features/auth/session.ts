@@ -1,5 +1,5 @@
-import { apiFetch } from "@/lib/data/api"
-import type { Role, Session } from "@/lib/domain/user"
+import { apiFetch } from "@/lib/api/client"
+import type { Role, Session } from "@/lib/features/auth/types"
 
 /**
  * Client-side session check.
