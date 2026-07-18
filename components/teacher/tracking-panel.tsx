@@ -6,8 +6,8 @@ import { Input } from "@/components/ui/input"
 import { MetricCard } from "@/components/shared/metric-card"
 import { StatusIndicator, ProgressBar } from "@/components/shared/progress-indicators"
 import { StudentProgressDialog } from "@/components/teacher/student-progress-dialog"
-import type { CourseProgressSummary, StudentProgress } from "@/lib/domain/submission"
-import type { Topic } from "@/lib/domain/topic"
+import type { CourseProgressSummary, StudentProgress } from "@/lib/features/teacher/types"
+import type { Topic } from "@/lib/features/student/types"
 
 interface TrackingPanelProps {
   courseId: string

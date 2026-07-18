@@ -4,9 +4,9 @@ import { useState } from "react"
 import { Search, Download, Trash2 } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { cn } from "@/lib/utils"
-import type { AuditEntry } from "@/lib/domain/audit"
-import type { Role } from "@/lib/domain/user"
-import { clearAuditLog } from "@/lib/data/audit"
+import type { AuditEntry } from "@/lib/features/teacher/types"
+import type { Role } from "@/lib/features/auth/types"
+import { clearAuditLog } from "@/lib/features/teacher/data"
 
 const PAGE_SIZE = 8
 

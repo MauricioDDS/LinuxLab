@@ -18,8 +18,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import type { Activity } from "@/lib/domain/activity"
-import { syllabus, getTopic } from "@/lib/content/temario"
+import type { Activity } from "@/lib/features/teacher/types"
+import { syllabus, getTopic } from "@/lib/features/shared/temario"
 
 const difficultyClass: Record<string, string> = {
   basic: "text-success",

@@ -5,7 +5,7 @@ import { Terminal, User } from "lucide-react"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { ThemeToggle } from "@/components/shared/theme-toggle"
-import { useAuth, initialsOf } from "@/lib/auth/context"
+import { useAuth, initialsOf } from "@/lib/features/auth/context"
 
 export function Navbar() {
   const { user } = useAuth()

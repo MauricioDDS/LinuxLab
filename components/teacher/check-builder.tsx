@@ -2,7 +2,7 @@
 
 import { Plus, Trash2, ShieldCheck } from "lucide-react"
 import { cn } from "@/lib/utils"
-import type { ActivityCheck } from "@/lib/domain/activity"
+import type { ActivityCheck } from "@/lib/features/teacher/types"
 
 export type { ActivityCheck }
 

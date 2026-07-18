@@ -1,7 +1,7 @@
 import { Image as ImageIcon, Film } from "lucide-react"
 import { Markdown } from "@/components/shared/markdown"
 import { CodeWindow } from "@/components/shared/code-window"
-import type { LessonBlock } from "@/lib/content/lesson-blocks"
+import type { LessonBlock } from "@/lib/features/shared/lesson-blocks"
 
 const IMG_CLASS = "mx-auto my-8 max-h-80 w-auto max-w-full rounded-lg"
 

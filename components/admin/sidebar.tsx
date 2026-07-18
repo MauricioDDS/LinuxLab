@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { BookOpen, Database, PlusCircle, Terminal, ScrollText, LogOut } from "lucide-react"
+import { Terminal, Users, LogOut } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { ThemeToggle } from "@/components/shared/theme-toggle"
@@ -10,36 +10,15 @@ import { useAuth, initialsOf } from "@/lib/features/auth/context"
 
 const navItems = [
   {
-    label: "Mis Cursos",
-    href: "/home",
-    icon: BookOpen,
-  },
-  {
-    label: "Actividad Bank",
-    href: "/bank",
-    icon: Database,
-  },
-  {
-    label: "Create Course",
-    href: "/create-course",
-    icon: PlusCircle,
-  },
-  {
-    label: "Audit Log",
-    href: "/audit-log",
-    icon: ScrollText,
+    label: "Gestión de Docentes",
+    href: "/admin/docentes",
+    icon: Users,
   },
 ]
 
 export function Sidebar() {
   const pathname = usePathname()
   const { user, signOut } = useAuth()
-  const roleLabel =
-    user?.role === "admin"
-      ? "Administrador"
-      : user?.role === "student"
-        ? "Estudiante"
-        : "Docente"
 
   return (
     <aside className="w-64 bg-card border-r border-border flex flex-col h-screen shrink-0">
@@ -51,6 +30,9 @@ export function Sidebar() {
           </div>
           <span className="font-semibold text-foreground group-hover:neon-text transition-all">
             LinuxLab
+          </span>
+          <span className="ml-auto text-[10px] font-mono text-muted-foreground border border-border px-1.5 py-0.5 rounded">
+            Admin
           </span>
         </Link>
       </div>
@@ -68,7 +50,7 @@ export function Sidebar() {
                     "flex items-center gap-3 px-3 py-2.5 text-sm transition-all duration-200",
                     isActive
                       ? "bg-primary/10 text-primary border-l-2 border-primary neon-glow"
-                      : "text-muted-foreground hover:text-foreground hover:bg-secondary/50"
+                      : "text-muted-foreground hover:text-foreground hover:bg-secondary/50",
                   )}
                 >
                   <item.icon className="w-4 h-4" />
@@ -80,7 +62,7 @@ export function Sidebar() {
         </ul>
       </nav>
 
-      {/* Teacher Profile */}
+      {/* Admin Profile */}
       <div className="p-4 border-t border-border">
         <div className="flex items-center gap-3">
           <Avatar className="w-10 h-10 border border-border">
@@ -92,9 +74,7 @@ export function Sidebar() {
             <p className="text-sm font-medium text-foreground truncate">
               {user?.name ?? "Invitado"}
             </p>
-            <span className="text-xs text-muted-foreground">
-              {roleLabel}
-            </span>
+            <span className="text-xs text-muted-foreground">Administrador</span>
           </div>
         </div>
       </div>

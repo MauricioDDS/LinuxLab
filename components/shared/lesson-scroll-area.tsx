@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react"
 import { NeonProgress } from "@/components/shared/neon-progress"
-import { useLessonProgress } from "@/lib/progress/context"
+import { useLessonProgress } from "@/lib/features/student/progress"
 
 /** Below this the lesson counts as read. Reaching an exact 100% is fiddly. */
 const READ_AT = 95

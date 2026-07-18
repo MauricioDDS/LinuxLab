@@ -1,6 +1,6 @@
 import Link from "next/link"
 import { ArrowLeft, ArrowRight } from "lucide-react"
-import type { LessonRef } from "@/lib/content/lessons"
+import type { LessonRef } from "@/lib/features/shared/lessons"
 
 function describe(ref: LessonRef, currentTopicNumber: number, direction: "prev" | "next") {
   const crossesTopic = ref.topicNumber !== currentTopicNumber
