@@ -3,7 +3,7 @@ import { Markdown } from "@/components/shared/markdown"
 import { CodeWindow } from "@/components/shared/code-window"
 import type { LessonBlock } from "@/lib/features/shared/lesson-blocks"
 
-const IMG_CLASS = "mx-auto my-8 max-h-80 w-auto max-w-full rounded-lg"
+const IMG_CLASS = "mx-auto my-8 w-full max-w-full rounded-lg"
 
 /** Renders a lesson: markdown chunks interleaved with its image/video directives. */
 export function LessonBody({ blocks }: { blocks: LessonBlock[] }) {

@@ -4,6 +4,7 @@ import { Analytics } from '@vercel/analytics/next'
 import { ThemeProvider } from '@/components/shared/theme-provider'
 import { AuthProvider } from '@/lib/features/auth/context'
 import { Toaster } from '@/components/ui/sonner'
+import { DevRoleSwitcher } from '@/components/dev/role-switcher'
 import './globals.css'
 
 const _geist = Geist({ subsets: ["latin"] });
@@ -49,6 +50,7 @@ export default function RootLayout({
           <AuthProvider>
             {children}
             <Toaster richColors position="top-right" />
+            <DevRoleSwitcher />
           </AuthProvider>
         </ThemeProvider>
         {process.env.NODE_ENV === 'production' && <Analytics />}

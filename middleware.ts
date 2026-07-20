@@ -23,6 +23,15 @@ function matchesRoute(pathname: string, rule: RouteRule): boolean {
 }
 
 export async function middleware(request: NextRequest) {
+  // ##########################################################################
+  // ## AUTH DESACTIVADA PARA DESARROLLO. NO TOCAR HASTA TERMINAR EL         ##
+  // ## PROYECTO. Deja navegar sin iniciar sesion. Se reactiva sola en       ##
+  // ## produccion; para reactivarla en local, borra este bloque.           ##
+  // ##########################################################################
+  if (process.env.NODE_ENV !== "production") {
+    return NextResponse.next()
+  }
+
   const { pathname } = request.nextUrl
 
   if (pathname === "/") {

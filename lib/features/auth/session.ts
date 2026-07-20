@@ -31,6 +31,23 @@ export async function requireRole(role: Role): Promise<Session> {
  * Use in server components / layouts.
  */
 export async function getServerSession(): Promise<Session | null> {
+  // ##########################################################################
+  // ## AUTH DESACTIVADA PARA DESARROLLO. NO TOCAR HASTA TERMINAR EL         ##
+  // ## PROYECTO. Sesion falsa para no exigir login. Se apaga sola en        ##
+  // ## produccion. Cambia role a "teacher"/"admin" si necesitas esas        ##
+  // ## vistas; para reactivar auth en local, borra este bloque.             ##
+  // ##########################################################################
+  if (process.env.NODE_ENV !== "production") {
+    // El rol lo controla el switcher de dev (cookie "dev-role"). Default: student.
+    const { cookies } = await import("next/headers")
+    const devRole = (await cookies()).get("dev-role")?.value
+    const role: Role =
+      devRole === "teacher" || devRole === "admin" ? devRole : "student"
+    return {
+      user: { id: "dev", email: "dev@ufps.edu.co", name: "Modo Dev", role },
+    }
+  }
+
   const { cookies } = await import("next/headers")
   const token = (await cookies()).get("token")?.value
   if (!token) return null
