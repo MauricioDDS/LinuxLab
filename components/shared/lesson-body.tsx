@@ -4,6 +4,8 @@ import { CodeWindow } from "@/components/shared/code-window"
 import type { LessonBlock } from "@/lib/features/shared/lesson-blocks"
 
 const IMG_CLASS = "mx-auto my-8 w-full max-w-full rounded-lg"
+// Los logos por tema (imagen de bienvenida) conservan su tamaño original, mas chico.
+const LOGO_CLASS = "mx-auto my-8 max-h-80 w-auto max-w-full rounded-lg"
 
 /** Renders a lesson: markdown chunks interleaved with its image/video directives. */
 export function LessonBody({ blocks }: { blocks: LessonBlock[] }) {
@@ -43,13 +45,13 @@ export function LessonBody({ blocks }: { blocks: LessonBlock[] }) {
                 <img
                   src={block.lightSrc}
                   alt={block.alt}
-                  className={`${IMG_CLASS} block dark:hidden`}
+                  className={`${LOGO_CLASS} block dark:hidden`}
                 />
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={block.darkSrc}
                   alt={block.alt}
-                  className={`${IMG_CLASS} hidden dark:block`}
+                  className={`${LOGO_CLASS} hidden dark:block`}
                 />
               </span>
             ) : (
