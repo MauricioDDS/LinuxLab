@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { ThemeToggle } from "@/components/shared/theme-toggle"
 import { useAuth, initialsOf } from "@/lib/features/auth/context"
+import { DevRoleSwitcher } from "@/components/dev/role-switcher"
 
 const navItems = [
   { label: "Home", href: "/home", icon: Home },
@@ -84,6 +85,8 @@ export function Sidebar() {
           Cerrar sesión
         </button>
       </div>
+
+      <DevRoleSwitcher />
     </aside>
   )
 }

@@ -56,7 +56,7 @@ const FENCE_RE = /```([a-zA-Z0-9]*)[ \t]*\r?\n([\s\S]*?)```/g
  * rendered as a collapsed disclosure instead of a wall of citations between the
  * lesson and the "Next" button.
  */
-const SOURCES_RE = /\n+(?:---[ \t]*\n+)?\*\*Sources\*\*[ \t]*\n+([\s\S]*)$/
+const SOURCES_RE = /\n+(?:---[ \t]*\n+)?\*\*(?:Fuentes|Sources)\*\*[ \t]*\n+([\s\S]*)$/
 
 /** Languages we render as a terminal window. */
 const TERMINAL_LANGS = new Set(["bash", "sh", "shell", "zsh", "console"])

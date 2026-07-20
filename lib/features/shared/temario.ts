@@ -10,7 +10,7 @@ import type { Topic } from "@/lib/features/student/types"
  * teaching material (text, video, links per topic) lives in `content/temario/`
  * and is authored by the thesis team.
  *
- * 14 topics; topic 14 is complementary (optional).
+ * 12 topics; topic 12 is complementary (optional).
  */
 export const syllabus: Topic[] = [
   {
@@ -41,7 +41,7 @@ export const syllabus: Topic[] = [
     number: 3,
     slug: "directorios",
     title: "Directorios",
-    description: "Tipos de directorios del sistema: etc/, home/, var/, tmp/, entre otros.",
+    description: "Tipos de directorios, la jerarquía del sistema y creación de directorios (mkdir).",
     subTopics: [
       { number: 1, title: "El sistema de archivos" },
       { number: 2, title: "Simulador: navega el árbol" },
@@ -49,20 +49,6 @@ export const syllabus: Topic[] = [
   },
   {
     number: 4,
-    slug: "sistema-de-archivos",
-    title: "Sistema de archivos",
-    description: "Inodos y estructura del sistema de archivos.",
-    subTopics: [],
-  },
-  {
-    number: 5,
-    slug: "creacion-de-directorios",
-    title: "Creación de directorios",
-    description: "Uso de mkdir y construcción de una estructura jerárquica.",
-    subTopics: [],
-  },
-  {
-    number: 6,
     slug: "creacion-de-archivos",
     title: "Creación de archivos",
     description: "touch y editores de texto: vi, pico, nano.",
@@ -72,7 +58,7 @@ export const syllabus: Topic[] = [
     ],
   },
   {
-    number: 7,
+    number: 5,
     slug: "permisos",
     title: "Permisos",
     description: "Gestión de permisos con chmod, chown y umask.",
@@ -83,14 +69,14 @@ export const syllabus: Topic[] = [
     ],
   },
   {
-    number: 8,
+    number: 6,
     slug: "compresion",
     title: "Compresión",
     description: "Compresión de archivos con tar, gzip, bzip2 y zip.",
     subTopics: [],
   },
   {
-    number: 9,
+    number: 7,
     slug: "busqueda",
     title: "Búsqueda",
     description: "Patrones, expresiones regulares y uso de find y grep.",
@@ -101,7 +87,7 @@ export const syllabus: Topic[] = [
     ],
   },
   {
-    number: 10,
+    number: 8,
     slug: "usuarios-y-grupos",
     title: "Usuarios y grupos",
     description: "passwd, shadow y creación de cuentas con useradd y groupadd.",
@@ -112,7 +98,7 @@ export const syllabus: Topic[] = [
     ],
   },
   {
-    number: 11,
+    number: 9,
     slug: "gestion-de-procesos",
     title: "Gestión de procesos",
     description: "ps, top, kill, jobs y manejo de primer y segundo plano (fg, bg, &).",
@@ -123,7 +109,7 @@ export const syllabus: Topic[] = [
     ],
   },
   {
-    number: 12,
+    number: 10,
     slug: "servicios-y-demonios",
     title: "Servicios y demonios",
     description: "systemctl y estados de los servicios.",
@@ -133,14 +119,14 @@ export const syllabus: Topic[] = [
     ],
   },
   {
-    number: 13,
+    number: 11,
     slug: "shell-scripting",
     title: "Shell scripting",
     description: "Variables, condicionales, ciclos y funciones en Bash.",
     subTopics: [],
   },
   {
-    number: 14,
+    number: 12,
     slug: "instalacion-de-paquetes",
     title: "Instalación de paquetes",
     description: "Gestión de paquetes con apt y dnf.",

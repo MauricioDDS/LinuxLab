@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { ThemeToggle } from "@/components/shared/theme-toggle"
 import { useAuth, initialsOf } from "@/lib/features/auth/context"
+import { DevRoleSwitcher } from "@/components/dev/role-switcher"
 
 const navItems = [
   {
@@ -98,6 +99,8 @@ export function Sidebar() {
         <p className="text-xs text-muted-foreground">LinuxLab UFPS v1.0</p>
         <ThemeToggle className="h-7 w-7" />
       </div>
+
+      <DevRoleSwitcher />
     </aside>
   )
 }

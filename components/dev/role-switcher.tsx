@@ -3,10 +3,10 @@
 import { useEffect, useState } from "react"
 
 /**
- * Selector de rol SOLO para desarrollo. Cambia el rol de la sesion falsa
- * (ver el bloque de bypass en lib/features/auth/session.ts) escribiendo la
- * cookie "dev-role" y recargando, para saltar entre las vistas de estudiante,
- * docente y admin sin editar codigo.
+ * Selector de rol SOLO para desarrollo. Vive en el footer de la sidebar de home.
+ * Cambia el rol de la sesion falsa (ver el bypass en lib/features/auth/session.ts)
+ * escribiendo la cookie "dev-role" y recargando, para saltar entre las vistas de
+ * estudiante, docente y admin sin editar codigo.
  *
  * No renderiza nada en produccion.
  */
@@ -43,24 +43,26 @@ export function DevRoleSwitcher() {
   }
 
   return (
-    <div className="fixed bottom-3 left-3 z-[9999] flex items-center gap-1 rounded-full border border-border bg-card/95 px-1.5 py-1 shadow-lg backdrop-blur">
-      <span className="px-1.5 text-[10px] font-mono font-semibold tracking-wide text-muted-foreground">
-        DEV
-      </span>
-      {ROLES.map((r) => (
-        <button
-          key={r}
-          onClick={() => change(r)}
-          className={
-            "rounded-full px-2.5 py-0.5 text-xs transition-colors " +
-            (role === r
-              ? "bg-primary text-primary-foreground"
-              : "text-muted-foreground hover:text-foreground hover:bg-secondary")
-          }
-        >
-          {LABEL[r]}
-        </button>
-      ))}
+    <div className="border-t border-border p-3">
+      <p className="px-1 pb-1.5 text-[10px] font-mono font-semibold uppercase tracking-wide text-muted-foreground">
+        Vista (dev)
+      </p>
+      <div className="flex gap-1">
+        {ROLES.map((r) => (
+          <button
+            key={r}
+            onClick={() => change(r)}
+            className={
+              "flex-1 rounded-md px-2 py-1 text-xs transition-colors " +
+              (role === r
+                ? "bg-primary text-primary-foreground"
+                : "text-muted-foreground hover:text-foreground hover:bg-secondary/60")
+            }
+          >
+            {LABEL[r]}
+          </button>
+        ))}
+      </div>
     </div>
   )
 }

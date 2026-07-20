@@ -2,8 +2,6 @@ import {
   Terminal,
   SquareTerminal,
   FolderTree,
-  HardDrive,
-  FolderPlus,
   FilePlus,
   ShieldCheck,
   Archive,
@@ -22,19 +20,17 @@ import {
  */
 const TOPIC_ICONS: Record<number, LucideIcon> = {
   1: Terminal, // Introducción a Linux
-  2: SquareTerminal, // Introducción a la CLI
+  2: SquareTerminal, // La Terminal
   3: FolderTree, // Directorios
-  4: HardDrive, // Sistema de archivos
-  5: FolderPlus, // Creación de directorios
-  6: FilePlus, // Creación de archivos
-  7: ShieldCheck, // Permisos
-  8: Archive, // Compresión
-  9: Search, // Búsqueda
-  10: Users, // Usuarios y grupos
-  11: Activity, // Gestión de procesos
-  12: Server, // Servicios y demonios
-  13: Code2, // Shell scripting
-  14: Package, // Instalación de paquetes (complementario)
+  4: FilePlus, // Creación de archivos
+  5: ShieldCheck, // Permisos
+  6: Archive, // Compresión
+  7: Search, // Búsqueda
+  8: Users, // Usuarios y grupos
+  9: Activity, // Gestión de procesos
+  10: Server, // Servicios y demonios
+  11: Code2, // Shell scripting
+  12: Package, // Instalación de paquetes (complementario)
 }
 
 export function topicIcon(topicNumber: number): LucideIcon {
