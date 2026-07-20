@@ -1,7 +1,0 @@
-export * from "./user"
-export * from "./topic"
-export * from "./course"
-export * from "./activity"
-export * from "./submission"
-export * from "./audit"
-export * from "./content"

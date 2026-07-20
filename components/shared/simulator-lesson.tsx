@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react"
 import { X, Play } from "lucide-react"
 import { LessonNav } from "@/components/shared/lesson-nav"
-import type { LessonRef } from "@/lib/content/lessons"
+import type { LessonRef } from "@/lib/features/shared/lessons"
 
 export function SimulatorLesson({
   src,

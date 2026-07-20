@@ -15,7 +15,7 @@ import {
   TableRow,
 } from "@/components/ui/table"
 
-import type { Student } from "@/lib/domain/user"
+import type { Student } from "@/lib/features/auth/types"
 
 interface StudentManagerProps {
   students: Student[]

@@ -11,8 +11,8 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog"
 import { cn } from "@/lib/utils"
-import type { ProgressStatus, StudentProgress } from "@/lib/domain/submission"
-import type { Topic } from "@/lib/domain/topic"
+import type { ProgressStatus, StudentProgress } from "@/lib/features/teacher/types"
+import type { Topic } from "@/lib/features/student/types"
 
 interface StudentProgressDialogProps {
   student: StudentProgress | null
@@ -143,7 +143,7 @@ export function StudentProgressDialog({
         {/* Footer link */}
         <div className="flex justify-end pt-1">
           <Link
-            href={`/teacher/courses/${courseId}/student/${person.id}`}
+            href={`/courses/${courseId}/student/${person.id}`}
             className="inline-flex items-center gap-1.5 text-sm text-primary hover:underline"
           >
             Ver dashboard completo

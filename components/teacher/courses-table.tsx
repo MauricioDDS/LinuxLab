@@ -4,8 +4,8 @@ import { useMemo, useState } from "react"
 import Link from "next/link"
 import { Eye, Pencil, Users, Archive, ArchiveRestore, Trash2 } from "lucide-react"
 import { cn } from "@/lib/utils"
-import type { Course } from "@/lib/domain/course"
-import { deleteCourse, setCourseArchived } from "@/lib/data/courses"
+import type { Course } from "@/lib/features/teacher/types"
+import { deleteCourse, setCourseArchived } from "@/lib/features/teacher/data"
 
 type Tab = "activos" | "archivados"
 
@@ -113,7 +113,7 @@ export function CoursesTable({ initialCourses }: { initialCourses: Course[] }) {
                     </span>
                   </td>
                   <td className="px-4 py-3">
-                    <Link href={`/teacher/courses/${course.id}`} className="group block">
+                    <Link href={`/courses/${course.id}`} className="group block">
                       <span className="text-sm font-medium text-foreground group-hover:text-primary transition-colors">
                         {course.name}
                       </span>
@@ -133,9 +133,9 @@ export function CoursesTable({ initialCourses }: { initialCourses: Course[] }) {
                   </td>
                   <td className="px-4 py-3">
                     <div className="flex items-center justify-end gap-1">
-                      <IconAction href={`/teacher/courses/${course.id}`} label="View" icon={Eye} />
-                      <IconAction href={`/teacher/courses/${course.id}`} label="Students" icon={Users} />
-                      <IconAction href={`/teacher/create-course`} label="Edit" icon={Pencil} />
+                      <IconAction href={`/courses/${course.id}`} label="View" icon={Eye} />
+                      <IconAction href={`/courses/${course.id}`} label="Students" icon={Users} />
+                      <IconAction href={`/create-course`} label="Edit" icon={Pencil} />
                       <button
                         onClick={() => toggleArchive(course)}
                         title={course.archived ? "Desarchivar" : "Archivar"}

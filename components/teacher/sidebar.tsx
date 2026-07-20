@@ -2,31 +2,31 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { BookOpen, Database, PlusCircle, Terminal, ArrowLeftRight, ScrollText, LogOut } from "lucide-react"
+import { BookOpen, Database, PlusCircle, Terminal, ScrollText, LogOut } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { ThemeToggle } from "@/components/shared/theme-toggle"
-import { useAuth, initialsOf } from "@/lib/auth/context"
+import { useAuth, initialsOf } from "@/lib/features/auth/context"
 
 const navItems = [
   {
     label: "Mis Cursos",
-    href: "/teacher",
+    href: "/home",
     icon: BookOpen,
   },
   {
     label: "Actividad Bank",
-    href: "/teacher/bank",
+    href: "/bank",
     icon: Database,
   },
   {
     label: "Create Course",
-    href: "/teacher/create-course",
+    href: "/create-course",
     icon: PlusCircle,
   },
   {
     label: "Audit Log",
-    href: "/teacher/audit-log",
+    href: "/audit-log",
     icon: ScrollText,
   },
 ]
@@ -45,7 +45,7 @@ export function Sidebar() {
     <aside className="w-64 bg-card border-r border-border flex flex-col h-screen shrink-0">
       {/* Logo */}
       <div className="p-4 border-b border-border">
-        <Link href="/teacher" className="flex items-center gap-2 group">
+        <Link href="/home" className="flex items-center gap-2 group">
           <div className="w-8 h-8 bg-primary/10 border border-primary/30 flex items-center justify-center group-hover:neon-glow transition-shadow">
             <Terminal className="w-4 h-4 text-primary" />
           </div>
@@ -79,17 +79,6 @@ export function Sidebar() {
           })}
         </ul>
       </nav>
-
-      {/* Role switch */}
-      <div className="px-4 pb-2">
-        <Link
-          href="/home"
-          className="flex items-center gap-3 px-3 py-2.5 text-sm rounded-md text-muted-foreground hover:text-foreground hover:bg-secondary/50 transition-colors"
-        >
-          <ArrowLeftRight className="w-4 h-4" />
-          View student view
-        </Link>
-      </div>
 
       {/* Teacher Profile */}
       <div className="p-4 border-t border-border">

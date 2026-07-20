@@ -1,11 +1,11 @@
 "use client"
 
 import Link from "next/link"
-import { syllabus } from "@/lib/content/temario"
-import { topicIcon } from "@/lib/content/topic-icons"
+import { syllabus } from "@/lib/features/shared/temario"
+import { topicIcon } from "@/lib/features/shared/topic-icons"
 import { NeonProgress } from "@/components/shared/neon-progress"
-import { useLessonProgress } from "@/lib/progress/context"
-import type { Topic } from "@/lib/domain/topic"
+import { useLessonProgress } from "@/lib/features/student/progress"
+import type { Topic } from "@/lib/features/student/types"
 
 /** The topic catalogue, each card showing how much of the topic has been read. */
 export function TopicGrid({ lessonCounts }: { lessonCounts: Record<number, number> }) {

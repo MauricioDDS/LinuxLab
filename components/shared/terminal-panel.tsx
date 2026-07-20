@@ -4,7 +4,7 @@ import { useMemo, useState } from "react"
 import { Terminal as TerminalIcon, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { TerminalEmulator } from "@/components/shared/terminal-emulator"
-import { createTerminalSession } from "@/lib/data/terminal"
+import { createTerminalSession } from "@/lib/features/student/data"
 
 interface TerminalLine {
   type: "prompt" | "output"

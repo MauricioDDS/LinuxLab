@@ -4,10 +4,10 @@ import { LessonNav } from "@/components/shared/lesson-nav"
 import { LessonSources } from "@/components/shared/lesson-sources"
 import { SimulatorLesson } from "@/components/shared/simulator-lesson"
 import { LessonScrollArea } from "@/components/shared/lesson-scroll-area"
-import type { Topic } from "@/lib/domain/topic"
-import type { LessonResource, LessonSubtopic, TopicContentMeta } from "@/lib/domain/content"
-import type { LessonBlock } from "@/lib/content/lesson-blocks"
-import type { LessonRef } from "@/lib/content/lessons"
+import type { Topic } from "@/lib/features/student/types"
+import type { LessonResource, LessonSubtopic, TopicContentMeta } from "@/lib/features/shared/types"
+import type { LessonBlock } from "@/lib/features/shared/lesson-blocks"
+import type { LessonRef } from "@/lib/features/shared/lessons"
 
 interface ContentAreaProps {
   topic: Topic

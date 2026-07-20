@@ -2,7 +2,7 @@
 
 import { Checkbox } from "@/components/ui/checkbox"
 import { cn } from "@/lib/utils"
-import { syllabus } from "@/lib/content/temario"
+import { syllabus } from "@/lib/features/shared/temario"
 
 interface TopicSelectorProps {
   /** Selected syllabus topic numbers. */

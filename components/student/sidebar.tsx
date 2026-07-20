@@ -2,11 +2,11 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { Home, Terminal, BookOpen, LogOut, ArrowLeftRight } from "lucide-react"
+import { Home, Terminal, BookOpen, LogOut } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { ThemeToggle } from "@/components/shared/theme-toggle"
-import { useAuth, initialsOf } from "@/lib/auth/context"
+import { useAuth, initialsOf } from "@/lib/features/auth/context"
 
 const navItems = [
   { label: "Home", href: "/home", icon: Home },
@@ -54,17 +54,6 @@ export function Sidebar() {
           })}
         </ul>
       </nav>
-
-      {/* Role switch */}
-      <div className="px-3 pb-2">
-        <Link
-          href="/teacher"
-          className="flex items-center gap-3 px-3 py-2.5 text-sm rounded-md text-muted-foreground hover:text-foreground hover:bg-secondary/60 transition-colors"
-        >
-          <ArrowLeftRight className="w-4 h-4" />
-          View teacher view
-        </Link>
-      </div>
 
       {/* Profile */}
       <div className="border-t border-border p-3 space-y-2">
