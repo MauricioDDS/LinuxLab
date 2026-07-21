@@ -116,6 +116,54 @@ export function getTopicLessonCounts(): Record<number, number> {
   return counts
 }
 
+/** A "sneak peek" of what a topic holds, used by the content cards. */
+export interface TopicPreview {
+  /** Estimated reading time in minutes. */
+  minutes: number
+  videos: number
+  simulators: number
+  activities: number
+}
+
+const VIDEO_DIRECTIVE = /<!--\s*VIDEO\s*:/gi
+const WORDS_PER_MINUTE = 200
+
+/**
+ * Per-topic preview stats (reading time + how many videos, simulators and
+ * activities are inside). Topics without published content are omitted, so their
+ * cards show no tags. Activities are not wired to topics yet, so that count stays
+ * at zero until they are.
+ */
+export function getTopicPreviews(): Record<number, TopicPreview> {
+  const previews: Record<number, TopicPreview> = {}
+  for (const topic of syllabus) {
+    const meta = getTopicContentMeta(topic.number)
+    if (!meta) continue
+
+    let words = 0
+    let videos = 0
+    let simulators = 0
+    for (const sub of meta.subtopics) {
+      if (sub.type === "simulator") {
+        simulators++
+        continue
+      }
+      const md = getSubtopicMarkdown(topic.number, sub.file)
+      if (!md) continue
+      words += md.split(/\s+/).filter(Boolean).length
+      videos += (md.match(VIDEO_DIRECTIVE) ?? []).length
+    }
+
+    previews[topic.number] = {
+      minutes: words > 0 ? Math.max(1, Math.round(words / WORDS_PER_MINUTE)) : 0,
+      videos,
+      simulators,
+      activities: 0,
+    }
+  }
+  return previews
+}
+
 /** Previous/next step around the given position. */
 export function getLessonNeighbours(
   topicNumber: number,
