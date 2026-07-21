@@ -50,9 +50,7 @@ function TopicCard({ topic, total, done }: { topic: Topic; total: number; done: 
           </span>
         )}
       </div>
-      <p className="text-sm text-muted-foreground leading-relaxed">{topic.description}</p>
-
-      {/* mt-auto keeps the bars aligned across cards of different text lengths. */}
+      {/* mt-auto keeps the bars aligned across cards of different title lengths. */}
       <div className="mt-auto pt-5">
         {/* An untouched topic just shows the empty grey track; the red fill (and
             its glow) only appear once there is progress. */}
@@ -62,11 +60,6 @@ function TopicCard({ topic, total, done }: { topic: Topic; total: number; done: 
             {pct}%
           </span>
         </div>
-        {total > 0 && (
-          <p className="mt-1.5 text-xs text-muted-foreground">
-            {done} de {total} {total === 1 ? "lección" : "lecciones"}
-          </p>
-        )}
       </div>
     </Link>
   )
