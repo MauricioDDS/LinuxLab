@@ -10,7 +10,7 @@ import type { Topic } from "@/lib/features/student/types"
  * teaching material (text, video, links per topic) lives in `content/temario/`
  * and is authored by the thesis team.
  *
- * 12 topics; topic 12 is complementary (optional).
+ * 12 topics.
  */
 export const syllabus: Topic[] = [
   {
@@ -130,7 +130,6 @@ export const syllabus: Topic[] = [
     slug: "instalacion-de-paquetes",
     title: "Instalación de paquetes",
     description: "Gestión de paquetes con apt y dnf.",
-    complementary: true,
     subTopics: [],
   },
 ]
