@@ -1,5 +1,5 @@
 import { TopicGrid } from "@/components/student/topic-grid"
-import { getTopicLessonCounts } from "@/lib/features/shared/lessons"
+import { getTopicLessonCounts, getTopicPreviews } from "@/lib/features/shared/lessons"
 import { LessonProgressProvider } from "@/lib/features/student/progress"
 
 export default function ContentsPage() {
@@ -14,7 +14,7 @@ export default function ContentsPage() {
       </div>
 
       <LessonProgressProvider>
-        <TopicGrid lessonCounts={getTopicLessonCounts()} />
+        <TopicGrid lessonCounts={getTopicLessonCounts()} previews={getTopicPreviews()} />
       </LessonProgressProvider>
     </div>
   )
