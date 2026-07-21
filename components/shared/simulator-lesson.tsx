@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react"
 import { X, Play } from "lucide-react"
 import { LessonNav } from "@/components/shared/lesson-nav"
+import { LessonContainer } from "@/components/shared/terminal-ui"
 import type { LessonRef } from "@/lib/features/shared/lessons"
 
 export function SimulatorLesson({
@@ -48,7 +49,7 @@ export function SimulatorLesson({
   }
 
   return (
-    <div className="p-6 max-w-3xl">
+    <LessonContainer>
       <div className="mt-6 mb-10 rounded-xl border border-border bg-card overflow-hidden">
         <div className="px-8 pt-10 pb-8 text-center">
           <p className="text-xs font-medium uppercase tracking-widest text-emerald-500 mb-3">
@@ -71,6 +72,6 @@ export function SimulatorLesson({
       </div>
 
       <LessonNav currentTopicNumber={currentTopicNumber} prev={prev} next={next} />
-    </div>
+    </LessonContainer>
   )
 }
