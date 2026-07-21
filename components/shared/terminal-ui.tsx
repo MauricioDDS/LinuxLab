@@ -43,7 +43,7 @@ export function LessonContainer({ children }: { children: React.ReactNode }) {
     <div
       className={cn(
         "p-6 transition-[max-width] duration-300 ease-out",
-        open ? "max-w-3xl" : "max-w-4xl mx-auto",
+        open ? "max-w-3xl" : "max-w-6xl mx-auto",
       )}
     >
       {children}
