@@ -4,6 +4,7 @@ import { LessonNav } from "@/components/shared/lesson-nav"
 import { LessonSources } from "@/components/shared/lesson-sources"
 import { SimulatorLesson } from "@/components/shared/simulator-lesson"
 import { LessonScrollArea } from "@/components/shared/lesson-scroll-area"
+import { LessonContainer } from "@/components/shared/terminal-ui"
 import type { Topic } from "@/lib/features/student/types"
 import type { LessonResource, LessonSubtopic, TopicContentMeta } from "@/lib/features/shared/types"
 import type { LessonBlock } from "@/lib/features/shared/lesson-blocks"
@@ -62,7 +63,7 @@ export function ContentArea({
           currentTopicNumber={topic.number}
         />
       ) : (
-        <div className="p-6 max-w-3xl">
+        <LessonContainer>
           {bodyBlocks && bodyBlocks.length > 0 ? (
             <LessonBody blocks={bodyBlocks} />
           ) : (
@@ -93,7 +94,7 @@ export function ContentArea({
               </div>
             </section>
           )}
-        </div>
+        </LessonContainer>
       )}
     </LessonScrollArea>
   )

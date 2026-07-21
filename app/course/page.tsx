@@ -11,6 +11,7 @@ import {
 } from "@/lib/features/shared/lessons"
 import { parseLessonBlocks } from "@/lib/features/shared/lesson-blocks"
 import { LessonProgressProvider } from "@/lib/features/student/progress"
+import { TerminalUIProvider } from "@/components/shared/terminal-ui"
 
 export default async function CoursePage({
   searchParams,
@@ -41,7 +42,8 @@ export default async function CoursePage({
 
   return (
     <LessonProgressProvider>
-      <div className="h-screen flex flex-col bg-background">
+      <TerminalUIProvider>
+        <div className="h-screen flex flex-col bg-background">
         <Navbar />
         <div className="flex-1 flex overflow-hidden">
           <CourseSidebar
@@ -60,7 +62,8 @@ export default async function CoursePage({
           />
           <CourseTerminal />
         </div>
-      </div>
+        </div>
+      </TerminalUIProvider>
     </LessonProgressProvider>
   )
 }
