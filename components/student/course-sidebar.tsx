@@ -67,8 +67,8 @@ export function CourseSidebar({
 
   return (
     <aside className="w-72 shrink-0 border-r border-border bg-sidebar h-full flex flex-col">
-      {/* Course Header */}
-      <div className="p-4 border-b border-border flex items-center justify-between gap-2">
+      {/* Course Header. h-14 matches the lesson header so their dividers line up. */}
+      <div className="h-14 px-4 border-b border-border flex items-center justify-between gap-2">
         <div className="flex items-center gap-2 min-w-0">
           <Link
             href="/home"

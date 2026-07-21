@@ -72,8 +72,10 @@ export function LessonScrollArea({
 
   return (
     <main ref={scrollRef} className="flex-1 overflow-y-auto bg-background flex flex-col">
-      <div className="sticky top-0 z-10 bg-background/95 backdrop-blur border-b border-border">
-        <div className="px-6 py-4 flex items-center justify-between gap-4">
+      {/* h-14 matches the sidebar header so their dividers line up. The reading
+          bar is pinned to the bottom edge, so it doesn't add to that height. */}
+      <div className="sticky top-0 z-10 h-14 bg-background/95 backdrop-blur border-b border-border">
+        <div className="h-full px-6 flex items-center justify-between gap-4">
           {header}
           <span className="shrink-0 text-xs font-mono tabular-nums text-muted-foreground">
             {pct}%
@@ -81,7 +83,7 @@ export function LessonScrollArea({
         </div>
         <NeonProgress
           value={pct}
-          className="h-0.5 rounded-none bg-transparent"
+          className="absolute bottom-0 inset-x-0 h-0.5 rounded-none bg-transparent"
           barClassName="rounded-none"
         />
       </div>
