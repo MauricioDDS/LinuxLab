@@ -54,8 +54,12 @@ export function TerminalEmulator({ className }: { className?: string }) {
       term.write("\r\n\x1b[31mError de conexión. ¿El servidor está corriendo?\x1b[0m\r\n")
     }
 
-    ws.onclose = () => {
-      term.write("\r\n\x1b[33mConexión cerrada.\x1b[0m\r\n")
+    ws.onclose = (event) => {
+      if (event.code !== 1000) {
+        term.write(`\r\n\x1b[33mConexión cerrada (${event.code}). ${event.reason || "¿El servidor está corriendo?"}\x1b[0m\r\n`)
+      } else {
+        term.write("\r\n\x1b[33mConexión cerrada.\x1b[0m\r\n")
+      }
     }
 
     term.onData((data) => {
