@@ -1,34 +1,8 @@
-"use client"
+'use client'
 
-import { useMemo, useState } from "react"
 import { TerminalEmulator } from "@/components/shared/terminal-emulator"
-import { createTerminalSession } from "@/lib/features/student/data"
-
-interface TerminalLine {
-  type: "prompt" | "output"
-  content: string
-}
 
 export default function TerminalPage() {
-  const session = useMemo(() => createTerminalSession({ user: "student" }), [])
-  const [history, setHistory] = useState<TerminalLine[]>(
-    session.greeting.map((content) => ({ type: "output", content }))
-  )
-  const [currentInput, setCurrentInput] = useState("")
-
-  const handleSubmit = async (command: string) => {
-    setHistory((prev) => [...prev, { type: "prompt", content: command }])
-    setCurrentInput("")
-    const result = await session.run(command)
-    if (result.clear) {
-      setHistory([])
-      return
-    }
-    if (result.output) {
-      setHistory((prev) => [...prev, { type: "output", content: result.output }])
-    }
-  }
-
   return (
     <div className="h-screen flex flex-col p-6">
       <div className="mb-4 shrink-0">
@@ -38,12 +12,7 @@ export default function TerminalPage() {
         </p>
       </div>
       <div className="flex-1 min-h-0">
-        <TerminalEmulator
-          history={history}
-          currentInput={currentInput}
-          onInputChange={setCurrentInput}
-          onSubmit={handleSubmit}
-        />
+        <TerminalEmulator />
       </div>
     </div>
   )

@@ -1,42 +1,14 @@
 "use client"
 
-import { useMemo, useState } from "react"
 import { ClipboardList } from "lucide-react"
 import { Navbar } from "@/components/shared/navbar"
 import { TerminalEmulator } from "@/components/shared/terminal-emulator"
-import { createTerminalSession } from "@/lib/features/student/data"
-
-interface TerminalLine {
-  type: "prompt" | "output"
-  content: string
-}
 
 export default function ActivityPage() {
-  const session = useMemo(() => createTerminalSession({ user: "student" }), [])
-  const [history, setHistory] = useState<TerminalLine[]>(
-    session.greeting.map((content) => ({ type: "output", content }))
-  )
-  const [currentInput, setCurrentInput] = useState("")
-  const [isFullscreen, setIsFullscreen] = useState(false)
-
-  const handleTerminalSubmit = async (command: string) => {
-    setHistory((prev) => [...prev, { type: "prompt", content: command }])
-    setCurrentInput("")
-    const result = await session.run(command)
-    if (result.clear) {
-      setHistory([])
-      return
-    }
-    if (result.output) {
-      setHistory((prev) => [...prev, { type: "output", content: result.output }])
-    }
-  }
-
   return (
     <div className="h-screen flex flex-col bg-background">
       <Navbar />
       <div className="flex-1 flex overflow-hidden">
-        {/* Left Panel - Instructions (40%) */}
         <div className="w-[40%] flex-shrink-0 bg-card border-r border-border flex items-center justify-center p-8">
           <div className="max-w-sm text-center">
             <div className="w-12 h-12 mx-auto mb-4 rounded-lg bg-secondary/60 flex items-center justify-center">
@@ -52,16 +24,8 @@ export default function ActivityPage() {
           </div>
         </div>
 
-        {/* Right Panel - Terminal (60%) */}
         <div className="flex-1 p-4">
-          <TerminalEmulator
-            history={history}
-            currentInput={currentInput}
-            onInputChange={setCurrentInput}
-            onSubmit={handleTerminalSubmit}
-            isFullscreen={isFullscreen}
-            onToggleFullscreen={() => setIsFullscreen(!isFullscreen)}
-          />
+          <TerminalEmulator />
         </div>
       </div>
     </div>

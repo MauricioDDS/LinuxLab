@@ -1,35 +1,38 @@
-import { createMockTerminalSession } from "./terminal.mock"
+/**
+ * Terminal seam — legacy mock for pages not yet migrated to xterm.js.
+ *
+ * The full-screen terminal (/terminal) and the sidebar panel (TerminalPanel)
+ * now use xterm.js via components/shared/terminal-emulator.tsx.
+ *
+ * Pages that haven't been migrated yet (activity, create-course) continue
+ * to use this mock until they are rewritten in a future iteration.
+ */
 
 export interface TerminalResult {
-  /** Text to append to the terminal. Empty string appends nothing. */
   output: string
-  /** When true, the UI should clear its history (e.g. the `clear` command). */
   clear?: boolean
 }
 
 export interface TerminalSession {
-  /** Lines shown when the terminal first opens. */
   readonly greeting: string[]
-  /** Execute a command and return its output. */
   run(command: string): Promise<TerminalResult>
 }
 
 export interface TerminalSessionOptions {
-  /** Prompt username, e.g. "student" or "teacher". */
   user?: string
 }
 
-/**
- * Terminal seam.
- *
- * TODO (real terminal): replace the mock with an Xterm.js front-end connected
- * over WebSocket (`env.terminalGatewayUrl`) to the shared Linux server, where
- * each student has an isolated Unix account with cgroup/quota limits. The UI
- * components already talk only to this `TerminalSession` interface, so swapping
- * the implementation here is all that's needed.
- *
- * For now it returns an in-browser mock so the interface is demonstrable.
- */
 export function createTerminalSession(options: TerminalSessionOptions = {}): TerminalSession {
-  return createMockTerminalSession(options)
+  const user = options.user ?? "student"
+  return {
+    greeting: ["Terminal mock activo — migrar a xterm.js."],
+    async run(command: string): Promise<TerminalResult> {
+      const cmd = command.trim().toLowerCase()
+      if (cmd === "clear") return { output: "", clear: true }
+      if (cmd.startsWith("echo ")) return { output: command.substring(5) }
+      if (cmd === "whoami") return { output: user }
+      if (cmd === "pwd") return { output: `/home/${user}` }
+      return { output: `bash: ${command.split(" ")[0]}: command not found` }
+    },
+  }
 }
