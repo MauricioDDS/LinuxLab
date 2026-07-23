@@ -72,9 +72,10 @@ export function LessonScrollArea({
 
   return (
     <main ref={scrollRef} className="flex-1 overflow-y-auto bg-background flex flex-col">
-      {/* h-14 matches the sidebar header so their dividers line up. The reading
-          bar is pinned to the bottom edge, so it doesn't add to that height. */}
-      <div className="sticky top-0 z-10 h-14 bg-background/95 backdrop-blur border-b border-border">
+      {/* h-16 matches the sidebar header so their dividers align. shrink-0 stops
+          flexbox from collapsing it: this header lives in a scrollable column, so
+          without it the overflow squashes it down to the text height. */}
+      <div className="sticky top-0 z-10 shrink-0 h-16 bg-background/95 backdrop-blur border-b border-border">
         <div className="h-full px-6 flex items-center justify-between gap-4">
           {header}
           <span className="shrink-0 text-xs font-mono tabular-nums text-muted-foreground">
