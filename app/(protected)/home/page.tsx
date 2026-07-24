@@ -10,7 +10,7 @@ export default async function HomePage() {
 
   switch (session.user.role) {
     case "student":
-      return <StudentDashboard userName={session.user.name} />
+      return <StudentDashboard />
     case "teacher":
       return <TeacherDashboard />
     case "admin":
