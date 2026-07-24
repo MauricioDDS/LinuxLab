@@ -12,10 +12,11 @@ export function HomeHero() {
       />
       <div className="relative mx-auto max-w-3xl">
         <h1 className="text-4xl font-extrabold leading-[1.05] tracking-tight text-foreground sm:text-6xl">
-          Conoce La Terminal{" "}
+          Bienvenido al{" "}
           <span className="bg-gradient-to-r from-[#ff5470] via-[#f43f5e] to-[#C41E3A] bg-clip-text text-transparent">
             Linux
           </span>
+          <span className="text-foreground">Lab</span>
         </h1>
         <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-muted-foreground">
           La forma moderna de aprender Linux: teoría al grano, una{" "}
