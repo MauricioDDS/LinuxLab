@@ -3,7 +3,7 @@
 import Link from "next/link"
 import { Clock, Video, Terminal, ListChecks, type LucideIcon } from "lucide-react"
 import { syllabus } from "@/lib/features/shared/temario"
-import { topicIcon } from "@/lib/features/shared/topic-icons"
+import { topicIllustration } from "@/components/student/topic-illustrations"
 import { NeonProgress } from "@/components/shared/neon-progress"
 import { useLessonProgress } from "@/lib/features/student/progress"
 import { cn } from "@/lib/utils"
@@ -16,14 +16,15 @@ interface TopicGridProps {
 }
 
 /**
- * The topic catalogue. Each card is compact at rest (icon, title, tags, bar) and
- * expands on hover to reveal the description, lighting up with a neon glow.
+ * The topic catalogue, AlgoMaster-style: each card has an illustration panel on
+ * top that zooms on hover while the card lifts and lights up with a neon glow;
+ * the text content stays put. Adds our per-topic progress bar and sneak-peek tags.
  */
 export function TopicGrid({ lessonCounts, previews }: TopicGridProps) {
   const { readCountForTopic } = useLessonProgress()
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 items-start">
+    <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
       {syllabus.map((topic) => {
         const total = lessonCounts[topic.number] ?? 0
         return (
@@ -92,62 +93,57 @@ function TopicCard({
   done: number
   preview?: TopicPreview
 }) {
-  const Icon = topicIcon(topic.number)
+  const Illustration = topicIllustration(topic.number)
   const pct = total > 0 ? Math.round((done / total) * 100) : 0
   const tags = preview ? previewTags(preview) : []
 
   return (
     <Link
       href={`/course?tema=${topic.slug}`}
-      className="group flex flex-col bg-card border border-border rounded-lg p-6 transition-all duration-300 hover:border-primary hover:shadow-[var(--neon-glow-strong)]"
+      className="group relative flex flex-col overflow-hidden rounded-2xl border border-border bg-card transition-all duration-300 ease-out hover:z-10 hover:scale-[1.02] hover:border-primary/50 hover:shadow-[var(--neon-glow-strong)]"
     >
-      <div className="w-11 h-11 bg-primary/10 flex items-center justify-center rounded-md mb-4 group-hover:bg-primary/15 transition-colors">
-        <Icon className="w-5 h-5 text-primary" />
+      {/* Illustration panel: dark, and the drawing zooms on hover. */}
+      <div className="overflow-hidden border-b border-border bg-[#0d1117]">
+        <div className="flex aspect-[16/10] items-center justify-center p-6 transition-transform duration-500 ease-out group-hover:scale-110">
+          <Illustration />
+        </div>
       </div>
-      <div className="flex items-center gap-2 mb-3">
-        <h2 className="text-lg font-semibold text-foreground group-hover:text-primary transition-colors">
+
+      {/* Content stays steady while the card and image grow. */}
+      <div className="flex flex-1 flex-col p-5">
+        <h3 className="text-lg font-bold tracking-tight text-foreground transition-colors group-hover:text-primary">
           {topic.number}. {topic.title}
-        </h2>
-        {topic.complementary && (
-          <span className="text-[10px] uppercase tracking-wide font-medium text-muted-foreground bg-secondary px-1.5 py-0.5 rounded">
-            Complementario
-          </span>
+        </h3>
+        {/* Gradient underline reveal, AlgoMaster-style. */}
+        <span className="mt-1.5 h-0.5 w-0 rounded-full bg-gradient-to-r from-[#ff5470] to-[#C41E3A] transition-all duration-300 ease-out group-hover:w-12" />
+        <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+          {topic.description}
+        </p>
+
+        {tags.length > 0 && (
+          <div className="mt-4 flex flex-wrap gap-1.5">
+            {tags.map((tag) => (
+              <span
+                key={tag.label}
+                className={cn(
+                  "inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-medium",
+                  tag.className,
+                )}
+              >
+                <tag.icon className="h-3 w-3" />
+                {tag.label}
+              </span>
+            ))}
+          </div>
         )}
-      </div>
 
-      {tags.length > 0 && (
-        <div className="flex flex-wrap gap-1.5">
-          {tags.map((tag) => (
-            <span
-              key={tag.label}
-              className={cn(
-                "inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-medium",
-                tag.className,
-              )}
-            >
-              <tag.icon className="w-3 h-3" />
-              {tag.label}
+        <div className="mt-auto pt-5">
+          <div className="flex items-center gap-2">
+            <NeonProgress value={pct} />
+            <span className="w-9 shrink-0 text-right font-mono text-xs tabular-nums text-muted-foreground">
+              {pct}%
             </span>
-          ))}
-        </div>
-      )}
-
-      {/* Collapsed at rest; the grid row grows from 0fr to 1fr on hover to reveal
-          the description. overflow-hidden clips it while collapsed. */}
-      <div className="grid grid-rows-[0fr] transition-[grid-template-rows] duration-300 ease-out group-hover:grid-rows-[1fr]">
-        <div className="overflow-hidden">
-          <p className="pt-3 text-sm text-muted-foreground leading-relaxed">
-            {topic.description}
-          </p>
-        </div>
-      </div>
-
-      <div className="pt-5">
-        <div className="flex items-center gap-2">
-          <NeonProgress value={pct} />
-          <span className="shrink-0 w-9 text-right text-xs font-mono tabular-nums text-muted-foreground">
-            {pct}%
-          </span>
+          </div>
         </div>
       </div>
     </Link>
